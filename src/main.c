@@ -7,9 +7,13 @@
 
 int main(int argc, char** argv)
 {
-    SHARK_LOG("--- Start your engines ---\n");
+    LOG_INFO("--- Start your engines ---\n");
 
-    SHARK_LOG("--- See you soon big baboune ---\n");
+    if(!glfwInit())
+    {
+    }
+
+    LOG_DBG("--- See you soon big baboune ---\n");
     return EXIT_SUCCESS;
 }
 
