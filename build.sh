@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-TARGET_EXE=raining-shark.out
+TARGET_EXE=raining-sharks.out
 
 rm $TARGET_EXE >> /dev/null 2>&1
 

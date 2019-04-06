@@ -19,6 +19,11 @@ void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int
     }
 }
 
+void glfwWindowSizeCallback(GLFWwindow * window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
 int main(int argc, char** argv)
 {
     LOG_DBG("--- Start your engines ---\n");
@@ -63,16 +68,30 @@ int main(int argc, char** argv)
     // Set callbacks
     glfwSetErrorCallback(glfwErrorCallback);
     glfwSetKeyCallback(window, glfwKeyCallback);
+    glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
 
     glfwMakeContextCurrent(window);
 
 
     // Main loop
     glfwSwapInterval(1);
+    float timeBeginInSec = glfwGetTime();
+    float timeEndInSec = 0.0f;
+    float dt = 1.0f / 60.0f;
     while(!glfwWindowShouldClose(window))
     {
+        int fps = (int)(1.0f / dt);
+        LOG_DBG("dt = %f, fps = %d\n", dt, fps);
+
+        glClearColor(0.76f, 0.78f, 1.f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         glfwPollEvents();
         glfwSwapBuffers(window);
+
+        timeEndInSec = glfwGetTime();
+        dt = timeEndInSec - timeBeginInSec;
+        timeBeginInSec = timeEndInSec;
     }
 
     glfwDestroyWindow(window);
