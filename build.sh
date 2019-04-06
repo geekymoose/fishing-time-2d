@@ -9,7 +9,7 @@ gcc -g -Wall \
     -I./extern/glfw/include \
     -I./extern/glew/include \
     -lX11 -lXrandr -lXinerama -lXxf86vm -lXcursor \
-    -lrt -lm -ldl \
+    -lrt -lm -ldl -lGL \
     -lpthread \
     ./src/main.c \
     ./extern/glfw/bin/libglfw3.a \
