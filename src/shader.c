@@ -89,4 +89,10 @@ GLuint createShaderProgramFromFile(const char* _vertexPath, const char* _fragPat
     return createShaderProgram(idVertex, idFrag);
 }
 
+void setShaderProgramUniform(GLuint _shaderID, const char* _name, float _x, float _y)
+{
+    glUseProgram(_shaderID);
+    glUniform2f(glGetUniformLocation(_shaderID, _name), _x, _y);
+}
+
 

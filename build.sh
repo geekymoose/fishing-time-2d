@@ -16,6 +16,7 @@ gcc -g -Wall \
     ./src/window.c \
     ./src/shader.c \
     ./src/sprite.c \
+    ./src/entity.c \
     ./extern/glfw/bin/libglfw3.a \
     ./extern/glew/bin/libGLEW.a \
     -o $TARGET_EXE

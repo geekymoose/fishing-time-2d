@@ -8,8 +8,11 @@
 #include "sprite.h"
 #include "shader.h"
 #include "window.h"
+#include "entity.h"
+
 
 static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!
+static GLuint s_shaderID = 0;
 
 
 static void glfwErrorCallback(int _error, const char* _description)
@@ -43,7 +46,7 @@ void gameInit()
     glfwSetFramebufferSizeCallback(s_window, glfwWindowSizeCallback);
 
     // OpenGL Shader
-    createShaderProgramFromFile(
+    s_shaderID = createShaderProgramFromFile(
             "./shaders/vertex_shader.glsl",
             "./shaders/fragment_shader.glsl");
 }
@@ -54,9 +57,13 @@ void gameDestroy()
     glfwTerminate();
 }
 
-
 void gameRunLoop()
 {
+    // TODO a tmp entity
+    Entity e;
+    e.position.x = 42.0f;
+    e.position.y = 42.0f;
+
     // Main loop
     glfwSwapInterval(1);
     float timeBeginInSec = glfwGetTime();
