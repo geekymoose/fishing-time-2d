@@ -1,4 +1,5 @@
 extern/
+resources/tmp/
 .vscode
 .ycm_extra_conf.py
 *.o
