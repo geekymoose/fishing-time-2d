@@ -6,6 +6,8 @@
 #include "log.h"
 #include "config.h"
 #include "render.h"
+#include "shader.h"
+#include "window.h"
 
 
 static void glfwErrorCallback(int error, const char* description)

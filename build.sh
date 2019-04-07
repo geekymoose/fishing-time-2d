@@ -13,6 +13,8 @@ gcc -g -Wall \
     -lpthread \
     ./src/main.c \
     ./src/render.c \
+    ./src/shader.c \
+    ./src/window.c \
     ./extern/glfw/bin/libglfw3.a \
     ./extern/glew/bin/libGLEW.a \
     -o $TARGET_EXE
