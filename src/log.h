@@ -22,7 +22,7 @@ enum
     _XTERM_COLOR_YELLOW = 33,
 };
 
-const char* _logLevelHeader(const int level)
+static inline const char* _logLevelHeader(const int level)
 {
     switch(level)
     {
@@ -39,7 +39,7 @@ const char* _logLevelHeader(const int level)
     }
 }
 
-int _logLevelColor(const int level)
+static inline int _logLevelColor(const int level)
 {
     switch(level)
     {
@@ -56,7 +56,7 @@ int _logLevelColor(const int level)
     }
 }
 
-void _log(const int level, const char* format, ...)
+static inline void _log(const int level, const char* format, ...)
 {
     va_list ap;
     va_start(ap, format);

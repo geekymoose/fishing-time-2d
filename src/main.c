@@ -5,13 +5,15 @@
 
 #include "log.h"
 #include "config.h"
+#include "render.h"
 
-void glfwErrorCallback(int error, const char* description)
+
+static void glfwErrorCallback(int error, const char* description)
 {
     LOG_ERR("GLFW error %d: %s\n", error, description);
 }
 
-void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int modes)
+static void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int modes)
 {
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
@@ -19,14 +21,14 @@ void glfwKeyCallback(GLFWwindow * window, int key, int scancode, int action, int
     }
 }
 
-void glfwWindowSizeCallback(GLFWwindow * window, int width, int height)
+static void glfwWindowSizeCallback(GLFWwindow * window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
 int main(int argc, char** argv)
 {
-    LOG_DBG("--- Start your engines ---\n");
+    LOG_INFO("--- Start your engines ---\n");
 
 
     // Init GLFW
@@ -35,8 +37,11 @@ int main(int argc, char** argv)
         LOG_ERR("Unable to initialize glfw. Ahah you suck!\n");
         return -1;
     }
-    LOG_DBG("GLFW successfully initialized. Not that bad!\n");
-    LOG_DBG("GLFW info: %s\n", glfwGetVersionString());
+    LOG_INFO("GLFW successfully initialized. Not that bad!\n");
+    LOG_INFO("GLFW info: %s\n", glfwGetVersionString());
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 
     // Create GLFW window
@@ -52,17 +57,7 @@ int main(int argc, char** argv)
         glfwTerminate();
         return -1;
     }
-
-
-    // Init GLEW
-    GLenum glewinit = glewInit();
-    if(glewinit == GLEW_OK)
-    {
-        LOG_ERR("Unable to init GLEW. He was not in the mood\n");
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        return -1;
-    }
+    glfwMakeContextCurrent(window);
 
 
     // Set callbacks
@@ -70,7 +65,23 @@ int main(int argc, char** argv)
     glfwSetKeyCallback(window, glfwKeyCallback);
     glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
 
-    glfwMakeContextCurrent(window);
+
+    // Init GLEW
+    GLenum glewinit = glewInit();
+    if(glewinit != GLEW_OK)
+    {
+        LOG_ERR("Unable to init GLEW. He was not in the mood\n");
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
+    LOG_INFO("GLEW successfully initialize! GG!\n");
+
+
+    // OpenGL Shader
+    createShaderProgramFromFile(
+            "./shaders/vertex_shader.glsl",
+            "./shaders/fragment_shader.glsl");
 
 
     // Main loop
@@ -97,7 +108,7 @@ int main(int argc, char** argv)
     glfwDestroyWindow(window);
     glfwTerminate();
 
-    LOG_DBG("--- See you soon big baboune ---\n");
+    LOG_INFO("--- See you soon big baboune ---\n");
     return EXIT_SUCCESS;
 }
 
