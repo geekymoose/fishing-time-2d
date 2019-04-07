@@ -30,59 +30,20 @@ int main(int argc, char** argv)
 {
     LOG_INFO("--- Start your engines ---\n");
 
-
-    // Init GLFW
-    if(!glfwInit())
-    {
-        LOG_ERR("Unable to initialize glfw. Ahah you suck!\n");
-        return -1;
-    }
-    LOG_INFO("GLFW successfully initialized. Not that bad!\n");
-    LOG_INFO("GLFW info: %s\n", glfwGetVersionString());
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-
-    // Create GLFW window
-    GLFWwindow * window = glfwCreateWindow(
+    GLFWwindow * window = createWindowGLFW(
             SHARK_WINDOW_WIDTH,
             SHARK_WINDOW_HEIGHT,
-            SHARK_WINDOW_TITLE,
-            NULL,
-            NULL);
-    if(window == NULL)
-    {
-        LOG_ERR("Unable to create GLFW window. How are you gonna play now?\n");
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-
+            SHARK_WINDOW_TITLE);
 
     // Set callbacks
     glfwSetErrorCallback(glfwErrorCallback);
     glfwSetKeyCallback(window, glfwKeyCallback);
     glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
 
-
-    // Init GLEW
-    GLenum glewinit = glewInit();
-    if(glewinit != GLEW_OK)
-    {
-        LOG_ERR("Unable to init GLEW. He was not in the mood\n");
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        return -1;
-    }
-    LOG_INFO("GLEW successfully initialize! GG!\n");
-
-
     // OpenGL Shader
     createShaderProgramFromFile(
             "./shaders/vertex_shader.glsl",
             "./shaders/fragment_shader.glsl");
-
 
     // Main loop
     glfwSwapInterval(1);
