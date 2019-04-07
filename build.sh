@@ -12,6 +12,7 @@ gcc -g -Wall \
     -lrt -lm -ldl -lGL \
     -lpthread \
     ./src/main.c \
+    ./src/game.c \
     ./src/window.c \
     ./src/shader.c \
     ./src/sprite.c \
