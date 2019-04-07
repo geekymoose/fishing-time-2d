@@ -28,11 +28,6 @@ static void glfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _
     }
 }
 
-static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height)
-{
-    glViewport(0, 0, _width, _height);
-}
-
 void gameInit()
 {
     s_window = createWindowGLFW(
@@ -43,7 +38,6 @@ void gameInit()
     // Set callbacks
     glfwSetErrorCallback(glfwErrorCallback);
     glfwSetKeyCallback(s_window, glfwKeyCallback);
-    glfwSetFramebufferSizeCallback(s_window, glfwWindowSizeCallback);
 
     // OpenGL Shader
     s_shaderID = createShaderProgramFromFile(
@@ -61,15 +55,20 @@ void gameRunLoop()
 {
     // TODO a tmp entity
     Sprite s;
-    s.size.x = 10.0f;
-    s.size.y = 10.0f;
+    s.size.x = 640.0f;
+    s.size.y = 480.0f;
     initSprite(&s);
 
     Entity e;
     e.sprite = &s;
-    e.position.x = 0.0f;
-    e.position.y = 0.0f;
+    e.position.x = -10.0f;
+    e.position.y = 10.0f;
     drawEntity(&e, s_shaderID);
+
+    // Camera is hardcoded with a default rect of vision
+    setShaderProgramUniform(s_shaderID, "cameraRect",
+            SHARK_CAMERA_RECT_WIDTH,
+            SHARK_CAMERA_RECT_HEIGHT);
 
     // Main loop
     glfwSwapInterval(1);

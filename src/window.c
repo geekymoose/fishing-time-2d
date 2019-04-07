@@ -2,6 +2,11 @@
 
 #include "log.h"
 
+static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height)
+{
+    LOG_DBG("Resizing: w = %d, h = %d\n", _width, _height);
+    glViewport(0, 0, _width, _height);
+}
 
 GLFWwindow * createWindowGLFW(const int width, const int height, const char* title)
 {
@@ -26,6 +31,7 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
         return NULL;
     }
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
 
     // Init GLEW
     GLenum glewinit = glewInit();
