@@ -11,13 +11,19 @@
 static float s_spriteDefaultVertices[] =
 {
     // Coord                UV
+    /*
     0.0f, 0.0f,             0.0f, 1.0f,
     1.0f, 0.0f,             1.0f, 1.0f,
     1.0f, 1.0f,             1.0f, 0.0f,
     0.0f, 1.0f,             0.0f, 0.0f,
+    */
+    0.0f, 0.0f,             0.0f, 1.0f,
+    1.0f, 0.0f,             1.0f, 1.0f,
+    1.0f, -1.0f,            1.0f, 0.0f,
+    0.0f, -1.0f,            0.0f, 0.0f,
 };
 
-static unsigned int s_spriteVerticesIndices[] = 
+static unsigned int s_spriteVerticesIndices[] =
 {
     0, 1, 2,
     0, 2, 3
@@ -25,6 +31,8 @@ static unsigned int s_spriteVerticesIndices[] =
 
 void initSprite(Sprite * _sprite)
 {
+    ASSERT_MSG(_sprite->size.x != 0, "Sprite with no X size");
+    ASSERT_MSG(_sprite->size.y != 0, "Sprite with no Y size");
     memcpy(_sprite->vertices, s_spriteDefaultVertices, sizeof(s_spriteDefaultVertices));
 
     // VAO
@@ -37,7 +45,7 @@ void initSprite(Sprite * _sprite)
     glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(_sprite->vertices), _sprite->vertices, GL_STATIC_DRAW);
 
-    const int stride = sizeof(float) * 2;
+    const int stride = sizeof(float) * 4;
     const void* offset_0 = (void*)(offsetof(Vertex1P1UV, position));
     const void* offset_1 = (void*)(offsetof(Vertex1P1UV, uv));
 
@@ -60,8 +68,8 @@ void initSprite(Sprite * _sprite)
 void drawSprite(Sprite const* _sprite, const GLuint _shaderID)
 {
     glBindVertexArray(_sprite->vertex_vao);
-    setShaderProgramUniform(_shaderID, "size", _sprite->size.x, _sprite->size.y);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, s_spriteVerticesIndices);
+    setShaderProgramUniform(_shaderID, "spriteSize", _sprite->size.x, _sprite->size.y);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 

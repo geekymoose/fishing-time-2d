@@ -60,9 +60,16 @@ void gameDestroy()
 void gameRunLoop()
 {
     // TODO a tmp entity
+    Sprite s;
+    s.size.x = 10.0f;
+    s.size.y = 10.0f;
+    initSprite(&s);
+
     Entity e;
-    e.position.x = 42.0f;
-    e.position.y = 42.0f;
+    e.sprite = &s;
+    e.position.x = 0.0f;
+    e.position.y = 0.0f;
+    drawEntity(&e, s_shaderID);
 
     // Main loop
     glfwSwapInterval(1);
@@ -77,8 +84,10 @@ void gameRunLoop()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glfwPollEvents();
+        drawEntity(&e, s_shaderID);
+
         glfwSwapBuffers(s_window);
+        glfwPollEvents();
 
         timeEndInSec = glfwGetTime();
         dt = timeEndInSec - timeBeginInSec;

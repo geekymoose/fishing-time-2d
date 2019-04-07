@@ -72,6 +72,8 @@ static inline void _log(const int level, const char* format, ...)
 #define LOG_ERR(format, ...) _log(_LOG_LEVEL_ERR, format, ##__VA_ARGS__)
 #define LOG_OMG(format, ...) _log(_LOG_LEVEL_OMG, format, ##__VA_ARGS__)
 
-#define ASSERT(exp) assert(exp)
+#define ASSERT_MSG(exp, msg) \
+    if(!(exp)) { fprintf(stderr, "[ASSERT][%s:%d]: %s\n", __FILE__, __LINE__, msg); } \
+    assert(exp)
 
 
