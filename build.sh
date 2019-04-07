@@ -12,9 +12,9 @@ gcc -g -Wall \
     -lrt -lm -ldl -lGL \
     -lpthread \
     ./src/main.c \
-    ./src/render.c \
-    ./src/shader.c \
     ./src/window.c \
+    ./src/shader.c \
+    ./src/sprite.c \
     ./extern/glfw/bin/libglfw3.a \
     ./extern/glew/bin/libGLEW.a \
     -o $TARGET_EXE

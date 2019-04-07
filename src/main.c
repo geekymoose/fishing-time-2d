@@ -5,7 +5,7 @@
 
 #include "log.h"
 #include "config.h"
-#include "render.h"
+#include "sprite.h"
 #include "shader.h"
 #include "window.h"
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         int fps = (int)(1.0f / dt);
         LOG_DBG("dt = %f, fps = %d\n", dt, fps);
 
-        glClearColor(0.76f, 0.78f, 1.f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwPollEvents();
