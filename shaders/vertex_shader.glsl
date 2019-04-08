@@ -3,11 +3,11 @@
 layout(location = 0) in vec2 _vPos; // Vertex coordinates
 layout(location = 1) in vec2 _vUV; // Vertex's UV coordinates
 
+out vec2 texture_UV;
+
 uniform vec2 spriteSize; // Sprite's size
 uniform vec2 position; // Coordinate of the entity in 2D world
 uniform vec2 cameraRect; // Rect camera can see (in pixels)
-
-out vec2 uv;
 
 void main()
 {
@@ -21,8 +21,8 @@ void main()
     new_x /= cameraRect.x;
     new_y /= cameraRect.y;
 
+    texture_UV = _vUV;
     gl_Position = vec4(new_x, new_y, 0.0, 1.0);
-    uv = _vUV;
 }
 
 

@@ -54,16 +54,12 @@ void gameDestroy()
 void gameRunLoop()
 {
     // TODO a tmp entity
-    Sprite s;
-    s.size.x = 640.0f;
-    s.size.y = 480.0f;
-    initSprite(&s);
-
+    Texture tex = makeTexture("./resources/tmp/shark_background.png");
+    Sprite s = makeSprite(&tex, 640.0f, 480.0f);
     Entity e;
     e.sprite = &s;
     e.position.x = -10.0f;
     e.position.y = 10.0f;
-    drawEntity(&e, s_shaderID);
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect",

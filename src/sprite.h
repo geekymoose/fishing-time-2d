@@ -16,10 +16,10 @@ typedef struct
     vecf2 size;
     Vertex1P1UV vertices[4];
     GLuint vertex_vao;
-    Texture texture;
+    Texture * texture;
 } Sprite;
 
-void initSprite(Sprite * _sprite);
+Sprite makeSprite(Texture * texture, int width, int height);
 void drawSprite(Sprite const* _sprite, const GLuint _shaderID);
 void destroySprite(Sprite * _sprite);
 
