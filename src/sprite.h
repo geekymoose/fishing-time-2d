@@ -2,6 +2,7 @@
 
 #include "libmath.h"
 #include "shader.h"
+#include "texture.h"
 
 
 typedef struct
@@ -15,6 +16,7 @@ typedef struct
     vecf2 size;
     Vertex1P1UV vertices[4];
     GLuint vertex_vao;
+    Texture texture;
 } Sprite;
 
 void initSprite(Sprite * _sprite);
