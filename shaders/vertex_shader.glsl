@@ -21,8 +21,12 @@ void main()
     new_x /= cameraRect.x;
     new_y /= cameraRect.y;
 
-    texture_UV = _vUV;
+    // NDC is from -1:1, here we are in 0:1, need to multiply
+    new_x *= 2;
+    new_y *= 2;
+
     gl_Position = vec4(new_x, new_y, 0.0, 1.0);
+    texture_UV = _vUV;
 }
 
 

@@ -59,8 +59,8 @@ Sprite makeSprite(Texture * texture, int width, int height)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(s_indices), s_indices, GL_STATIC_DRAW);
 
     // Unbind all
-    glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     return sprite;
 }

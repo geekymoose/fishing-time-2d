@@ -58,8 +58,8 @@ void gameRunLoop()
     Sprite s = makeSprite(&tex, 640.0f, 480.0f);
     Entity e;
     e.sprite = &s;
-    e.position.x = -10.0f;
-    e.position.y = 10.0f;
+    e.position.x = -320.0f;
+    e.position.y = -240.0f;
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect",
