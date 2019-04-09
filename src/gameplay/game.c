@@ -12,20 +12,6 @@
 static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!
 static GLuint s_shaderID = 0;
 
-
-static void glfwErrorCallback(int _error, const char* _description)
-{
-    LOG_ERR("GLFW error %d: %s\n", _error, _description);
-}
-
-static void glfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _modes)
-{
-    if(_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(_window, 1);
-    }
-}
-
 void gameInit()
 {
     s_window = createWindowGLFW(
@@ -33,11 +19,6 @@ void gameInit()
             SHARK_WINDOW_HEIGHT,
             SHARK_WINDOW_TITLE);
 
-    // Set callbacks
-    glfwSetErrorCallback(glfwErrorCallback);
-    glfwSetKeyCallback(s_window, glfwKeyCallback);
-
-    // OpenGL Shader
     s_shaderID = createShaderProgramFromFile(
             "./shaders/vertex_shader.glsl",
             "./shaders/fragment_shader.glsl");

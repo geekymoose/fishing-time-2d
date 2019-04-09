@@ -8,6 +8,19 @@ static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height
     glViewport(0, 0, _width, _height);
 }
 
+static void glfwErrorCallback(int _error, const char* _description)
+{
+    LOG_ERR("GLFW error %d: %s\n", _error, _description);
+}
+
+static void glfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _modes)
+{
+    if(_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(_window, 1);
+    }
+}
+
 GLFWwindow * createWindowGLFW(const int width, const int height, const char* title)
 {
     // Init GLFW
@@ -31,7 +44,11 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
         return NULL;
     }
     glfwMakeContextCurrent(window);
+
+    // Callbacks
     glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
+    glfwSetErrorCallback(glfwErrorCallback);
+    glfwSetKeyCallback(window, glfwKeyCallback);
 
     // Init GLEW
     GLenum glewinit = glewInit();
