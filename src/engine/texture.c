@@ -1,12 +1,10 @@
 #include "texture.h"
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb_image.h>
 
-#include "log.h"
+#include "engine/shader.h"
+#include "engine/log.h"
 
 
 Texture makeTexture(const char* path)

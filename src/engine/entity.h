@@ -1,8 +1,8 @@
 #pragma once
 
-#include "libmath.h"
-#include "sprite.h"
-#include "shader.h"
+#include "engine/libmath.h"
+#include "engine/sprite.h"
+#include "engine/shader.h"
 
 
 typedef struct

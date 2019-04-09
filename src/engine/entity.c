@@ -1,6 +1,6 @@
-#include "entity.h"
+#include "engine/entity.h"
 
-#include "log.h"
+#include "engine/log.h"
 
 
 void drawEntity(Entity const* _entity, const GLuint _shaderID)

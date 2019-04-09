@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "game.h"
-#include "log.h"
+#include "gameplay/game.h"
+#include "engine/log.h"
 
 
 int main(int argc, char** argv)

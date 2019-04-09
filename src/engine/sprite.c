@@ -3,8 +3,8 @@
 #include <string.h> // memcpy
 #include <stddef.h> // offsetof
 
-#include "log.h"
-#include "shader.h"
+#include "engine/log.h"
+#include "engine/shader.h"
 
 
 // Vertices of sprite describe a simple rect from 0:0 to 1:1

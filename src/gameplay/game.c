@@ -1,14 +1,12 @@
 #include "game.h"
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include "log.h"
-#include "config.h"
-#include "sprite.h"
-#include "shader.h"
-#include "window.h"
-#include "entity.h"
+#include "engine/log.h"
+#include "engine/entity.h"
+#include "engine/shader.h"
+#include "engine/sprite.h"
+#include "engine/texture.h"
+#include "engine/window.h"
+#include "gameplay/config.h"
 
 
 static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!

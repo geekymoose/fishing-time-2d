@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 
-#include "log.h"
+#include "engine/log.h"
 
 
 GLuint createShaderFromSource(const char* _sources, const GLenum _type)

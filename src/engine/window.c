@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "log.h"
+#include "engine/log.h"
 
 static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
