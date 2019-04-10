@@ -4,14 +4,12 @@
 #include "engine/sprite.h"
 #include "engine/shader.h"
 
-
 typedef struct
 {
     vecf2 position;
     Sprite * sprite;
-} Entity;
+} Boat;
 
-
-void drawEntity(Entity const* _entity, const GLuint _shaderID);
+void drawBoat(Boat const* _boat, const GLuint _shaderID);
 
 

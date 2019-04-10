@@ -12,10 +12,11 @@ Texture makeTexture(const char* path)
     LOG_DBG("Loading texture from %s\n", path);
     int width, height, channels;
     stbi_set_flip_vertically_on_load(1);
-    unsigned char* data = stbi_load(path, &width, &height, &channels, 0);
+    unsigned char * data = stbi_load(path, &width, &height, &channels, 0);
     if(data == NULL)
     {
         LOG_ERR("Unable to load texture %s\n", path);
+        ASSERT_MSG(0==1, "Unable to load texture");
         Texture t = {-1}; // Returns invalid texture. Kinda ugly but ok for now
         return t;
     }
@@ -42,20 +43,26 @@ Texture makeTexture(const char* path)
     GLuint textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glActiveTexture(GL_TEXTURE0);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB , width, height, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0,
                  format, GL_UNSIGNED_BYTE, data);
+    if(glGetError() != GL_NO_ERROR)
+    {
+        LOG_ERR("Metho glGetError failed with GLenum to %d\n", glGetError());
+        ASSERT_MSG(0==1, "Error from glTexImage2D\n");
+    }
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
     stbi_image_free(data);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     Texture tex = {textureID};
     return tex;
 }
+
+

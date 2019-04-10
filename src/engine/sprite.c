@@ -59,14 +59,17 @@ Sprite makeSprite(Texture * texture, int width, int height)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(s_indices), s_indices, GL_STATIC_DRAW);
 
     // Unbind all
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     return sprite;
 }
 
 void drawSprite(Sprite const* _sprite, const GLuint _shaderID)
 {
+    glUseProgram(_shaderID);
+
     glActiveTexture(GL_TEXTURE0); // Done by default actually
     glBindTexture(GL_TEXTURE_2D, _sprite->texture->id);
 
