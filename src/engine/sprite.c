@@ -105,7 +105,7 @@ void drawSprite(Sprite const* _sprite, const GLuint _shaderID)
 
 void destroySprite(Sprite * _sprite)
 {
-    ASSERT_MSG(_sprite != NULL, "NULL sprite given to the destroy method\n");
+    ASSERT_MSG(_sprite != NULL, "NULL sprite given to the destroy method");
 
     glDeleteVertexArrays(1, &_sprite->vertex_vao);
 

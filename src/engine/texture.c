@@ -54,7 +54,7 @@ Texture makeTexture(const char* path)
     if(glGetError() != GL_NO_ERROR)
     {
         LOG_ERR("Metho glGetError failed with GLenum to %d\n", glGetError());
-        ASSERT_MSG(0==1, "Error from glTexImage2D\n");
+        ASSERT_MSG(0==1, "Error from glTexImage2D");
     }
     glGenerateMipmap(GL_TEXTURE_2D);
 
