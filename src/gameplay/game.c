@@ -41,18 +41,22 @@ static void drawBackground(Sprite const* _sprite, const GLuint _shaderID)
 
 void gameRunLoop()
 {
+    // TMP UV coords
+    vecf2 uv1 = {0.0f, 0.0f};
+    vecf2 uv2 = {1.0f, 1.0f};
+
     // TMP Background
     Texture texBackground = makeTexture("./resources/tmp/background.png");
-    Sprite spriteBackground = makeSprite(&texBackground, 640.0f, 480.0f);
+    Sprite spriteBackground = makeSprite(&texBackground, 640.0f, 480.0f, uv1, uv2);
 
     // TMP shark
     Texture texShark = makeTexture("./resources/tmp/shark_a.png");
-    Sprite spriteShark = makeSprite(&texShark, 78, 16);
+    Sprite spriteShark = makeSprite(&texShark, 78, 16, uv1, uv2);
     Shark shark = {{100.0f, 0.0f}, &spriteShark};
 
     // TMP shark
     Texture texBoat = makeTexture("./resources/tmp/boat.png");
-    Sprite spriteBoat = makeSprite(&texBoat, 180, 38);
+    Sprite spriteBoat = makeSprite(&texBoat, 180, 38, uv1, uv2);
     Boat boat = {{0.0f, -230.0f}, &spriteBoat};
 
     // Camera is hardcoded with a default rect of vision
