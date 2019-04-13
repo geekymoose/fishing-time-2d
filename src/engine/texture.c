@@ -46,7 +46,7 @@ Texture makeTexture(const char* path)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0,
@@ -56,7 +56,6 @@ Texture makeTexture(const char* path)
         LOG_ERR("Metho glGetError failed with GLenum to %d\n", glGetError());
         ASSERT_MSG(0==1, "Error from glTexImage2D");
     }
-    glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D, 0);
