@@ -9,13 +9,13 @@
 
 Texture makeTexture(const char* path)
 {
-    LOG_DBG("Loading texture from %s\n", path);
+    LOG_INFO("Loading texture %s", path);
     int width, height, channels;
     stbi_set_flip_vertically_on_load(1);
     unsigned char * data = stbi_load(path, &width, &height, &channels, 0);
     if(data == NULL)
     {
-        LOG_ERR("Unable to load texture %s\n", path);
+        LOG_ERR("Unable to load texture %s", path);
         ASSERT_MSG(0==1, "Unable to load texture");
         Texture t = {-1}; // Returns invalid texture. Kinda ugly but ok for now
         return t;
@@ -53,7 +53,7 @@ Texture makeTexture(const char* path)
                  format, GL_UNSIGNED_BYTE, data);
     if(glGetError() != GL_NO_ERROR)
     {
-        LOG_ERR("Metho glGetError failed with GLenum to %d\n", glGetError());
+        LOG_ERR("Metho glGetError failed with GLenum to %d", glGetError());
         ASSERT_MSG(0==1, "Error from glTexImage2D");
     }
 

@@ -74,6 +74,7 @@ static inline void _log(const int level, const char* format, ...)
     va_start(ap, format);
     fprintf(stdout, "\e[%dm%s\e[0m", _logLevelColor(level), _logLevelHeader(level));
     vfprintf(stdout, format, ap);
+    fprintf(stdout, "\n");
     va_end(ap);
 }
 

@@ -4,7 +4,7 @@
 
 static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
-    LOG_DBG("Resizing: w = %d, h = %d\n", _width, _height);
+    LOG_DBG("Resizing: w = %d, h = %d", _width, _height);
     glViewport(0, 0, _width, _height);
 }
 
@@ -26,11 +26,11 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
     // Init GLFW
     if(!glfwInit())
     {
-        LOG_ERR("Unable to initialize glfw. Ahah you suck!\n");
+        LOG_ERR("Unable to initialize glfw. Ahah you suck!");
         return NULL;
     }
-    LOG_INFO("GLFW successfully initialized. Not that bad!\n");
-    LOG_INFO("GLFW info: %s\n", glfwGetVersionString());
+    LOG_INFO("GLFW successfully initialized. Not that bad!");
+    LOG_INFO("GLFW info: %s", glfwGetVersionString());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -39,7 +39,7 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
     GLFWwindow * window = glfwCreateWindow(width, height, title, NULL, NULL);
     if(window == NULL)
     {
-        LOG_ERR("Unable to create GLFW window. How are you gonna play now?\n");
+        LOG_ERR("Unable to create GLFW window. How are you gonna play now?");
         glfwTerminate();
         return NULL;
     }
@@ -54,12 +54,12 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
     GLenum glewinit = glewInit();
     if(glewinit != GLEW_OK)
     {
-        LOG_ERR("Unable to init GLEW. He was not in the mood\n");
+        LOG_ERR("Unable to init GLEW. He was not in the mood");
         glfwDestroyWindow(window);
         glfwTerminate();
         return NULL;
     }
-    LOG_INFO("GLEW successfully initialize! GG!\n");
+    LOG_INFO("GLEW successfully initialize! GG!");
 
     return window;
 }

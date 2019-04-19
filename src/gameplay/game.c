@@ -59,9 +59,9 @@ void gameRunLoop()
     Sprite * spriteShark = resourceGetSprite(id);
     Shark shark = {{100.0f, 0.0f}, spriteShark};
 
-    // TMP shark
+    // TMP boat
     id = resourceLoadTexture("./resources/tmp/boat.png");
-    id = resourceLoadSprite(id, 180, 38, uv1, uv2);
+    id = resourceLoadSprite(id, 45, 38, uv1, uv2);
     Sprite * spriteBoat = resourceGetSprite(id);
     Boat boat = {{0.0f, -230.0f}, spriteBoat};
 
@@ -78,7 +78,7 @@ void gameRunLoop()
     while(!glfwWindowShouldClose(s_window))
     {
         int fps = (int)(1.0f / dt);
-        LOG_DBG("dt = %f, fps = %d\n", dt, fps);
+        LOG_DBG("dt = %f, fps = %d", dt, fps);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

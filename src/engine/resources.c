@@ -24,7 +24,7 @@ static unsigned int s_arraySpritesHead = 0;
 
 unsigned int resourceLoadTexture(const char * _path)
 {
-    LOG_INFO("Loading texture: %s\n", _path);
+    LOG_INFO("Loading texture %s", _path);
     ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE, "You must increase the texture array size");
 
     const int pos = s_arrayTexturesHead;
@@ -49,7 +49,7 @@ Texture * resourceGetTexture(const unsigned int _resourceID)
 unsigned int resourceLoadSprite(unsigned int _textureID, int _width, int _height,
                                 vecf2 _uvBottomLeft, vecf2 _uvTopRight)
 {
-    LOG_INFO("Loading sprite (tex=%ud, w=%d, h=%d)\n", _textureID, _width, _height);
+    LOG_INFO("Loading sprite (tex=%ud, w=%d, h=%d)", _textureID, _width, _height);
     ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE, "You must increase the sprite array size");
     ASSERT_MSG(resourceGetTexture(_textureID) != NULL, "Cannot create a sprite with NULL texture");
 
@@ -67,3 +67,4 @@ Sprite * resourceGetSprite(unsigned int _resourceID)
 
     return &s_arraySprites[_resourceID];
 }
+

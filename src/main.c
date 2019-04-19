@@ -6,13 +6,13 @@
 
 int main(int argc, char** argv)
 {
-    LOG_INFO("--- Start your engines ---\n");
+    LOG_INFO("--- Start your engines ---");
 
     gameInit();
     gameRunLoop();
     gameDestroy();
 
-    LOG_INFO("--- See you soon big baboune ---\n");
+    LOG_INFO("--- See you soon big baboune ---");
     return EXIT_SUCCESS;
 }
 
