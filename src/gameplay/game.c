@@ -8,6 +8,7 @@
 #include "gameplay/config.h"
 #include "gameplay/shark.h"
 #include "gameplay/boat.h"
+#include "engine/resources.h"
 
 
 static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!
@@ -45,19 +46,24 @@ void gameRunLoop()
     vecf2 uv1 = {0.0f, 0.0f};
     vecf2 uv2 = {1.0f, 1.0f};
 
+    unsigned int id = 0; // tmp id
+
     // TMP Background
-    Texture texBackground = makeTexture("./resources/tmp/background.png");
-    Sprite spriteBackground = makeSprite(&texBackground, 640.0f, 480.0f, uv1, uv2);
+    id = resourceLoadTexture("./resources/tmp/background.png");
+    id = resourceLoadSprite(id, 640.0f, 480.0f, uv1, uv2);
+    Sprite * spriteBackground = resourceGetSprite(id);
 
     // TMP shark
-    Texture texShark = makeTexture("./resources/tmp/shark_a.png");
-    Sprite spriteShark = makeSprite(&texShark, 78, 16, uv1, uv2);
-    Shark shark = {{100.0f, 0.0f}, &spriteShark};
+    id = resourceLoadTexture("./resources/tmp/shark_a.png");
+    id = resourceLoadSprite(id, 78, 16, uv1, uv2);
+    Sprite * spriteShark = resourceGetSprite(id);
+    Shark shark = {{100.0f, 0.0f}, spriteShark};
 
     // TMP shark
-    Texture texBoat = makeTexture("./resources/tmp/boat.png");
-    Sprite spriteBoat = makeSprite(&texBoat, 180, 38, uv1, uv2);
-    Boat boat = {{0.0f, -230.0f}, &spriteBoat};
+    id = resourceLoadTexture("./resources/tmp/boat.png");
+    id = resourceLoadSprite(id, 180, 38, uv1, uv2);
+    Sprite * spriteBoat = resourceGetSprite(id);
+    Boat boat = {{0.0f, -230.0f}, spriteBoat};
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect",
@@ -80,7 +86,7 @@ void gameRunLoop()
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        drawBackground(&spriteBackground, s_shaderID);
+        drawBackground(spriteBackground, s_shaderID);
         drawShark(&shark, s_shaderID);
         drawBoat(&boat, s_shaderID);
 
