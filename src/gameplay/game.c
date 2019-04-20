@@ -11,8 +11,28 @@
 #include "engine/resources.h"
 
 
+// -----------------------------------------------------------------------------
+// Static data
+// -----------------------------------------------------------------------------
 static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!
 static GLuint s_shaderID = 0;
+
+
+// -----------------------------------------------------------------------------
+// Static methods
+// -----------------------------------------------------------------------------
+static void drawBackground(Sprite const* _sprite, const GLuint _shaderID)
+{
+    const float x = -SHARK_CAMERA_RECT_WIDTH / 2.0f;
+    const float y = -SHARK_CAMERA_RECT_HEIGHT / 2.0f;
+    setShaderProgramUniform(_shaderID, "position", x, y);
+    drawSprite(_sprite, _shaderID);
+}
+
+
+// -----------------------------------------------------------------------------
+// Game Methods
+// -----------------------------------------------------------------------------
 
 void gameInit()
 {
@@ -30,14 +50,6 @@ void gameDestroy()
 {
     glfwDestroyWindow(s_window);
     glfwTerminate();
-}
-
-static void drawBackground(Sprite const* _sprite, const GLuint _shaderID)
-{
-    const float x = -SHARK_CAMERA_RECT_WIDTH / 2.0f;
-    const float y = -SHARK_CAMERA_RECT_HEIGHT / 2.0f;
-    setShaderProgramUniform(_shaderID, "position", x, y);
-    drawSprite(_sprite, _shaderID);
 }
 
 void gameRunLoop()

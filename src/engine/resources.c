@@ -50,8 +50,11 @@ unsigned int resourceLoadSprite(unsigned int _textureID, int _width, int _height
                                 vecf2 _uvBottomLeft, vecf2 _uvTopRight)
 {
     LOG_INFO("Loading sprite (tex=%ud, w=%d, h=%d)", _textureID, _width, _height);
-    ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE, "You must increase the sprite array size");
-    ASSERT_MSG(resourceGetTexture(_textureID) != NULL, "Cannot create a sprite with NULL texture");
+
+    ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE,
+               "You must increase the sprite array size");
+    ASSERT_MSG(resourceGetTexture(_textureID) != NULL,
+               "Cannot create a sprite with NULL texture");
 
     const int pos = s_arraySpritesHead;
     s_arraySprites[pos] = makeSprite(resourceGetTexture(_textureID), _width, _height, _uvBottomLeft, _uvTopRight);

@@ -20,15 +20,17 @@ enum
 
 enum
 {
-    _XTERM_COLOR_WHITE = 0,
-    _XTERM_COLOR_RED = 31,
-    _XTERM_COLOR_GREEN = 32,
-    _XTERM_COLOR_YELLOW = 33,
+    _XTERM_COLOR_DEFAULT    = 0,
+    _XTERM_COLOR_ORANGE     = 31,
+    _XTERM_COLOR_GREEN      = 32,
+    _XTERM_COLOR_YELLOW     = 33,
+    _XTERM_COLOR_BLUE       = 34,
+    _XTERM_COLOR_RED        = 35,
 };
 
 
 // -----------------------------------------------------------------------------
-// Log methods
+// Static log methods (internal)
 // -----------------------------------------------------------------------------
 
 // Returns a string representation of a log level
@@ -37,29 +39,29 @@ static inline const char* _logLevelHeader(const int level)
     switch(level)
     {
         case _LOG_LEVEL_DBG:
-            return "[LOG DBG]: ";
+            return "[DBG] ";
         case _LOG_LEVEL_INFO:
-            return "[LOG INFO]: ";
+            return "[INFO] ";
         case _LOG_LEVEL_WARN:
-            return "[LOG WARN]: ";
+            return "[WARN] ";
         case _LOG_LEVEL_ERR:
-            return "[LOG ERR]: ";
+            return "[ERR] ";
         default:
-            return "[LOG OMG]: ";
+            return "[OMG] ";
     }
 }
 
-// Returns a the terminal color for a log level
+// Returns the terminal color for this log level
 static inline int _logLevelColor(const int level)
 {
     switch(level)
     {
         case _LOG_LEVEL_DBG:
-            return _XTERM_COLOR_WHITE;
+            return _XTERM_COLOR_BLUE;
         case _LOG_LEVEL_INFO:
-            return _XTERM_COLOR_WHITE;
-        case _LOG_LEVEL_WARN:
             return _XTERM_COLOR_YELLOW;
+        case _LOG_LEVEL_WARN:
+            return _XTERM_COLOR_ORANGE;
         case _LOG_LEVEL_ERR:
             return _XTERM_COLOR_RED;
         default:
@@ -67,7 +69,7 @@ static inline int _logLevelColor(const int level)
     }
 }
 
-// Print a log
+// Prints a log
 static inline void _log(const int level, const char* format, ...)
 {
     va_list ap;

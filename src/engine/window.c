@@ -10,7 +10,7 @@ static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height
 
 static void glfwErrorCallback(int _error, const char* _description)
 {
-    LOG_ERR("GLFW error %d: %s\n", _error, _description);
+    LOG_ERR("GLFW error %d: %s", _error, _description);
 }
 
 static void glfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _modes)
