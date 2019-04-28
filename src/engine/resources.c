@@ -7,8 +7,10 @@
 // This is a terribly simple and naive implementation of a resource registery.
 // All the resources are loaded at start and no 'unload' is implemented.
 // These are LSR (Load-and-Stay resident) resources that live for the game duration.
-// This gives use the knowledge of the exact resource registery size.
-// For this purpose, I use an array, with index as the resource ID.
+
+// DevNote2:
+// Since this is a simple game, we know the exact number of needed resources
+// at start, therefore, the array size is hardcoded with a known value.
 
 
 // -----------------------------------------------------------------------------
@@ -16,12 +18,12 @@
 // -----------------------------------------------------------------------------
 
 // Textures
-#define S_ARRAY_TEXTURES_SIZE 5
+#define S_ARRAY_TEXTURES_SIZE 3
 static Texture s_arrayTextures[S_ARRAY_TEXTURES_SIZE];
 static unsigned int s_arrayTexturesHead = 0;
 
 // Sprites
-#define S_ARRAY_SPRITES_SIZE 10
+#define S_ARRAY_SPRITES_SIZE 3
 static Sprite s_arraySprites[S_ARRAY_SPRITES_SIZE];
 static unsigned int s_arraySpritesHead = 0;
 
@@ -58,8 +60,8 @@ Texture * resourceGetTexture(const unsigned int _resourceID)
 unsigned int resourceLoadSprite(Texture * _tex, int _w, int _h, vecf2 _origin)
 {
     ASSERT_MSG(_tex != NULL, "[Resource] Texture param _tex should not be NULL");
-    ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE,
-               "[Resource] Please increase S_ARRAY_TEXTURES_SIZE");
+    ASSERT_MSG(s_arraySpritesHead < S_ARRAY_SPRITES_SIZE,
+               "[Resource] Please increase S_ARRAY_SPRITES_SIZE");
 
     const int resourceID = s_arraySpritesHead;
 
