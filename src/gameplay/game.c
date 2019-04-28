@@ -53,12 +53,20 @@ static void drawBoat(Boat const * _boat, const GLuint _shaderID)
 
 static void gameUpdate(Game * _game, float _dt)
 {
-    // TODO
+    _game->boat.velocity = 0.0f;
+    if(glfwGetKey(s_window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        _game->boat.velocity = -SHARK_BOAT_SPEED;
+    }
+    else if(glfwGetKey(s_window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        _game->boat.velocity = SHARK_BOAT_SPEED;
+    }
 }
 
 static void gameFixedUpdate(Game * _game, float _dt)
 {
-    // TODO
+    _game->boat.position.x += _game->boat.velocity;
 }
 
 static void gameRender(Game * _game)
@@ -67,7 +75,6 @@ static void gameRender(Game * _game)
     drawShark(&_game->shark, s_shaderID);
     drawBoat(&_game->boat, s_shaderID);
 }
-
 
 
 // -----------------------------------------------------------------------------
@@ -85,6 +92,11 @@ void gameInit()
             "./shaders/vertex_shader.glsl",
             "./shaders/fragment_shader.glsl");
 
+    // Camera is hardcoded with a default rect of vision
+    setShaderProgramUniform(s_shaderID, "cameraRect",
+            SHARK_CAMERA_RECT_WIDTH,
+            SHARK_CAMERA_RECT_HEIGHT);
+
     // Tmp vars to create game elements
     unsigned int tex_id = 0;
     unsigned int sprite_id = 0;
@@ -101,16 +113,11 @@ void gameInit()
     Shark shark = {{0.0f, 0.0f}, resourceGetSprite(sprite_id)};
     s_game.shark = shark;
 
-    // Boat
+    // Game boat
     tex_id = resourceLoadTexture("./resources/tmp/boat.png");
     sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 45, 38, origin);
-    Boat boat = {{0.0f, -100.0f}, resourceGetSprite(sprite_id)};
+    Boat boat = {{0.0f, -100.0f}, 0.0f, resourceGetSprite(sprite_id)};
     s_game.boat = boat;
-
-    // Camera is hardcoded with a default rect of vision
-    setShaderProgramUniform(s_shaderID, "cameraRect",
-            SHARK_CAMERA_RECT_WIDTH,
-            SHARK_CAMERA_RECT_HEIGHT);
 }
 
 void gameDestroy()
@@ -120,7 +127,10 @@ void gameDestroy()
 
 void gameRunLoop()
 {
-    glfwSwapInterval(1);
+    ASSERT_MSG(s_window != NULL, "[Game] You must init the game before running it");
+    ASSERT_MSG(s_shaderID != 0, "[Game] You must init the game before running it");
+
+    glfwSwapInterval(1); // vsync
 
     float timeBeginInSec = glfwGetTime();
     float timeEndInSec = 0.0f;

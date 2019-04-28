@@ -11,6 +11,7 @@
 typedef struct
 {
     vecf2 position;
+    float velocity; // Boat can move only on x axis
     Sprite * sprite;
 } Boat;
 
@@ -22,9 +23,9 @@ typedef struct
 
 typedef struct
 {
-	Boat boat;
-	Shark shark;
-	Sprite * background;
+    Boat boat;
+    Shark shark;
+    Sprite * background;
 } Game;
 
 
