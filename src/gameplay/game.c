@@ -14,6 +14,7 @@
 // -----------------------------------------------------------------------------
 // Static data
 // -----------------------------------------------------------------------------
+
 static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!
 static GLuint s_shaderID = 0;
 
@@ -21,6 +22,7 @@ static GLuint s_shaderID = 0;
 // -----------------------------------------------------------------------------
 // Static methods
 // -----------------------------------------------------------------------------
+
 static void drawBackground(Sprite const* _sprite, const GLuint _shaderID)
 {
     const float x = -SHARK_CAMERA_RECT_WIDTH / 2.0f;
@@ -54,28 +56,26 @@ void gameDestroy()
 
 void gameRunLoop()
 {
-    // TMP UV coords
-    vecf2 uv1 = {0.0f, 0.0f};
-    vecf2 uv2 = {1.0f, 1.0f};
-
-    unsigned int id = 0; // tmp id
+    unsigned int tex_id = 0; // tmp id
+    unsigned int sprite_id = 0; // tmp id
+    vecf2 origin = {0.0f, 0.0f};
 
     // TMP Background
-    id = resourceLoadTexture("./resources/tmp/background.png");
-    id = resourceLoadSprite(id, 640.0f, 480.0f, uv1, uv2);
-    Sprite * spriteBackground = resourceGetSprite(id);
+    tex_id = resourceLoadTexture("./resources/tmp/background.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 191, 199, origin);
+    Sprite * spriteBackground = resourceGetSprite(sprite_id);
 
     // TMP shark
-    id = resourceLoadTexture("./resources/tmp/shark_a.png");
-    id = resourceLoadSprite(id, 78, 16, uv1, uv2);
-    Sprite * spriteShark = resourceGetSprite(id);
-    Shark shark = {{100.0f, 0.0f}, spriteShark};
+    tex_id = resourceLoadTexture("./resources/tmp/shark_a.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 39, 16, origin);
+    Sprite * spriteShark = resourceGetSprite(sprite_id);
+    Shark shark = {{0.0f, 0.0f}, spriteShark};
 
     // TMP boat
-    id = resourceLoadTexture("./resources/tmp/boat.png");
-    id = resourceLoadSprite(id, 45, 38, uv1, uv2);
-    Sprite * spriteBoat = resourceGetSprite(id);
-    Boat boat = {{0.0f, -230.0f}, spriteBoat};
+    tex_id = resourceLoadTexture("./resources/tmp/boat.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 45, 38, origin);
+    Sprite * spriteBoat = resourceGetSprite(sprite_id);
+    Boat boat = {{0.0f, -100.0f}, spriteBoat};
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect",
@@ -110,5 +110,4 @@ void gameRunLoop()
         timeBeginInSec = timeEndInSec;
     }
 }
-
 

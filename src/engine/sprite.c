@@ -21,12 +21,11 @@ static unsigned int s_indices[] =
 // Methods
 // -----------------------------------------------------------------------------
 
-Sprite makeSprite(Texture * _texture, int _width, int _height,
-                  vecf2 _uvBottomLeft, vecf2 _uvTopRight)
+Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin)
 {
-    ASSERT_MSG(_texture != NULL, "No texture provided! What are you doing?");
-    ASSERT_MSG(_width >= 0, "Texture with invalid width (width < 0)");
-    ASSERT_MSG(_height >= 0, "Texture with invalid height (width < 0)");
+    ASSERT_MSG(_texture != NULL, "[Sprite] No texture provided! What are you doing?");
+    ASSERT_MSG(_width >= 0, "[Sprite] Invalid width (width < 0)");
+    ASSERT_MSG(_height >= 0, "[Sprite] Invalid height (width < 0)");
 
     Sprite sprite;
     sprite.texture = _texture;
@@ -36,26 +35,26 @@ Sprite makeSprite(Texture * _texture, int _width, int _height,
     // Top left vertex
     sprite.vertices[0].position.x = 0.0f;
     sprite.vertices[0].position.y = _height;
-    sprite.vertices[0].uv.x = _uvBottomLeft.x;
-    sprite.vertices[0].uv.y = _uvTopRight.y;
+    sprite.vertices[0].uv.x = _origin.x / _texture->width;
+    sprite.vertices[0].uv.y = (_origin.y + _height) / _texture->height;
 
     // Top right vertex
     sprite.vertices[1].position.x = _width;
     sprite.vertices[1].position.y = _height;
-    sprite.vertices[1].uv.x = _uvTopRight.x;
-    sprite.vertices[1].uv.y = _uvTopRight.y;
+    sprite.vertices[1].uv.x = (_origin.x + _width) / _texture->width;
+    sprite.vertices[1].uv.y = (_origin.y + _height) / _texture->height;
 
     // Bottom right vertex
     sprite.vertices[2].position.x = _width;
     sprite.vertices[2].position.y = 0.0f;
-    sprite.vertices[2].uv.x = _uvTopRight.x;
-    sprite.vertices[2].uv.y = _uvBottomLeft.y;
+    sprite.vertices[2].uv.x = (_origin.x + _width) / _texture->width;
+    sprite.vertices[2].uv.y = _origin.y / _texture->height;
 
     // Bottom left vertex
     sprite.vertices[3].position.x = 0.0f;
     sprite.vertices[3].position.y = 0.0f;
-    sprite.vertices[3].uv.x = _uvBottomLeft.x;
-    sprite.vertices[3].uv.y = _uvBottomLeft.y;
+    sprite.vertices[3].uv.x = _origin.x / _texture->width;
+    sprite.vertices[3].uv.y = _origin.y / _texture->height;
 
 
     // VAO
@@ -105,7 +104,7 @@ void drawSprite(Sprite const* _sprite, const GLuint _shaderID)
 
 void destroySprite(Sprite * _sprite)
 {
-    ASSERT_MSG(_sprite != NULL, "NULL sprite given to the destroy method");
+    ASSERT_MSG(_sprite != NULL, "[Sprite] Sprite should not be NULL");
 
     glDeleteVertexArrays(1, &_sprite->vertex_vao);
 
