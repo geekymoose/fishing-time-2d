@@ -2,35 +2,45 @@
 
 #include "engine/log.h"
 
+
+// -----------------------------------------------------------------------------
+// Internal static methods
+// -----------------------------------------------------------------------------
+
 static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
-    LOG_DBG("Resizing: w = %d, h = %d", _width, _height);
+    LOG_DBG("[Window] Resizing: w = %d, h = %d", _width, _height);
     glViewport(0, 0, _width, _height);
 }
 
 static void glfwErrorCallback(int _error, const char* _description)
 {
-    LOG_ERR("GLFW error %d: %s", _error, _description);
+    LOG_ERR("[Window] GLFW error %d: %s", _error, _description);
 }
 
 static void glfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _modes)
 {
     if(_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
     {
-        glfwSetWindowShouldClose(_window, 1);
+        closeWindow(_window);
     }
 }
+
+
+// -----------------------------------------------------------------------------
+// Public methods
+// -----------------------------------------------------------------------------
 
 GLFWwindow * createWindowGLFW(const int width, const int height, const char* title)
 {
     // Init GLFW
     if(!glfwInit())
     {
-        LOG_ERR("Unable to initialize glfw. Ahah you suck!");
+        LOG_ERR("[Window] Unable to initialize glfw. Ahah you suck!");
         return NULL;
     }
-    LOG_INFO("GLFW successfully initialized. Not that bad!");
-    LOG_INFO("GLFW info: %s", glfwGetVersionString());
+    LOG_INFO("[Window] GLFW successfully initialized. Not that bad!");
+    LOG_INFO("[Window] GLFW info: %s", glfwGetVersionString());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -39,7 +49,7 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
     GLFWwindow * window = glfwCreateWindow(width, height, title, NULL, NULL);
     if(window == NULL)
     {
-        LOG_ERR("Unable to create GLFW window. How are you gonna play now?");
+        LOG_ERR("[Window] Unable to create GLFW window. How are you gonna play now?");
         glfwTerminate();
         return NULL;
     }
@@ -54,14 +64,48 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
     GLenum glewinit = glewInit();
     if(glewinit != GLEW_OK)
     {
-        LOG_ERR("Unable to init GLEW. He was not in the mood");
+        LOG_ERR("[Window] Unable to init GLEW. He was not in the mood");
         glfwDestroyWindow(window);
         glfwTerminate();
         return NULL;
     }
-    LOG_INFO("GLEW successfully initialize! GG!");
+    LOG_INFO("[Window] GLEW successfully initialize! GG!");
+
+    // Specific config (used for alpha color)
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     return window;
 }
 
+void destroyWindowGLFW(GLFWwindow * _window)
+{
+    LOG_INFO("[Window] Destroy GLFW window and terminate GLFW");
+    ASSERT_MSG(_window != NULL, "[Window] Cannot destroy NULL window");
+
+    glfwDestroyWindow(_window);
+    glfwTerminate();
+}
+
+void clearWindow(GLFWwindow * _window)
+{
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void swapWindow(GLFWwindow * _window)
+{
+    glfwSwapBuffers(_window);
+    glfwPollEvents();
+}
+
+void closeWindow(GLFWwindow * _window)
+{
+    glfwSetWindowShouldClose(_window, 1);
+}
+
+int isWindowClosed(GLFWwindow * _window)
+{
+    return glfwWindowShouldClose(_window);
+}
 

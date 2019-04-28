@@ -6,8 +6,6 @@
 #include "engine/texture.h"
 #include "engine/window.h"
 #include "gameplay/config.h"
-#include "gameplay/shark.h"
-#include "gameplay/boat.h"
 #include "engine/resources.h"
 
 
@@ -50,8 +48,7 @@ void gameInit()
 
 void gameDestroy()
 {
-    glfwDestroyWindow(s_window);
-    glfwTerminate();
+    destroyWindowGLFW(s_window);
 }
 
 void gameRunLoop()
@@ -87,23 +84,18 @@ void gameRunLoop()
     float timeBeginInSec = glfwGetTime();
     float timeEndInSec = 0.0f;
     float dt = 1.0f / 60.0f;
-    while(!glfwWindowShouldClose(s_window))
+    while(!isWindowClosed(s_window))
     {
         int fps = (int)(1.0f / dt);
         LOG_DBG("dt = %f, fps = %d", dt, fps);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        clearWindow(s_window);
 
         drawBackground(spriteBackground, s_shaderID);
         drawShark(&shark, s_shaderID);
         drawBoat(&boat, s_shaderID);
 
-        glfwSwapBuffers(s_window);
-        glfwPollEvents();
+        swapWindow(s_window);
 
         timeEndInSec = glfwGetTime();
         dt = timeEndInSec - timeBeginInSec;
