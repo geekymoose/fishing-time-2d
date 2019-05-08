@@ -2,6 +2,7 @@
 
 #include "engine/libmath.h"
 #include "engine/sprite.h"
+#include "config.h"
 
 
 // -----------------------------------------------------------------------------
@@ -18,6 +19,7 @@ typedef struct
 typedef struct
 {
     vecf2 position;
+    float velocity; // Moves only on Y axis
     Sprite * sprite;
 } Shark;
 
@@ -31,7 +33,7 @@ typedef struct
 typedef struct
 {
     Boat boat;
-    Shark shark;
+    Shark * sharksArray[GAME_NB_MAX_SHARKS];
     Anchor * anchor;
     Sprite * background;
 } Game;

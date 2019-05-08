@@ -1,9 +1,10 @@
 #include "game.h"
 
+#include <stdlib.h>
+
 #include "engine/log.h"
 #include "engine/shader.h"
 #include "engine/window.h"
-#include "gameplay/config.h"
 #include "engine/resources.h"
 
 
@@ -11,7 +12,10 @@
 // Static data
 // -----------------------------------------------------------------------------
 
-static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!
+// Statics vars
+// Since there are few elements, we use static instantiations.
+// It is easier and OK for our purpose (instead of malloc / free).
+static GLFWwindow * s_window  = NULL;
 static GLuint s_shaderID = 0;
 static Game s_game;
 static Anchor s_anchor;
@@ -57,6 +61,7 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
     drawSprite(_anchor->sprite, _shaderID);
 }
 
+
 // -----------------------------------------------------------------------------
 // Static update methods
 // -----------------------------------------------------------------------------
@@ -88,6 +93,12 @@ static void gameFixedUpdate(Game * _game, float _dt)
 {
     _game->boat.position.x += (_game->boat.velocity * _dt);
 
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
+        _game->sharksArray[i]->position.y -= (_game->sharksArray[i]->velocity * _dt);
+    }
+
     if(_game->anchor != NULL)
     {
         _game->anchor->position.y += (_game->anchor->velocity * _dt);
@@ -105,7 +116,13 @@ static void gameFixedUpdate(Game * _game, float _dt)
 static void gameRender(Game * _game)
 {
     drawBackground(_game->background, s_shaderID);
-    drawShark(&_game->shark, s_shaderID);
+
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
+        drawShark(_game->sharksArray[i], s_shaderID);
+    }
+
     drawBoat(&_game->boat, s_shaderID);
 
     if(_game->anchor != NULL)
@@ -140,16 +157,10 @@ void gameInit()
     unsigned int sprite_id = 0;
     vecf2 origin = {0.0f, 0.0f};
 
-    // Game background
-    tex_id = resourceLoadTexture("./resources/background.png");
+    // Resource Background
+    tex_id = resourceLoadTexture("./resources/tmp/background.png");
     sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 200, 200, origin);
     s_game.background = resourceGetSprite(sprite_id);
-
-    // Game shark
-    tex_id = resourceLoadTexture("./resources/tmp/shark_a.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 39, 16, origin);
-    Shark shark = {{0.0f, 0.0f}, resourceGetSprite(sprite_id)};
-    s_game.shark = shark;
 
     // Game boat
     tex_id = resourceLoadTexture("./resources/tmp/boat.png");
@@ -165,11 +176,39 @@ void gameInit()
     s_anchor.velocity = GAME_ANCHOR_SPEED;
     s_anchor.sprite = resourceGetSprite(sprite_id);
     s_game.anchor = NULL; // when game has anchor set, means boat is firing
+
+    // Resource shark
+    tex_id = resourceLoadTexture("./resources/tmp/shark_a.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 39, 16, origin);
+
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        s_game.sharksArray[i] = (Shark*)malloc(sizeof(Shark));
+
+        ASSERT_MSG(s_game.sharksArray[i] != NULL, "malloc(Shark) failed");
+        if(s_game.sharksArray[i] == NULL)
+        {
+            LOG_ERR("Unable to malloc the shark size at index %d", i);
+        }
+        else
+        {
+            s_game.sharksArray[i]->position.x = (i * 40.0f) - 100; // TMP positions
+            s_game.sharksArray[i]->position.y = 100.0f; // Top of the screen
+            s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
+            s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
+        }
+    }
 }
 
 void gameDestroy()
 {
     destroyWindowGLFW(s_window);
+
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        ASSERT_MSG(s_game.sharksArray[i] != NULL, "Shark array has an unexpected NULL value");
+        free(s_game.sharksArray[i]);
+    }
 }
 
 void gameRunLoop()
@@ -211,4 +250,5 @@ void gameRunLoop()
         timeBeginInSec = timeEndInSec;
     }
 }
+
 
