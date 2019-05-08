@@ -23,8 +23,16 @@ typedef struct
 
 typedef struct
 {
+    vecf2 position;
+    float velocity; // Moves only on Y axis
+    Sprite * sprite;
+} Anchor;
+
+typedef struct
+{
     Boat boat;
     Shark shark;
+    Anchor * anchor;
     Sprite * background;
 } Game;
 

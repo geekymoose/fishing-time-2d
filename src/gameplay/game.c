@@ -14,6 +14,7 @@
 static GLFWwindow * s_window  = NULL; // Yeah, ugly static var. GameJam style!
 static GLuint s_shaderID = 0;
 static Game s_game;
+static Anchor s_anchor;
 
 
 // -----------------------------------------------------------------------------
@@ -47,6 +48,15 @@ static void drawBoat(Boat const * _boat, const GLuint _shaderID)
     drawSprite(_boat->sprite, _shaderID);
 }
 
+static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
+{
+    ASSERT_MSG(_anchor != NULL, "[Draw] Anchor NULL");
+    ASSERT_MSG(_anchor->sprite != NULL, "[Draw] Anchor has no sprite");
+
+    setShaderProgramUniform(_shaderID, "position", _anchor->position.x, _anchor->position.y);
+    drawSprite(_anchor->sprite, _shaderID);
+}
+
 // -----------------------------------------------------------------------------
 // Static update methods
 // -----------------------------------------------------------------------------
@@ -54,19 +64,34 @@ static void drawBoat(Boat const * _boat, const GLuint _shaderID)
 static void gameUpdate(Game * _game, float _dt)
 {
     _game->boat.velocity = 0.0f;
-    if(glfwGetKey(s_window, GLFW_KEY_A) == GLFW_PRESS)
+    if(glfwGetKey(s_window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         _game->boat.velocity = -SHARK_BOAT_SPEED;
     }
-    else if(glfwGetKey(s_window, GLFW_KEY_D) == GLFW_PRESS)
+    else if(glfwGetKey(s_window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
         _game->boat.velocity = SHARK_BOAT_SPEED;
+    }
+    else if(glfwGetKey(s_window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        if(_game->anchor == NULL)
+        {
+            // TODO Shoot
+            s_anchor.position.x = _game->boat.position.x;
+            s_anchor.position.y = _game->boat.position.y;
+            _game->anchor = &s_anchor;
+        }
     }
 }
 
 static void gameFixedUpdate(Game * _game, float _dt)
 {
-    _game->boat.position.x += _game->boat.velocity;
+    _game->boat.position.x += (_game->boat.velocity * _dt);
+
+    if(_game->anchor != NULL)
+    {
+        _game->anchor->position.y += (_game->anchor->velocity * _dt);
+    }
 }
 
 static void gameRender(Game * _game)
@@ -74,6 +99,11 @@ static void gameRender(Game * _game)
     drawBackground(_game->background, s_shaderID);
     drawShark(&_game->shark, s_shaderID);
     drawBoat(&_game->boat, s_shaderID);
+
+    if(_game->anchor != NULL)
+    {
+        drawAnchor(_game->anchor, s_shaderID);
+    }
 }
 
 
@@ -103,8 +133,8 @@ void gameInit()
     vecf2 origin = {0.0f, 0.0f};
 
     // Game background
-    tex_id = resourceLoadTexture("./resources/tmp/background.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 191, 199, origin);
+    tex_id = resourceLoadTexture("./resources/background.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 200, 200, origin);
     s_game.background = resourceGetSprite(sprite_id);
 
     // Game shark
@@ -118,6 +148,15 @@ void gameInit()
     sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 45, 38, origin);
     Boat boat = {{0.0f, -100.0f}, 0.0f, resourceGetSprite(sprite_id)};
     s_game.boat = boat;
+
+    // Game anchor
+    tex_id = resourceLoadTexture("./resources/tmp/anchor.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 12, 13, origin);
+    s_anchor.position.x = 0.0f;
+    s_anchor.position.y = 0.0f;
+    s_anchor.velocity = SHARK_ANCHOR_SPEED;
+    s_anchor.sprite = resourceGetSprite(sprite_id);
+    s_game.anchor = NULL; // when game has anchor set, means boat is firing
 }
 
 void gameDestroy()

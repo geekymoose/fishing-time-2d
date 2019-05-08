@@ -18,12 +18,12 @@
 // -----------------------------------------------------------------------------
 
 // Textures
-#define S_ARRAY_TEXTURES_SIZE 3
+#define S_ARRAY_TEXTURES_SIZE 4
 static Texture s_arrayTextures[S_ARRAY_TEXTURES_SIZE];
 static unsigned int s_arrayTexturesHead = 0;
 
 // Sprites
-#define S_ARRAY_SPRITES_SIZE 3
+#define S_ARRAY_SPRITES_SIZE 4
 static Sprite s_arraySprites[S_ARRAY_SPRITES_SIZE];
 static unsigned int s_arraySpritesHead = 0;
 
