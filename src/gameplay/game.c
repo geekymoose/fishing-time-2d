@@ -23,8 +23,8 @@ static Anchor s_anchor;
 
 static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
 {
-    const float x = -SHARK_CAMERA_RECT_WIDTH / 2.0f;
-    const float y = -SHARK_CAMERA_RECT_HEIGHT / 2.0f;
+    const float x = -GAME_CAMERA_RECT_WIDTH / 2.0f;
+    const float y = -GAME_CAMERA_RECT_HEIGHT / 2.0f;
 
     setShaderProgramUniform(_shaderID, "position", x, y);
     drawSprite(_sprite, _shaderID);
@@ -66,17 +66,17 @@ static void gameUpdate(Game * _game, float _dt)
     _game->boat.velocity = 0.0f;
     if(glfwGetKey(s_window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        _game->boat.velocity = -SHARK_BOAT_SPEED;
+        _game->boat.velocity = -GAME_BOAT_SPEED;
     }
     else if(glfwGetKey(s_window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        _game->boat.velocity = SHARK_BOAT_SPEED;
+        _game->boat.velocity = GAME_BOAT_SPEED;
     }
-    else if(glfwGetKey(s_window, GLFW_KEY_SPACE) == GLFW_PRESS)
+
+    if(glfwGetKey(s_window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         if(_game->anchor == NULL)
         {
-            // TODO Shoot
             s_anchor.position.x = _game->boat.position.x;
             s_anchor.position.y = _game->boat.position.y;
             _game->anchor = &s_anchor;
@@ -91,6 +91,14 @@ static void gameFixedUpdate(Game * _game, float _dt)
     if(_game->anchor != NULL)
     {
         _game->anchor->position.y += (_game->anchor->velocity * _dt);
+
+        // The world doesn't move, 0:0 is the center of the screen, therefore,
+        // the top border is the camera height / 2
+        // since camera is exactly the world size
+        if(_game->anchor->position.y >= (GAME_CAMERA_RECT_HEIGHT / 2))
+        {
+            _game->anchor = NULL;
+        }
     }
 }
 
@@ -114,9 +122,9 @@ static void gameRender(Game * _game)
 void gameInit()
 {
     s_window = createWindowGLFW(
-            SHARK_WINDOW_WIDTH,
-            SHARK_WINDOW_HEIGHT,
-            SHARK_WINDOW_TITLE);
+            GAME_WINDOW_WIDTH,
+            GAME_WINDOW_HEIGHT,
+            GAME_WINDOW_TITLE);
 
     s_shaderID = createShaderProgramFromFile(
             "./shaders/vertex_shader.glsl",
@@ -124,8 +132,8 @@ void gameInit()
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect",
-            SHARK_CAMERA_RECT_WIDTH,
-            SHARK_CAMERA_RECT_HEIGHT);
+            GAME_CAMERA_RECT_WIDTH,
+            GAME_CAMERA_RECT_HEIGHT);
 
     // Tmp vars to create game elements
     unsigned int tex_id = 0;
@@ -154,7 +162,7 @@ void gameInit()
     sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 12, 13, origin);
     s_anchor.position.x = 0.0f;
     s_anchor.position.y = 0.0f;
-    s_anchor.velocity = SHARK_ANCHOR_SPEED;
+    s_anchor.velocity = GAME_ANCHOR_SPEED;
     s_anchor.sprite = resourceGetSprite(sprite_id);
     s_game.anchor = NULL; // when game has anchor set, means boat is firing
 }
