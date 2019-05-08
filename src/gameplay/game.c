@@ -91,7 +91,12 @@ static void gameUpdate(Game * _game, float _dt)
 
 static void gameFixedUpdate(Game * _game, float _dt)
 {
-    _game->boat.position.x += (_game->boat.velocity * _dt);
+    const int limit = GAME_CAMERA_RECT_WIDTH/2; // Boat cannot go outside camera.
+    const float nextpos = _game->boat.position.x + (_game->boat.velocity * _dt);
+    if(nextpos > -limit && nextpos < limit)
+    {
+        _game->boat.position.x = nextpos;
+    }
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
