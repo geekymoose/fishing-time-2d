@@ -2,10 +2,11 @@
 
 #include <stdlib.h>
 
+#include "engine/animation.h"
 #include "engine/log.h"
+#include "engine/resources.h"
 #include "engine/shader.h"
 #include "engine/window.h"
-#include "engine/resources.h"
 
 
 // -----------------------------------------------------------------------------
@@ -45,11 +46,12 @@ static void drawShark(Shark const * _shark, const GLuint _shaderID)
 
 static void drawBoat(Boat const * _boat, const GLuint _shaderID)
 {
-    ASSERT_MSG(_boat != NULL, "[Draw] Boat NULL");
-    ASSERT_MSG(_boat->sprite != NULL, "[Draw] Boat has no sprite");
+    ASSERT_MSG(_boat != NULL, "[Draw] Boat pointer NULL");
+    ASSERT_MSG(_boat->spritesArray[_boat->anim.currentFrameIndex] != NULL,
+               "[Draw] Boat sprite in spritesArray is NULL");
 
     setShaderProgramUniform(_shaderID, "position", _boat->position.x, _boat->position.y);
-    drawSprite(_boat->sprite, _shaderID);
+    drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _shaderID);
 }
 
 static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
@@ -68,6 +70,7 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
 
 static void gameUpdate(Game * _game, float _dt)
 {
+    // Boat movement
     _game->boat.velocity = 0.0f;
     if(glfwGetKey(s_window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
@@ -78,6 +81,7 @@ static void gameUpdate(Game * _game, float _dt)
         _game->boat.velocity = GAME_BOAT_SPEED;
     }
 
+    // Boat shoot anchor
     if(glfwGetKey(s_window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         if(_game->anchor == NULL)
@@ -87,6 +91,9 @@ static void gameUpdate(Game * _game, float _dt)
             _game->anchor = &s_anchor;
         }
     }
+
+    // Boat anim
+    updateAnimation(&(_game->boat.anim), _dt);
 }
 
 static void gameFixedUpdate(Game * _game, float _dt)
@@ -167,13 +174,7 @@ void gameInit()
     sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 200, 200, origin);
     s_game.background = resourceGetSprite(sprite_id);
 
-    // Game boat
-    tex_id = resourceLoadTexture("./resources/tmp/boat.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 45, 38, origin);
-    Boat boat = {{0.0f, -100.0f}, 0.0f, resourceGetSprite(sprite_id)};
-    s_game.boat = boat;
-
-    // Game anchor
+    // Resource anchor
     tex_id = resourceLoadTexture("./resources/tmp/anchor.png");
     sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 12, 13, origin);
     s_anchor.position.x = 0.0f;
@@ -202,6 +203,23 @@ void gameInit()
             s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
             s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
         }
+    }
+
+    // Resource boat
+    s_game.boat.position.x = 0.0f;
+    s_game.boat.position.y = -100.0f;
+    s_game.boat.velocity = GAME_BOAT_SPEED;
+    s_game.boat.anim.nbFrames = GAME_BOAT_ANIM_NB_FRAMES;
+    s_game.boat.anim.currentFrameIndex = 0;
+    s_game.boat.anim.frameDurationInSec = GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC;
+    s_game.boat.anim.currentFrameDurationInSec = 0.0f;
+
+    tex_id = resourceLoadTexture("./resources/tmp/boat.png");
+    for(int i = 0; i < s_game.boat.anim.nbFrames; ++i)
+    {
+        origin.x = i * 45;
+        sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 45, 38, origin);
+        s_game.boat.spritesArray[i] = resourceGetSprite(sprite_id);
     }
 }
 

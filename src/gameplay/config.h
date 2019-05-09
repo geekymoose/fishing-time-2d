@@ -14,12 +14,22 @@
 
 
 // -----------------------------------------------------------------------------
+// Anims
+// -----------------------------------------------------------------------------
+
+// Durations are the time that one frame lasts.
+#define GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC  0.250f
+#define GAME_BOAT_ANIM_NB_FRAMES 4
+
+
+// -----------------------------------------------------------------------------
 // Gameplay
 // -----------------------------------------------------------------------------
 
 #define GAME_NB_MAX_SHARKS 5 // Max number of sharks simultaneously present
 
-#define GAME_BOAT_SPEED 100.0f // In practice, speed is in pixel per seconds
+// In practice, speeds are in pixel per seconds
+#define GAME_BOAT_SPEED 100.0f
 #define GAME_SHARK_SPEED 100.0f
 #define GAME_ANCHOR_SPEED 400.0f
 

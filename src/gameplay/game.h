@@ -2,6 +2,7 @@
 
 #include "engine/libmath.h"
 #include "engine/sprite.h"
+#include "engine/animation.h"
 #include "config.h"
 
 
@@ -13,7 +14,8 @@ typedef struct
 {
     vecf2 position;
     float velocity; // Boat can move only on x axis
-    Sprite * sprite;
+    Animation anim;
+    Sprite * spritesArray[GAME_BOAT_ANIM_NB_FRAMES];
 } Boat;
 
 typedef struct
