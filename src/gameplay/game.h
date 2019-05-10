@@ -3,6 +3,7 @@
 #include "engine/libmath.h"
 #include "engine/sprite.h"
 #include "engine/animation.h"
+#include "engine/collision.h"
 #include "config.h"
 
 
@@ -22,6 +23,7 @@ typedef struct
 {
     vecf2 position;
     float velocity; // Moves only on Y axis
+    RectCollider collider;
     Sprite * sprite;
 } Shark;
 
@@ -29,6 +31,7 @@ typedef struct
 {
     vecf2 position;
     float velocity; // Moves only on Y axis
+    RectCollider collider;
     Sprite * sprite;
 } Anchor;
 

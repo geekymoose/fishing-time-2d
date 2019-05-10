@@ -5,8 +5,8 @@
 // Core
 // -----------------------------------------------------------------------------
 
-#define GAME_WINDOW_WIDTH  500
-#define GAME_WINDOW_HEIGHT 500
+#define GAME_WINDOW_WIDTH  600
+#define GAME_WINDOW_HEIGHT 600
 #define GAME_WINDOW_TITLE  "Raining Sharks"
 
 #define GAME_CAMERA_RECT_WIDTH 200

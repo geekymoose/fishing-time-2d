@@ -98,6 +98,7 @@ static void gameUpdate(Game * _game, float _dt)
 
 static void gameFixedUpdate(Game * _game, float _dt)
 {
+    // Boat position
     const int limit = GAME_CAMERA_RECT_WIDTH/2; // Boat cannot go outside camera.
     const float nextpos = _game->boat.position.x + (_game->boat.velocity * _dt);
     if(nextpos > -limit && nextpos < limit)
@@ -105,15 +106,33 @@ static void gameFixedUpdate(Game * _game, float _dt)
         _game->boat.position.x = nextpos;
     }
 
+    // Sharks positions and collision
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
-        _game->sharksArray[i]->position.y -= (_game->sharksArray[i]->velocity * _dt);
+
+        Shark * shark = _game->sharksArray[i];
+        shark->position.y -= (shark->velocity * _dt);
+        shark->collider.center.x = shark->position.x;
+        shark->collider.center.y = shark->position.y;
+
+        // Check collision if anchor
+        if(_game->anchor != NULL)
+        {
+            if(checkIfCollide(&(shark->collider), &(_game->anchor->collider)) != -1)
+            {
+                LOG_DBG("Collides with shark %d", i);
+                shark->position.y = 150; // TODO tmp, just move shark outside screen
+            }
+        }
     }
 
+    // Anchor position
     if(_game->anchor != NULL)
     {
         _game->anchor->position.y += (_game->anchor->velocity * _dt);
+        _game->anchor->collider.center.x = _game->anchor->position.x;
+        _game->anchor->collider.center.y = _game->anchor->position.y;
 
         // The world doesn't move, 0:0 is the center of the screen, therefore,
         // the top border is the camera height / 2
@@ -181,6 +200,8 @@ void gameInit()
     s_anchor.position.y = 0.0f;
     s_anchor.velocity = GAME_ANCHOR_SPEED;
     s_anchor.sprite = resourceGetSprite(sprite_id);
+    s_anchor.collider.width = 12.0f;
+    s_anchor.collider.height= 13.0f;
     s_game.anchor = NULL; // when game has anchor set, means boat is firing
 
     // Resource shark
@@ -202,6 +223,8 @@ void gameInit()
             s_game.sharksArray[i]->position.y = 100.0f; // Top of the screen
             s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
             s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
+            s_game.sharksArray[i]->collider.width = 39.0f;
+            s_game.sharksArray[i]->collider.height= 16.0f;
         }
     }
 
@@ -251,7 +274,7 @@ void gameRunLoop()
     while(!isWindowClosed(s_window))
     {
         int fps = (int)(1.0f / dt);
-        LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
+        //LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
 
         clearWindow(s_window);
 
