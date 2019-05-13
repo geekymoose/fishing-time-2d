@@ -123,6 +123,7 @@ static void gameFixedUpdate(Game * _game, float _dt)
             {
                 LOG_DBG("Collides with shark %d", i);
                 shark->position.y = 150; // TODO tmp, just move shark outside screen
+                _game->anchor = NULL;
             }
         }
     }
@@ -273,8 +274,8 @@ void gameRunLoop()
 
     while(!isWindowClosed(s_window))
     {
-        int fps = (int)(1.0f / dt);
-        //LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
+        // const int fps = (int)(1.0f / dt);
+        // LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
 
         clearWindow(s_window);
 

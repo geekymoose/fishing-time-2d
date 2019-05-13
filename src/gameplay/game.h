@@ -39,6 +39,7 @@ typedef struct
 {
     Boat boat;
     Shark * sharksArray[GAME_NB_MAX_SHARKS];
+    Sprite * explosions[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
     Anchor * anchor;
     Sprite * background;
 } Game;
@@ -51,4 +52,5 @@ typedef struct
 void gameInit();
 void gameDestroy();
 void gameRunLoop();
+
 
