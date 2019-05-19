@@ -28,11 +28,10 @@ static Anchor s_anchor;
 
 static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
 {
-    const float x = -GAME_CAMERA_RECT_WIDTH / 2.0f;
-    const float y = -GAME_CAMERA_RECT_HEIGHT / 2.0f;
-
-    setShaderProgramUniform(_shaderID, "position", x, y);
-    drawSprite(_sprite, _shaderID);
+    // The world center 0:0 is the center of the screen.
+    // We hard coded to place the background in the center.
+    const vecf2 center = {0.0f, 0.0f};
+    drawSprite(_sprite, center, _shaderID);
 }
 
 static void drawShark(Shark const * _shark, const GLuint _shaderID)
@@ -40,8 +39,7 @@ static void drawShark(Shark const * _shark, const GLuint _shaderID)
     ASSERT_MSG(_shark != NULL, "[Draw] Cannot draw if shark ptr is NULL");
     ASSERT_MSG(_shark->sprite != NULL, "[Draw] Shark has no sprite");
 
-    setShaderProgramUniform(_shaderID, "position", _shark->position.x, _shark->position.y);
-    drawSprite(_shark->sprite, _shaderID);
+    drawSprite(_shark->sprite, _shark->position, _shaderID);
 }
 
 static void drawBoat(Boat const * _boat, const GLuint _shaderID)
@@ -50,8 +48,7 @@ static void drawBoat(Boat const * _boat, const GLuint _shaderID)
     ASSERT_MSG(_boat->spritesArray[_boat->anim.currentFrameIndex] != NULL,
                "[Draw] Boat sprite in spritesArray is NULL");
 
-    setShaderProgramUniform(_shaderID, "position", _boat->position.x, _boat->position.y);
-    drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _shaderID);
+    drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _boat->position, _shaderID);
 }
 
 static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
@@ -59,8 +56,7 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
     ASSERT_MSG(_anchor != NULL, "[Draw] Anchor NULL");
     ASSERT_MSG(_anchor->sprite != NULL, "[Draw] Anchor has no sprite");
 
-    setShaderProgramUniform(_shaderID, "position", _anchor->position.x, _anchor->position.y);
-    drawSprite(_anchor->sprite, _shaderID);
+    drawSprite(_anchor->sprite, _anchor->position, _shaderID);
 }
 
 
@@ -112,6 +108,7 @@ static void gameFixedUpdate(Game * _game, float _dt)
         ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
 
         Shark * shark = _game->sharksArray[i];
+
         shark->position.y -= (shark->velocity * _dt);
         shark->collider.center.x = shark->position.x;
         shark->collider.center.y = shark->position.y;
@@ -184,7 +181,7 @@ void gameInit()
             GAME_CAMERA_RECT_WIDTH,
             GAME_CAMERA_RECT_HEIGHT);
 
-    // Tmp vars to create game elements
+    // Variables used to load resources
     unsigned int tex_id = 0;
     unsigned int sprite_id = 0;
     vecf2 origin = {0.0f, 0.0f};
@@ -203,7 +200,7 @@ void gameInit()
     s_anchor.sprite = resourceGetSprite(sprite_id);
     s_anchor.collider.width = 12.0f;
     s_anchor.collider.height= 13.0f;
-    s_game.anchor = NULL; // when game has anchor set, means boat is firing
+    s_game.anchor = NULL; // When game has anchor set, means boat is firing
 
     // Resource shark
     tex_id = resourceLoadTexture("./resources/tmp/shark_a.png");
@@ -220,7 +217,7 @@ void gameInit()
         }
         else
         {
-            s_game.sharksArray[i]->position.x = (i * 40.0f) - 100; // TMP positions
+            s_game.sharksArray[i]->position.x = (i * 40.0f) - 100; // TODO TMP positions
             s_game.sharksArray[i]->position.y = 100.0f; // Top of the screen
             s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
             s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
@@ -231,7 +228,7 @@ void gameInit()
 
     // Resource boat
     s_game.boat.position.x = 0.0f;
-    s_game.boat.position.y = -100.0f;
+    s_game.boat.position.y = -81.0f;
     s_game.boat.velocity = GAME_BOAT_SPEED;
     s_game.boat.anim.nbFrames = GAME_BOAT_ANIM_NB_FRAMES;
     s_game.boat.anim.currentFrameIndex = 0;

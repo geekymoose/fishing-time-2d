@@ -32,27 +32,32 @@ Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin)
     sprite.size.x = _width;
     sprite.size.y = _height;
 
+    const float x_max = (float)_width / 2.0f;
+    const float x_min = -x_max;
+    const float y_max = (float)_height / 2.0f;
+    const float y_min = -y_max;
+
     // Top left vertex
-    sprite.vertices[0].position.x = 0.0f;
-    sprite.vertices[0].position.y = _height;
+    sprite.vertices[0].position.x = x_min;
+    sprite.vertices[0].position.y = y_max;
     sprite.vertices[0].uv.x = _origin.x / _texture->width;
     sprite.vertices[0].uv.y = (_origin.y + _height) / _texture->height;
 
     // Top right vertex
-    sprite.vertices[1].position.x = _width;
-    sprite.vertices[1].position.y = _height;
+    sprite.vertices[1].position.x = x_max;
+    sprite.vertices[1].position.y = y_max;
     sprite.vertices[1].uv.x = (_origin.x + _width) / _texture->width;
     sprite.vertices[1].uv.y = (_origin.y + _height) / _texture->height;
 
     // Bottom right vertex
-    sprite.vertices[2].position.x = _width;
-    sprite.vertices[2].position.y = 0.0f;
+    sprite.vertices[2].position.x = x_max;
+    sprite.vertices[2].position.y = y_min;
     sprite.vertices[2].uv.x = (_origin.x + _width) / _texture->width;
     sprite.vertices[2].uv.y = _origin.y / _texture->height;
 
     // Bottom left vertex
-    sprite.vertices[3].position.x = 0.0f;
-    sprite.vertices[3].position.y = 0.0f;
+    sprite.vertices[3].position.x = x_min;
+    sprite.vertices[3].position.y = y_min;
     sprite.vertices[3].uv.x = _origin.x / _texture->width;
     sprite.vertices[3].uv.y = _origin.y / _texture->height;
 
@@ -88,8 +93,10 @@ Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin)
     return sprite;
 }
 
-void drawSprite(Sprite const* _sprite, const GLuint _shaderID)
+void drawSprite(Sprite const* _sprite, vecf2 _center, const GLuint _shaderID)
 {
+    setShaderProgramUniform(_shaderID, "position", _center.x, _center.y);
+
     glUseProgram(_shaderID);
 
     glActiveTexture(GL_TEXTURE0); // Done by default actually

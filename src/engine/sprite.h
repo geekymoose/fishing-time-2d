@@ -31,18 +31,23 @@ typedef struct
 // -----------------------------------------------------------------------------
 
 /// Creates a sprite from a texture.
-/// A sprite may render only a part of the texture (e.g., element of a spritesheet)
+/// A sprite may render only a part of the texture to be used with spritesheets.
+/// The origin position 0:0 is the bottom left corner of the spritesheet.
 /// @param _texture The original texture for this sprite.
 /// @param _width The sprite's width in the original texture.
 /// @param _height The sprite's height in the original texture.
 /// @param _origin Location of the sprite in the original texture.
 Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin);
 
-/// Free all resources used by a sprite.
+/// Frees all resources used by a sprite.
 /// The sprite is no longer usable.
 /// @param _sprite Pointer to the sprite to destroy.
 void destroySprite(Sprite * _sprite);
 
-/// Draw a sprite using the specified shader.
-void drawSprite(Sprite const* _sprite, const GLuint _shaderID);
+/// Draws a sprite using the specified shader.
+/// @param _sprite Pointer to the sprite to draw.
+/// @param _center Position of the sprite's center in world coordinates.
+/// @param _shaderID ID of the OpenGL shader to use.
+void drawSprite(Sprite const* _sprite, vecf2 _center, const GLuint _shaderID);
+
 

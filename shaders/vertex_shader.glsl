@@ -11,9 +11,11 @@ uniform vec2 cameraRect; // Rect camera can see (in pixels)
 
 void main()
 {
-    // This is a simplified version of normal model matrix transform (GameJam style!)
+    // DevNote:
+    // This is a simplified version of model matrix transform.
+    // You may see 'position' as the model matrix, using only the "translation" part
 
-    // Position in world space
+    // Model space to world space
     float new_x = _vPos.x + position.x;
     float new_y = _vPos.y + position.y;
 
@@ -26,7 +28,6 @@ void main()
     // This is done by multiplying by 2 the previously divided value.
     new_x *= 2;
     new_y *= 2;
-
 
     gl_Position = vec4(new_x, new_y, 0.0, 1.0);
     texture_UV = _vUV;
