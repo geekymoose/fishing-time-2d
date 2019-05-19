@@ -84,6 +84,8 @@ static void gameUpdate(Game * _game, float _dt)
         {
             s_anchor.position.x = _game->boat.position.x;
             s_anchor.position.y = _game->boat.position.y;
+            s_anchor.collider.center.x = s_anchor.position.x;
+            s_anchor.collider.center.y = s_anchor.position.y;
             _game->anchor = &s_anchor;
         }
     }
