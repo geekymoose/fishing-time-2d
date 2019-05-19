@@ -37,9 +37,16 @@ typedef struct
 
 typedef struct
 {
+    vecf2 position;
+    Animation anim;
+    Sprite * spritesArray[GAME_EXPLOSION_ANIM_NB_FRAMES];
+} Explosion;
+
+typedef struct
+{
     Boat boat;
     Shark * sharksArray[GAME_NB_MAX_SHARKS];
-    Sprite * explosions[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
+    Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
     Anchor * anchor;
     Sprite * background;
 } Game;

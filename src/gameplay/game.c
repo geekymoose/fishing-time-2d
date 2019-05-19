@@ -20,6 +20,7 @@ static GLFWwindow * s_window  = NULL;
 static GLuint s_shaderID = 0;
 static Game s_game;
 static Anchor s_anchor;
+static Explosion s_explosionsPool[GAME_NB_MAX_SHARKS]; // Static pool of explosions
 
 
 // -----------------------------------------------------------------------------
@@ -92,6 +93,22 @@ static void gameUpdate(Game * _game, float _dt)
 
     // Boat anim
     updateAnimation(&(_game->boat.anim), _dt);
+
+    // Explosion anim
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        if(_game->explosionsArray[i] != NULL)
+        {
+            Animation * anim = &(_game->explosionsArray[i]->anim);
+            updateAnimation(anim, _dt);
+            if(anim->currentFrameIndex >= anim->nbFrames - 1)
+            {
+                // DevNote: note that if _dt is high (game freeze), we may bypass
+                // the last frame because anim 'plays' several frame instead of one
+                _game->explosionsArray[i] = NULL;
+            }
+        }
+    }
 }
 
 static void gameFixedUpdate(Game * _game, float _dt)
@@ -120,7 +137,11 @@ static void gameFixedUpdate(Game * _game, float _dt)
         {
             if(checkIfCollide(&(shark->collider), &(_game->anchor->collider)) != -1)
             {
-                LOG_DBG("Collides with shark %d", i);
+                s_game.explosionsArray[i] = &(s_explosionsPool[i]);
+                s_game.explosionsArray[i]->position.x = shark->position.x;
+                s_game.explosionsArray[i]->position.y = shark->position.y;
+                s_game.explosionsArray[i]->anim.currentFrameIndex = 0;
+                s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
                 shark->position.y = 150; // TODO tmp, just move shark outside screen
                 _game->anchor = NULL;
             }
@@ -159,6 +180,16 @@ static void gameRender(Game * _game)
     if(_game->anchor != NULL)
     {
         drawAnchor(_game->anchor, s_shaderID);
+    }
+
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        if(_game->explosionsArray[i] != NULL)
+        {
+            Explosion * explosion = _game->explosionsArray[i];
+            Sprite * sprite = explosion->spritesArray[explosion->anim.currentFrameIndex];
+            drawSprite(sprite, explosion->position, s_shaderID);
+        }
     }
 }
 
@@ -205,7 +236,7 @@ void gameInit()
     s_game.anchor = NULL; // When game has anchor set, means boat is firing
 
     // Resource shark
-    tex_id = resourceLoadTexture("./resources/tmp/shark_a.png");
+    tex_id = resourceLoadTexture("./resources/tmp/shark.png");
     sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 39, 16, origin);
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
@@ -226,6 +257,28 @@ void gameInit()
             s_game.sharksArray[i]->collider.width = 39.0f;
             s_game.sharksArray[i]->collider.height= 16.0f;
         }
+    }
+
+    // Resource explosion
+    tex_id = resourceLoadTexture("./resources/tmp/explosion.png");
+    unsigned int sprite1_id = 0;
+    unsigned int sprite2_id = 0;
+    unsigned int sprite3_id = 0;
+    origin.x = 0;
+    sprite1_id = resourceLoadSprite(resourceGetTexture(tex_id), 13, 14, origin);
+    origin.x = 13;
+    sprite2_id = resourceLoadSprite(resourceGetTexture(tex_id), 13, 14, origin);
+    origin.x = 2 * 13;
+    sprite3_id = resourceLoadSprite(resourceGetTexture(tex_id), 13, 14, origin);
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        s_explosionsPool[i].spritesArray[0] = resourceGetSprite(sprite1_id);
+        s_explosionsPool[i].spritesArray[1] = resourceGetSprite(sprite2_id);
+        s_explosionsPool[i].spritesArray[2] = resourceGetSprite(sprite3_id);
+        s_explosionsPool[i].anim.nbFrames = GAME_EXPLOSION_ANIM_NB_FRAMES;
+        s_explosionsPool[i].anim.currentFrameIndex = 0;
+        s_explosionsPool[i].anim.frameDurationInSec = GAME_EXPLOSION_ANIM_FRAME_DURATION_IN_SEC;
+        s_explosionsPool[i].anim.currentFrameDurationInSec = 0.0f;
     }
 
     // Resource boat
