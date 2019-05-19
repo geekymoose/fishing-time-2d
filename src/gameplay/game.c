@@ -132,6 +132,16 @@ static void gameFixedUpdate(Game * _game, float _dt)
         shark->collider.center.x = shark->position.x;
         shark->collider.center.y = shark->position.y;
 
+        if(shark->position.y <= -(GAME_CAMERA_RECT_HEIGHT / 2))
+        {
+            s_game.explosionsArray[i] = &(s_explosionsPool[i]);
+            s_game.explosionsArray[i]->position.x = shark->position.x;
+            s_game.explosionsArray[i]->position.y = shark->position.y;
+            s_game.explosionsArray[i]->anim.currentFrameIndex = 0;
+            s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
+            shark->position.y = 150; // TODO tmp, just move shark outside screen
+        }
+
         // Check collision if anchor
         if(_game->anchor != NULL)
         {
