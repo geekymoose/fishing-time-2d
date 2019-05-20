@@ -79,16 +79,22 @@ static void gameUpdate(Game * _game, float _dt)
     }
 
     // Boat shoot anchor
+    static int wasPressed = -1; // Maintain key pressed count for one shot
     if(glfwGetKey(s_window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
-        if(_game->anchor == NULL)
+        if(_game->anchor == NULL && wasPressed != 1)
         {
+            wasPressed = 1;
             s_anchor.position.x = _game->boat.position.x;
             s_anchor.position.y = _game->boat.position.y;
             s_anchor.collider.center.x = s_anchor.position.x;
             s_anchor.collider.center.y = s_anchor.position.y;
             _game->anchor = &s_anchor;
         }
+    }
+    else
+    {
+        wasPressed = -1;
     }
 
     // Boat anim
