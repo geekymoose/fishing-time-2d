@@ -9,8 +9,9 @@
 #define GAME_WINDOW_HEIGHT 600
 #define GAME_WINDOW_TITLE  "Raining Sharks"
 
-#define GAME_CAMERA_RECT_WIDTH 200
-#define GAME_CAMERA_RECT_HEIGHT 200
+// Rec of vision of the camera, in world units
+#define GAME_CAMERA_RECT_WIDTH 200.0f
+#define GAME_CAMERA_RECT_HEIGHT 200.0f
 
 
 // -----------------------------------------------------------------------------
@@ -29,7 +30,7 @@
 // Gameplay
 // -----------------------------------------------------------------------------
 
-#define GAME_NB_MAX_SHARKS 5 // Max number of sharks simultaneously present
+#define GAME_NB_MAX_SHARKS 15 // Max number of sharks simultaneously present
 
 // In practice, speeds are in pixel per seconds
 #define GAME_BOAT_SPEED 100.0f

@@ -62,6 +62,27 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
 
 
 // -----------------------------------------------------------------------------
+// Static game methods
+// -----------------------------------------------------------------------------
+
+// Spawn a shark on game. The given index is the shark position in the array.
+// This assume the index is not a living shark.
+static void spwanSharkInGame(Game * _game, int _index)
+{
+    // Since 0:0 is at the center, this returns a position X between left to righ coords
+    int randomX = (rand() % (int)_game->cameraRect.x) - (_game->cameraRect.x / 2);
+
+    // This is super arbitraty, the only goal is to place the shark outside the screen.
+    // at a random distance so that he will be back in a random x seconds.
+    int randomY = (rand() % (int)_game->cameraRect.y) + _game->cameraRect.y;
+
+    Shark * shark = _game->sharksArray[_index];
+    shark->position.x = randomX;
+    shark->position.y = randomY;
+}
+
+
+// -----------------------------------------------------------------------------
 // Static update methods
 // -----------------------------------------------------------------------------
 
@@ -120,7 +141,7 @@ static void gameUpdate(Game * _game, float _dt)
 static void gameFixedUpdate(Game * _game, float _dt)
 {
     // Boat position
-    const int limit = GAME_CAMERA_RECT_WIDTH/2; // Boat cannot go outside camera.
+    const int limit = _game->cameraRect.x / 2; // Boat cannot go outside camera
     const float nextpos = _game->boat.position.x + (_game->boat.velocity * _dt);
     if(nextpos > -limit && nextpos < limit)
     {
@@ -138,14 +159,14 @@ static void gameFixedUpdate(Game * _game, float _dt)
         shark->collider.center.x = shark->position.x;
         shark->collider.center.y = shark->position.y;
 
-        if(shark->position.y <= -(GAME_CAMERA_RECT_HEIGHT / 2))
+        if(shark->position.y <= -(_game->cameraRect.y / 2))
         {
             s_game.explosionsArray[i] = &(s_explosionsPool[i]);
             s_game.explosionsArray[i]->position.x = shark->position.x;
             s_game.explosionsArray[i]->position.y = shark->position.y;
             s_game.explosionsArray[i]->anim.currentFrameIndex = 0;
             s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
-            shark->position.y = 150; // TODO tmp, just move shark outside screen
+            spwanSharkInGame(_game, i);
         }
 
         // Check collision if anchor
@@ -158,8 +179,8 @@ static void gameFixedUpdate(Game * _game, float _dt)
                 s_game.explosionsArray[i]->position.y = shark->position.y;
                 s_game.explosionsArray[i]->anim.currentFrameIndex = 0;
                 s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
-                shark->position.y = 150; // TODO tmp, just move shark outside screen
                 _game->anchor = NULL;
+                spwanSharkInGame(_game, i);
             }
         }
     }
@@ -174,7 +195,7 @@ static void gameFixedUpdate(Game * _game, float _dt)
         // The world doesn't move, 0:0 is the center of the screen, therefore,
         // the top border is the camera height / 2
         // since camera is exactly the world size
-        if(_game->anchor->position.y >= (GAME_CAMERA_RECT_HEIGHT / 2))
+        if(_game->anchor->position.y >= (_game->cameraRect.y / 2))
         {
             _game->anchor = NULL;
         }
@@ -225,12 +246,15 @@ void gameInit()
             "./shaders/vertex_shader.glsl",
             "./shaders/fragment_shader.glsl");
 
+    s_game.cameraRect.x = GAME_CAMERA_RECT_WIDTH;
+    s_game.cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
+
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect",
-            GAME_CAMERA_RECT_WIDTH,
-            GAME_CAMERA_RECT_HEIGHT);
+                            s_game.cameraRect.x,
+                            s_game.cameraRect.y);
 
-    // Variables used to load resources
+    // Variables temporary used for loading
     unsigned int tex_id = 0;
     unsigned int sprite_id = 0;
     vecf2 origin = {0.0f, 0.0f};
@@ -266,8 +290,7 @@ void gameInit()
         }
         else
         {
-            s_game.sharksArray[i]->position.x = (i * 40.0f) - 100; // TODO TMP positions
-            s_game.sharksArray[i]->position.y = 100.0f; // Top of the screen
+            spwanSharkInGame(&s_game, i);
             s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
             s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
             s_game.sharksArray[i]->collider.width = 39.0f;

@@ -44,6 +44,7 @@ typedef struct
 
 typedef struct
 {
+    vecf2 cameraRect;   // Rectangle of camera vision
     Boat boat;
     Shark * sharksArray[GAME_NB_MAX_SHARKS];
     Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
