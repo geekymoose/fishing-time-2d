@@ -88,6 +88,21 @@ static void spwanSharkInGame(Game * _game, int _index)
 
 static void gameUpdate(Game * _game, float _dt)
 {
+    // Pause
+    static int wasPausePressed = -1;
+    if(glfwGetKey(s_window, GLFW_KEY_P) == GLFW_PRESS)
+    {
+        if(wasPausePressed == -1)
+        {
+            wasPausePressed = 1;
+            _game->isPaused = (_game->isPaused == -1) ? 1 : -1;
+        }
+    }
+    else
+    {
+        wasPausePressed = -1;
+    }
+
     // Boat movement
     _game->boat.velocity = 0.0f;
     if(glfwGetKey(s_window, GLFW_KEY_LEFT) == GLFW_PRESS)
@@ -246,6 +261,7 @@ void gameInit()
             "./shaders/vertex_shader.glsl",
             "./shaders/fragment_shader.glsl");
 
+    s_game.isPaused = -1;
     s_game.cameraRect.x = GAME_CAMERA_RECT_WIDTH;
     s_game.cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
 
@@ -367,6 +383,11 @@ void gameRunLoop()
     {
         // const int fps = (int)(1.0f / dt);
         // LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
+
+        if(s_game.isPaused == 1)
+        {
+            dt = 0.0f;
+        }
 
         clearWindow(s_window);
 

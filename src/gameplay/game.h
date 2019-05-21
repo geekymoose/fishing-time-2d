@@ -50,6 +50,7 @@ typedef struct
     Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
     Anchor * anchor;
     Sprite * background;
+    int isPaused;
 } Game;
 
 
