@@ -23,7 +23,7 @@ static Texture s_arrayTextures[S_ARRAY_TEXTURES_SIZE];
 static unsigned int s_arrayTexturesHead = 0;
 
 // Sprites
-#define S_ARRAY_SPRITES_SIZE 10
+#define S_ARRAY_SPRITES_SIZE 12
 static Sprite s_arraySprites[S_ARRAY_SPRITES_SIZE];
 static unsigned int s_arraySpritesHead = 0;
 

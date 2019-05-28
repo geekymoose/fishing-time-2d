@@ -5,8 +5,8 @@
 // Core
 // -----------------------------------------------------------------------------
 
-#define GAME_WINDOW_WIDTH  600
-#define GAME_WINDOW_HEIGHT 600
+#define GAME_WINDOW_WIDTH  800
+#define GAME_WINDOW_HEIGHT 800
 #define GAME_WINDOW_TITLE  "Raining Sharks"
 
 // Rec of vision of the camera, in world units
@@ -24,6 +24,9 @@
 
 #define GAME_EXPLOSION_ANIM_FRAME_DURATION_IN_SEC 0.150f
 #define GAME_EXPLOSION_ANIM_NB_FRAMES 3
+
+#define GAME_SHARK_ANIM_FRAME_DURATION_IN_SEC 0.250f
+#define GAME_SHARK_ANIM_NB_FRAMES 3
 
 
 // -----------------------------------------------------------------------------

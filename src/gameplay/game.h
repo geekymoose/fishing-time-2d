@@ -24,7 +24,8 @@ typedef struct
     vecf2 position;
     float velocity; // Moves only on Y axis
     RectCollider collider;
-    Sprite * sprite;
+    Animation anim;
+    Sprite * spritesArray[GAME_SHARK_ANIM_NB_FRAMES];
 } Shark;
 
 typedef struct

@@ -38,16 +38,15 @@ static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
 static void drawShark(Shark const * _shark, const GLuint _shaderID)
 {
     ASSERT_MSG(_shark != NULL, "[Draw] Cannot draw if shark ptr is NULL");
-    ASSERT_MSG(_shark->sprite != NULL, "[Draw] Shark has no sprite");
+    ASSERT_MSG(_shark->spritesArray[_shark->anim.currentFrameIndex] != NULL, "[Draw] Shark has no sprite");
 
-    drawSprite(_shark->sprite, _shark->position, _shaderID);
+    drawSprite(_shark->spritesArray[_shark->anim.currentFrameIndex], _shark->position, _shaderID);
 }
 
 static void drawBoat(Boat const * _boat, const GLuint _shaderID)
 {
     ASSERT_MSG(_boat != NULL, "[Draw] Boat pointer NULL");
-    ASSERT_MSG(_boat->spritesArray[_boat->anim.currentFrameIndex] != NULL,
-               "[Draw] Boat sprite in spritesArray is NULL");
+    ASSERT_MSG(_boat->spritesArray[_boat->anim.currentFrameIndex] != NULL, "[Draw] Boat sprite in spritesArray is NULL");
 
     drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _boat->position, _shaderID);
 }
@@ -150,6 +149,11 @@ static void gameUpdate(Game * _game, float _dt)
                 _game->explosionsArray[i] = NULL;
             }
         }
+    }
+
+    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    {
+        updateAnimation(&(_game->sharksArray[i]->anim), _dt);
     }
 }
 
@@ -295,32 +299,45 @@ void gameInit()
     s_game.anchor = NULL;
 
     // Resource shark
+    unsigned int sprite1_id = 0;
+    unsigned int sprite2_id = 0;
+    unsigned int sprite3_id = 0;
     origin.x = 0;
     origin.y = 0;
-    sprite_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 11, origin);
+    sprite1_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 12, origin);
+    origin.x += 14.0f;
+    sprite2_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 12, origin);
+    origin.x += 14.0f;
+    sprite3_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 12, origin);
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         s_game.sharksArray[i] = (Shark*)malloc(sizeof(Shark));
         ASSERT_MSG(s_game.sharksArray[i] != NULL, "malloc(Shark) failed");
 
-        spwanSharkInGame(&s_game, i);
         s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
-        s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
         s_game.sharksArray[i]->collider.width = 12.0f;
         s_game.sharksArray[i]->collider.height= 11.0f;
+
+        s_game.sharksArray[i]->spritesArray[0] = resourceGetSprite(sprite1_id);
+        s_game.sharksArray[i]->spritesArray[1] = resourceGetSprite(sprite2_id);
+        s_game.sharksArray[i]->spritesArray[2] = resourceGetSprite(sprite3_id);
+
+        s_game.sharksArray[i]->anim.currentFrameDurationInSec = 0.0f;
+        s_game.sharksArray[i]->anim.currentFrameIndex = 0;
+        s_game.sharksArray[i]->anim.frameDurationInSec = GAME_SHARK_ANIM_FRAME_DURATION_IN_SEC;
+        s_game.sharksArray[i]->anim.nbFrames = GAME_SHARK_ANIM_NB_FRAMES;
+
+        spwanSharkInGame(&s_game, i);
     }
 
     // Resource explosion
-    unsigned int sprite1_id = 0;
-    unsigned int sprite2_id = 0;
-    unsigned int sprite3_id = 0;
     origin.x = 43.0f;
     origin.y = 3.0f;
     sprite1_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
-    origin.x = 43.0f + 14.0f;
+    origin.x += 14.0f;
     sprite2_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
-    origin.x = 2.0f * 43.0f + 14.0f;
+    origin.x += 14.0f;
     sprite3_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
