@@ -35,6 +35,8 @@
 
 #define GAME_NB_MAX_SHARKS 15 // Max number of sharks simultaneously present
 
+#define GAME_TIME_AT_START_IN_SEC 60
+
 // In practice, speeds are in pixel per seconds
 #define GAME_BOAT_SPEED 100.0f
 #define GAME_SHARK_SPEED 100.0f

@@ -206,6 +206,8 @@ static void gameFixedUpdate(Game * _game, float _dt)
                 s_game.explosionsArray[i]->anim.currentFrameIndex = 0;
                 s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
                 _game->anchor = NULL;
+                _game->score++;
+                LOG_DBG("Score: %d", _game->score);
                 spwanSharkInGame(_game, i);
             }
         }
@@ -271,6 +273,9 @@ void gameInit()
             "./shaders/fragment_shader.glsl");
 
     s_game.isPaused = -1;
+    s_game.score = 0;
+    s_game.timeAtStartInSec = GAME_TIME_AT_START_IN_SEC;
+    s_game.remainingTime = s_game.timeAtStartInSec;
     s_game.cameraRect.x = GAME_CAMERA_RECT_WIDTH;
     s_game.cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
 
@@ -406,6 +411,13 @@ void gameRunLoop()
         if(s_game.isPaused == 1)
         {
             dt = 0.0f;
+        }
+
+        s_game.remainingTime -= dt;
+        if(s_game.remainingTime <= 0)
+        {
+            s_game.isPaused = 1;
+            LOG_DBG("The game is over (score %d)", s_game.score);
         }
 
         clearWindow(s_window);

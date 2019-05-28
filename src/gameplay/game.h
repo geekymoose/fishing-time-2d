@@ -53,6 +53,9 @@ typedef struct
     Anchor * anchor; // Anchor not NULL means boat is firing
     Sprite * background;
     int isPaused;
+    int score;
+    float remainingTime; // Remaining time
+    float timeAtStartInSec; // Available amount of time at beginning
 } Game;
 
 
