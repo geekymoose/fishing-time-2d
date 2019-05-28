@@ -47,7 +47,8 @@ void destroySprite(Sprite * _sprite);
 /// Draws a sprite using the specified shader.
 /// @param _sprite Pointer to the sprite to draw.
 /// @param _center Position of the sprite's center in world coordinates.
+/// @param _scale Sprite scaling.
 /// @param _shaderID ID of the OpenGL shader to use.
-void drawSprite(Sprite const* _sprite, vecf2 _center, const GLuint _shaderID);
+void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const GLuint _shaderID);
 
 

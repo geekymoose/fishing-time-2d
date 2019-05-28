@@ -93,9 +93,10 @@ Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin)
     return sprite;
 }
 
-void drawSprite(Sprite const* _sprite, vecf2 _center, const GLuint _shaderID)
+void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const GLuint _shaderID)
 {
     setShaderProgramUniform(_shaderID, "position", _center.x, _center.y);
+    setShaderProgramUniform(_shaderID, "scale", _scale.x, _scale.y);
 
     glUseProgram(_shaderID);
 

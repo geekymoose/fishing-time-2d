@@ -14,6 +14,7 @@
 typedef struct
 {
     vecf2 position;
+    float direction; // Vect director on x axis
     float velocity; // Boat can move only on x axis
     Animation anim;
     Sprite * spritesArray[GAME_BOAT_ANIM_NB_FRAMES];

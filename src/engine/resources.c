@@ -34,8 +34,7 @@ static unsigned int s_arraySpritesHead = 0;
 
 unsigned int resourceLoadTexture(const char * _path)
 {
-    ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE,
-               "[Resource] Please increase S_ARRAY_TEXTURES_SIZE");
+    ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE, "[Resource] Please increase S_ARRAY_TEXTURES_SIZE");
 
     const int resourceID = s_arrayTexturesHead;
     s_arrayTextures[resourceID] = makeTexture(_path);
@@ -60,8 +59,7 @@ Texture * resourceGetTexture(const unsigned int _resourceID)
 unsigned int resourceLoadSprite(Texture * _tex, int _w, int _h, vecf2 _origin)
 {
     ASSERT_MSG(_tex != NULL, "[Resource] Texture param _tex should not be NULL");
-    ASSERT_MSG(s_arraySpritesHead < S_ARRAY_SPRITES_SIZE,
-               "[Resource] Please increase S_ARRAY_SPRITES_SIZE");
+    ASSERT_MSG(s_arraySpritesHead < S_ARRAY_SPRITES_SIZE, "[Resource] Please increase S_ARRAY_SPRITES_SIZE");
 
     const int resourceID = s_arraySpritesHead;
 

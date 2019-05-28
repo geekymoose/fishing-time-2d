@@ -32,7 +32,8 @@ static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
     // The world center 0:0 is the center of the screen.
     // We hard coded to place the background in the center.
     const vecf2 center = {0.0f, 0.0f};
-    drawSprite(_sprite, center, _shaderID);
+    const vecf2 scale = {1.0f, 1.0f};
+    drawSprite(_sprite, center, scale, _shaderID);
 }
 
 static void drawShark(Shark const * _shark, const GLuint _shaderID)
@@ -40,7 +41,8 @@ static void drawShark(Shark const * _shark, const GLuint _shaderID)
     ASSERT_MSG(_shark != NULL, "[Draw] Cannot draw if shark ptr is NULL");
     ASSERT_MSG(_shark->spritesArray[_shark->anim.currentFrameIndex] != NULL, "[Draw] Shark has no sprite");
 
-    drawSprite(_shark->spritesArray[_shark->anim.currentFrameIndex], _shark->position, _shaderID);
+    const vecf2 scale = {1.0f, 1.0f};
+    drawSprite(_shark->spritesArray[_shark->anim.currentFrameIndex], _shark->position, scale, _shaderID);
 }
 
 static void drawBoat(Boat const * _boat, const GLuint _shaderID)
@@ -48,7 +50,9 @@ static void drawBoat(Boat const * _boat, const GLuint _shaderID)
     ASSERT_MSG(_boat != NULL, "[Draw] Boat pointer NULL");
     ASSERT_MSG(_boat->spritesArray[_boat->anim.currentFrameIndex] != NULL, "[Draw] Boat sprite in spritesArray is NULL");
 
-    drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _boat->position, _shaderID);
+    vecf2 scale = {1.0f, 1.0f};
+    scale.x *= _boat->direction;
+    drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _boat->position, scale, _shaderID);
 }
 
 static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
@@ -56,7 +60,8 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
     ASSERT_MSG(_anchor != NULL, "[Draw] Anchor NULL");
     ASSERT_MSG(_anchor->sprite != NULL, "[Draw] Anchor has no sprite");
 
-    drawSprite(_anchor->sprite, _anchor->position, _shaderID);
+    const vecf2 scale = {1.0f, 1.0f};
+    drawSprite(_anchor->sprite, _anchor->position, scale, _shaderID);
 }
 
 
@@ -106,10 +111,12 @@ static void gameUpdate(Game * _game, float _dt)
     _game->boat.velocity = 0.0f;
     if(glfwGetKey(s_window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
+        _game->boat.direction = -1;
         _game->boat.velocity = -GAME_BOAT_SPEED;
     }
     else if(glfwGetKey(s_window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
+        _game->boat.direction = 1;
         _game->boat.velocity = GAME_BOAT_SPEED;
     }
 
@@ -244,7 +251,8 @@ static void gameRender(Game * _game)
         {
             Explosion * explosion = _game->explosionsArray[i];
             Sprite * sprite = explosion->spritesArray[explosion->anim.currentFrameIndex];
-            drawSprite(sprite, explosion->position, s_shaderID);
+            const vecf2 scale = {1.0f, 1.0f};
+            drawSprite(sprite, explosion->position, scale, s_shaderID);
         }
     }
 }
@@ -256,10 +264,7 @@ static void gameRender(Game * _game)
 
 void gameInit()
 {
-    s_window = createWindowGLFW(
-            GAME_WINDOW_WIDTH,
-            GAME_WINDOW_HEIGHT,
-            GAME_WINDOW_TITLE);
+    s_window = createWindowGLFW(GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_TITLE);
 
     s_shaderID = createShaderProgramFromFile(
             "./shaders/vertex_shader.glsl",
@@ -270,9 +275,7 @@ void gameInit()
     s_game.cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
 
     // Camera is hardcoded with a default rect of vision
-    setShaderProgramUniform(s_shaderID, "cameraRect",
-                            s_game.cameraRect.x,
-                            s_game.cameraRect.y);
+    setShaderProgramUniform(s_shaderID, "cameraRect", s_game.cameraRect.x, s_game.cameraRect.y);
 
     // Variables temporary used for loading
     vecf2 origin = {0.0f, 0.0f};
@@ -354,6 +357,7 @@ void gameInit()
     s_game.boat.position.x = 0.0f;
     s_game.boat.position.y = -81.0f;
     s_game.boat.velocity = GAME_BOAT_SPEED;
+    s_game.boat.direction = 1; // Look at the right by default
     s_game.boat.anim.nbFrames = GAME_BOAT_ANIM_NB_FRAMES;
     s_game.boat.anim.currentFrameIndex = 0;
     s_game.boat.anim.frameDurationInSec = GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC;
