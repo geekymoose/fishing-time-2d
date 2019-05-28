@@ -271,60 +271,57 @@ void gameInit()
                             s_game.cameraRect.y);
 
     // Variables temporary used for loading
-    unsigned int tex_id = 0;
-    unsigned int sprite_id = 0;
     vecf2 origin = {0.0f, 0.0f};
+    unsigned int sprite_id;
 
-    // Resource Background
-    tex_id = resourceLoadTexture("./resources/tmp/background.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 200, 200, origin);
+    // Load textures
+    unsigned int texID_1 = resourceLoadTexture("./resources/placeholder/background.png");
+    unsigned int texID_2 = resourceLoadTexture("./resources/placeholder/spritesheet.png");
+
+    // Resource background
+    sprite_id = resourceLoadSprite(resourceGetTexture(texID_1), 200, 200, origin);
     s_game.background = resourceGetSprite(sprite_id);
 
     // Resource anchor
-    tex_id = resourceLoadTexture("./resources/tmp/anchor.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 12, 13, origin);
+    origin.x = 153.0f;
+    origin.y = 5.0f;
+    sprite_id = resourceLoadSprite(resourceGetTexture(texID_2), 10, 11, origin);
     s_anchor.position.x = 0.0f;
     s_anchor.position.y = 0.0f;
     s_anchor.velocity = GAME_ANCHOR_SPEED;
     s_anchor.sprite = resourceGetSprite(sprite_id);
-    s_anchor.collider.width = 12.0f;
-    s_anchor.collider.height= 13.0f;
-    s_game.anchor = NULL; // When game has anchor set, means boat is firing
+    s_anchor.collider.width = 10.0f;
+    s_anchor.collider.height= 12.0f;
+    s_game.anchor = NULL;
 
     // Resource shark
-    tex_id = resourceLoadTexture("./resources/tmp/shark.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 39, 16, origin);
+    origin.x = 0;
+    origin.y = 0;
+    sprite_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 11, origin);
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         s_game.sharksArray[i] = (Shark*)malloc(sizeof(Shark));
-
         ASSERT_MSG(s_game.sharksArray[i] != NULL, "malloc(Shark) failed");
-        if(s_game.sharksArray[i] == NULL)
-        {
-            LOG_ERR("Unable to malloc the shark size at index %d", i);
-        }
-        else
-        {
-            spwanSharkInGame(&s_game, i);
-            s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
-            s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
-            s_game.sharksArray[i]->collider.width = 39.0f;
-            s_game.sharksArray[i]->collider.height= 16.0f;
-        }
+
+        spwanSharkInGame(&s_game, i);
+        s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
+        s_game.sharksArray[i]->sprite = resourceGetSprite(sprite_id);
+        s_game.sharksArray[i]->collider.width = 12.0f;
+        s_game.sharksArray[i]->collider.height= 11.0f;
     }
 
     // Resource explosion
-    tex_id = resourceLoadTexture("./resources/tmp/explosion.png");
     unsigned int sprite1_id = 0;
     unsigned int sprite2_id = 0;
     unsigned int sprite3_id = 0;
-    origin.x = 0;
-    sprite1_id = resourceLoadSprite(resourceGetTexture(tex_id), 13, 14, origin);
-    origin.x = 13;
-    sprite2_id = resourceLoadSprite(resourceGetTexture(tex_id), 13, 14, origin);
-    origin.x = 2 * 13;
-    sprite3_id = resourceLoadSprite(resourceGetTexture(tex_id), 13, 14, origin);
+    origin.x = 43.0f;
+    origin.y = 3.0f;
+    sprite1_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
+    origin.x = 43.0f + 14.0f;
+    sprite2_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
+    origin.x = 2.0f * 43.0f + 14.0f;
+    sprite3_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         s_explosionsPool[i].spritesArray[0] = resourceGetSprite(sprite1_id);
@@ -345,11 +342,12 @@ void gameInit()
     s_game.boat.anim.frameDurationInSec = GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC;
     s_game.boat.anim.currentFrameDurationInSec = 0.0f;
 
-    tex_id = resourceLoadTexture("./resources/tmp/boat.png");
+    origin.x = 0.0f;
+    origin.y = 20.0f;
     for(int i = 0; i < s_game.boat.anim.nbFrames; ++i)
     {
-        origin.x = i * 45;
-        sprite_id = resourceLoadSprite(resourceGetTexture(tex_id), 45, 38, origin);
+        origin.x = i * 45.0f;
+        sprite_id = resourceLoadSprite(resourceGetTexture(texID_2), 45, 35, origin);
         s_game.boat.spritesArray[i] = resourceGetSprite(sprite_id);
     }
 }

@@ -48,7 +48,7 @@ typedef struct
     Boat boat;
     Shark * sharksArray[GAME_NB_MAX_SHARKS];
     Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
-    Anchor * anchor;
+    Anchor * anchor; // Anchor not NULL means boat is firing
     Sprite * background;
     int isPaused;
 } Game;

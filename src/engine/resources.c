@@ -18,7 +18,7 @@
 // -----------------------------------------------------------------------------
 
 // Textures
-#define S_ARRAY_TEXTURES_SIZE 5
+#define S_ARRAY_TEXTURES_SIZE 2
 static Texture s_arrayTextures[S_ARRAY_TEXTURES_SIZE];
 static unsigned int s_arrayTexturesHead = 0;
 
