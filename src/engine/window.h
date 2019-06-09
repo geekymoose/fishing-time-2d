@@ -24,7 +24,6 @@ void clearWindow(GLFWwindow * _window);
 /// @param _window the window where to swap.
 void swapWindow(GLFWwindow * _window);
 
-
 /// Requests closing the given window.
 /// Note that this does not destroy the window (and OpenGL context).
 /// @param _window The window to close.

@@ -31,3 +31,5 @@ int checkIfCollide(RectCollider const * _c1, RectCollider const * _c2)
     // At this point, we collide my friend!
     return 1;
 }
+
+

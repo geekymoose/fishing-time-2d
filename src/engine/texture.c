@@ -12,7 +12,7 @@ Texture makeTexture(const char* _path)
     Texture tex;
     int channels;
 
-    LOG_INFO("[Texture] Loading %s", _path);
+    LOG_INFO("[Texture] Loading texture %s", _path);
 
     stbi_set_flip_vertically_on_load(1);
     unsigned char * data = stbi_load(_path, &(tex.width), &(tex.height), &channels, 0);
@@ -41,6 +41,7 @@ Texture makeTexture(const char* _path)
             break;
         default:
             ASSERT_MSG(0==1, "Invalid channels value");
+            format = GL_RGBA;
             break;
     }
 
@@ -53,8 +54,7 @@ Texture makeTexture(const char* _path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, format, tex.width, tex.height, 0,
-                 format, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, tex.width, tex.height, 0, format, GL_UNSIGNED_BYTE, data);
     if(glGetError() != GL_NO_ERROR)
     {
         LOG_ERR("[Texture] Method glGetError failed with GLenum = %d", glGetError());
