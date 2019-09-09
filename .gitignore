@@ -1,5 +1,5 @@
 build/
-extern/
 generated-doc/
+extern/glew/glew.pc
 .vscode
 .ycm_extra_conf.py
