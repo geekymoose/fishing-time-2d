@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 
+#include "build_config.h"
 #include "engine/animation.h"
 #include "engine/log.h"
 #include "engine/resources.h"
@@ -269,8 +270,8 @@ void gameInit()
     s_window = createWindowGLFW(GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_TITLE);
 
     s_shaderID = createShaderProgramFromFile(
-            "./shaders/vertex_shader.glsl",
-            "./shaders/fragment_shader.glsl");
+            GAME_SHADERS_DIR"/vertex_shader.glsl",
+            GAME_SHADERS_DIR"/fragment_shader.glsl");
 
     s_game.isPaused = -1;
     s_game.score = 0;
@@ -287,8 +288,8 @@ void gameInit()
     unsigned int sprite_id;
 
     // Load textures
-    unsigned int texID_1 = resourceLoadTexture("./resources/placeholder/background.png");
-    unsigned int texID_2 = resourceLoadTexture("./resources/placeholder/spritesheet.png");
+    unsigned int texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/placeholder/background.png");
+    unsigned int texID_2 = resourceLoadTexture(GAME_RESOURCES_DIR"/placeholder/spritesheet.png");
 
     // Resource background
     sprite_id = resourceLoadSprite(resourceGetTexture(texID_1), 200, 200, origin);
