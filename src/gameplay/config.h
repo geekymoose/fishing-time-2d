@@ -41,6 +41,3 @@
 #define GAME_BOAT_SPEED 100.0f
 #define GAME_SHARK_SPEED 100.0f
 #define GAME_ANCHOR_SPEED 400.0f
-
-
-// -----------------------------------------------------------------------------

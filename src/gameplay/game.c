@@ -288,8 +288,8 @@ void gameInit()
     unsigned int sprite_id;
 
     // Load textures
-    unsigned int texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/placeholder/background.png");
-    unsigned int texID_2 = resourceLoadTexture(GAME_RESOURCES_DIR"/placeholder/spritesheet.png");
+    unsigned int texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/background.png");
+    unsigned int texID_2 = resourceLoadTexture(GAME_RESOURCES_DIR"/spritesheet.png");
 
     // Resource background
     sprite_id = resourceLoadSprite(resourceGetTexture(texID_1), 200, 200, origin);
