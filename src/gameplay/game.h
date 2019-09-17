@@ -52,6 +52,7 @@ typedef struct
     Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
     Anchor * anchor; // Anchor not NULL means boat is firing
     Sprite * background;
+    Sprite * textBitMap[10]; // The font is only 10 chars
     int isPaused;
     int score;
     float remainingTime; // Remaining time

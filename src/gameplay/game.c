@@ -65,6 +65,35 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
     drawSprite(_anchor->sprite, _anchor->position, scale, _shaderID);
 }
 
+static void drawGameUI(Game const * _game, const GLuint _shaderID)
+{
+    // UI position is in World units (as beeing seen by camera).
+    // Positions are hard coded (simply based on the visual results on screen)
+
+    // Score (max supported 999)
+    vecf2 score_position = {GAME_CAMERA_RECT_WIDTH / 2.3f, -GAME_CAMERA_RECT_HEIGHT / 2.1f};
+    vecf2 scale = {1.0f, 1.0f};
+
+    const int score = _game->score;
+    int digit_1 = (score / 10) % 10;   // 92 -> gives 9
+    int digit_2 = score % 10;          // 92 -> gives 2
+
+    drawSprite(_game->textBitMap[digit_1], score_position, scale, _shaderID);
+    score_position.x += _game->textBitMap[digit_1]->size.x;
+    drawSprite(_game->textBitMap[digit_2], score_position, scale, _shaderID);
+
+    // Remaining time (max supported 99 secs)
+    vecf2 time_position = {0.0f , GAME_CAMERA_RECT_HEIGHT / 2.1f};
+
+    const int time = _game->remainingTime;
+    digit_1 = (time / 10) % 10;   // 92 -> gives 9
+    digit_2 = time % 10;          // 92 -> gives 2
+
+    drawSprite(_game->textBitMap[digit_1], time_position, scale, _shaderID);
+    time_position.x += _game->textBitMap[digit_1]->size.x;
+    drawSprite(_game->textBitMap[digit_2], time_position, scale, _shaderID);
+}
+
 
 // -----------------------------------------------------------------------------
 // Static game methods
@@ -208,7 +237,6 @@ static void gameFixedUpdate(Game * _game, float _dt)
                 s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
                 _game->anchor = NULL;
                 _game->score++;
-                LOG_DBG("Score: %d", _game->score);
                 spwanSharkInGame(_game, i);
             }
         }
@@ -258,6 +286,8 @@ static void gameRender(Game * _game)
             drawSprite(sprite, explosion->position, scale, s_shaderID);
         }
     }
+
+    drawGameUI(_game, s_shaderID);
 }
 
 
@@ -286,10 +316,15 @@ void gameInit()
     // Variables temporary used for loading
     vecf2 origin = {0.0f, 0.0f};
     unsigned int sprite_id;
+    unsigned int sprite1_id = 0;
+    unsigned int sprite2_id = 0;
+    unsigned int sprite3_id = 0;
+    unsigned int texID_1 = 0;
+    unsigned int texID_2 = 0;
 
     // Load textures
-    unsigned int texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/background.png");
-    unsigned int texID_2 = resourceLoadTexture(GAME_RESOURCES_DIR"/spritesheet.png");
+    texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/background.png");
+    texID_2 = resourceLoadTexture(GAME_RESOURCES_DIR"/spritesheet.png");
 
     // Resource background
     sprite_id = resourceLoadSprite(resourceGetTexture(texID_1), 200, 200, origin);
@@ -308,9 +343,9 @@ void gameInit()
     s_game.anchor = NULL;
 
     // Resource shark
-    unsigned int sprite1_id = 0;
-    unsigned int sprite2_id = 0;
-    unsigned int sprite3_id = 0;
+    sprite1_id = 0;
+    sprite2_id = 0;
+    sprite3_id = 0;
     origin.x = 0;
     origin.y = 0;
     sprite1_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 12, origin);
@@ -377,6 +412,17 @@ void gameInit()
         sprite_id = resourceLoadSprite(resourceGetTexture(texID_2), 45, 35, origin);
         s_game.boat.spritesArray[i] = resourceGetSprite(sprite_id);
     }
+
+    // Resource fonts
+    texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/fonts.png");
+    origin.x = 0.0f;
+    origin.y = 0.0f;
+    for(int k = 0; k < 10; ++k)
+    {
+        sprite_id = resourceLoadSprite(resourceGetTexture(texID_1), 6, 8, origin);
+        s_game.textBitMap[k] = resourceGetSprite(sprite_id);
+        origin.x += 6;
+    }
 }
 
 void gameDestroy()
@@ -418,7 +464,6 @@ void gameRunLoop()
         if(s_game.remainingTime <= 0)
         {
             s_game.isPaused = 1;
-            LOG_DBG("The game is over (score %d)", s_game.score);
         }
 
         clearWindow(s_window);
