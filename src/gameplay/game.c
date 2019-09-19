@@ -30,9 +30,22 @@ static Explosion s_explosionsPool[GAME_NB_MAX_SHARKS]; // Static pool of explosi
 
 static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
 {
+    ASSERT_MSG(_sprite != NULL, "[Draw] Cannot draw if foreground ptr is NULL");
+
     // The world center 0:0 is the center of the screen.
     // We hard coded to place the background in the center.
     const vecf2 center = {0.0f, 0.0f};
+    const vecf2 scale = {1.0f, 1.0f};
+    drawSprite(_sprite, center, scale, _shaderID);
+}
+
+static void drawForeground(Sprite const * _sprite, const GLuint _shaderID)
+{
+    ASSERT_MSG(_sprite != NULL, "[Draw] Cannot draw if foreground ptr is NULL");
+
+    // Hardcoded position but basically it is (backgroundSize - 35) / 2
+    // See the background sprite size
+    const vecf2 center = {0.0f, 82.5f};
     const vecf2 scale = {1.0f, 1.0f};
     drawSprite(_sprite, center, scale, _shaderID);
 }
@@ -287,6 +300,7 @@ static void gameRender(Game * _game)
         }
     }
 
+    drawForeground(_game->foreground, s_shaderID);
     drawGameUI(_game, s_shaderID);
 }
 
@@ -315,25 +329,27 @@ void gameInit()
 
     // Variables temporary used for loading
     vecf2 origin = {0.0f, 0.0f};
+    unsigned int texID = 0;
     unsigned int sprite_id;
     unsigned int sprite1_id = 0;
     unsigned int sprite2_id = 0;
     unsigned int sprite3_id = 0;
-    unsigned int texID_1 = 0;
-    unsigned int texID_2 = 0;
-
-    // Load textures
-    texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/background.png");
-    texID_2 = resourceLoadTexture(GAME_RESOURCES_DIR"/spritesheet.png");
 
     // Resource background
-    sprite_id = resourceLoadSprite(resourceGetTexture(texID_1), 200, 200, origin);
+    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/background.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
     s_game.background = resourceGetSprite(sprite_id);
 
+    // Resource foreground
+    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/foreground.png");
+    sprite_id = resourceLoadSprite(resourceGetTexture(texID), 200, 35, origin);
+    s_game.foreground = resourceGetSprite(sprite_id);
+
     // Resource anchor
+    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/spritesheet.png");
     origin.x = 153.0f;
     origin.y = 5.0f;
-    sprite_id = resourceLoadSprite(resourceGetTexture(texID_2), 10, 11, origin);
+    sprite_id = resourceLoadSprite(resourceGetTexture(texID), 10, 11, origin);
     s_anchor.position.x = 0.0f;
     s_anchor.position.y = 0.0f;
     s_anchor.velocity = GAME_ANCHOR_SPEED;
@@ -348,11 +364,11 @@ void gameInit()
     sprite3_id = 0;
     origin.x = 0;
     origin.y = 0;
-    sprite1_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 12, origin);
+    sprite1_id = resourceLoadSprite(resourceGetTexture(texID), 14, 12, origin);
     origin.x += 14.0f;
-    sprite2_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 12, origin);
+    sprite2_id = resourceLoadSprite(resourceGetTexture(texID), 14, 12, origin);
     origin.x += 14.0f;
-    sprite3_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 12, origin);
+    sprite3_id = resourceLoadSprite(resourceGetTexture(texID), 14, 12, origin);
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
@@ -378,11 +394,11 @@ void gameInit()
     // Resource explosion
     origin.x = 43.0f;
     origin.y = 3.0f;
-    sprite1_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
+    sprite1_id = resourceLoadSprite(resourceGetTexture(texID), 14, 14, origin);
     origin.x += 14.0f;
-    sprite2_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
+    sprite2_id = resourceLoadSprite(resourceGetTexture(texID), 14, 14, origin);
     origin.x += 14.0f;
-    sprite3_id = resourceLoadSprite(resourceGetTexture(texID_2), 14, 14, origin);
+    sprite3_id = resourceLoadSprite(resourceGetTexture(texID), 14, 14, origin);
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         s_explosionsPool[i].spritesArray[0] = resourceGetSprite(sprite1_id);
@@ -409,17 +425,17 @@ void gameInit()
     for(int i = 0; i < s_game.boat.anim.nbFrames; ++i)
     {
         origin.x = i * 45.0f;
-        sprite_id = resourceLoadSprite(resourceGetTexture(texID_2), 45, 35, origin);
+        sprite_id = resourceLoadSprite(resourceGetTexture(texID), 45, 35, origin);
         s_game.boat.spritesArray[i] = resourceGetSprite(sprite_id);
     }
 
     // Resource fonts
-    texID_1 = resourceLoadTexture(GAME_RESOURCES_DIR"/fonts.png");
+    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/fonts.png");
     origin.x = 0.0f;
     origin.y = 0.0f;
     for(int k = 0; k < 10; ++k)
     {
-        sprite_id = resourceLoadSprite(resourceGetTexture(texID_1), 6, 8, origin);
+        sprite_id = resourceLoadSprite(resourceGetTexture(texID), 6, 8, origin);
         s_game.textBitMap[k] = resourceGetSprite(sprite_id);
         origin.x += 6;
     }
