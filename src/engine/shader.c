@@ -1,6 +1,5 @@
 #include "shader.h"
 
-#include <sys/stat.h>
 #include <stdio.h>
 
 #include "engine/log.h"
@@ -42,10 +41,12 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
         return 0;
     }
 
-    struct stat filestat;
-    stat(_path, &filestat);
-    char filebuffer[filestat.st_size];
-    const size_t toRead = filestat.st_size - 1; // -1 cuz st_size includes '\0'
+    fseek(file, 0L, SEEK_END);
+    const long file_size = ftell(file);
+    rewind(file);
+
+    char filebuffer[file_size];
+    const size_t toRead = file_size - 1; // -1 cuz st_size includes '\0'
     size_t elementsRead = fread(filebuffer, sizeof(char), toRead, file);
     if(elementsRead != toRead)
     {
