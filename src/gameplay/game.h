@@ -4,6 +4,7 @@
 #include "engine/sprite.h"
 #include "engine/animation.h"
 #include "engine/collision.h"
+#include "engine/engine.h"
 #include "config.h"
 
 
@@ -46,8 +47,9 @@ typedef struct
 
 typedef struct
 {
-    vecf2 cameraRect;   // Rectangle of camera vision
+    vecf2 cameraRect; // Rectangle of camera vision
     Boat boat;
+    Engine * engine; // TODO: to remove if not used anymore
     Shark * sharksArray[GAME_NB_MAX_SHARKS];
     Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
     Anchor * anchor; // Anchor not NULL means boat is firing
@@ -65,8 +67,8 @@ typedef struct
 // Methods
 // -----------------------------------------------------------------------------
 
-void gameInit();
-void gameDestroy();
-void gameRunLoop();
-
-
+void gameInit(Game * _game);
+void gameDestroy(Game * _game);
+void gameUpdate(Game * _game, float _dt);
+void gameFixedUpdate(Game * _game, float _dt);
+void gameRender(Game * _game);

@@ -7,7 +7,6 @@
 #include "engine/log.h"
 #include "engine/resources.h"
 #include "engine/shader.h"
-#include "engine/window.h"
 
 
 // -----------------------------------------------------------------------------
@@ -17,15 +16,11 @@
 // Statics vars
 // Since there are few elements, we use static instantiations.
 // It is easier and OK for our purpose (instead of malloc / free).
-static GLFWwindow * s_window  = NULL;
 static GLuint s_shaderID = 0;
-static Game s_game;
 static Anchor s_anchor;
 static Explosion s_explosionsPool[GAME_NB_MAX_SHARKS]; // Static pool of explosions
 
 
-// -----------------------------------------------------------------------------
-// Static draw methods
 // -----------------------------------------------------------------------------
 
 static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
@@ -109,8 +104,6 @@ static void drawGameUI(Game const * _game, const GLuint _shaderID)
 
 
 // -----------------------------------------------------------------------------
-// Static game methods
-// -----------------------------------------------------------------------------
 
 // Spawn a shark on game. The given index is the shark position in the array.
 // This assume the index is not a living shark.
@@ -130,14 +123,29 @@ static void spwanSharkInGame(Game * _game, int _index)
 
 
 // -----------------------------------------------------------------------------
-// Static update methods
-// -----------------------------------------------------------------------------
 
-static void gameUpdate(Game * _game, float _dt)
+void gameUpdate(Game * _game, float _dt)
 {
+    // End game
+    _game->remainingTime -= _dt;
+    if(_game->remainingTime <= 0)
+    {
+        _game->isPaused = 1;
+    }
+
     // Pause
+    if(_game->isPaused == 1)
+    {
+        _game->engine->timescale = 0.0f;
+    }
+    else
+    {
+        _game->engine->timescale = 1.0f;
+    }
+    
+
     static int wasPausePressed = -1;
-    if(glfwGetKey(s_window, GLFW_KEY_P) == GLFW_PRESS)
+    if(glfwGetKey(_game->engine->window, GLFW_KEY_P) == GLFW_PRESS)
     {
         if(wasPausePressed == -1)
         {
@@ -152,12 +160,12 @@ static void gameUpdate(Game * _game, float _dt)
 
     // Boat movement
     _game->boat.velocity = 0.0f;
-    if(glfwGetKey(s_window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    if(glfwGetKey(_game->engine->window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         _game->boat.direction = -1;
         _game->boat.velocity = -GAME_BOAT_SPEED;
     }
-    else if(glfwGetKey(s_window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    else if(glfwGetKey(_game->engine->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
         _game->boat.direction = 1;
         _game->boat.velocity = GAME_BOAT_SPEED;
@@ -165,7 +173,7 @@ static void gameUpdate(Game * _game, float _dt)
 
     // Boat shoot anchor
     static int wasPressed = -1; // Maintain key pressed count for one shot
-    if(glfwGetKey(s_window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if(glfwGetKey(_game->engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         if(_game->anchor == NULL && wasPressed != 1)
         {
@@ -207,7 +215,7 @@ static void gameUpdate(Game * _game, float _dt)
     }
 }
 
-static void gameFixedUpdate(Game * _game, float _dt)
+void gameFixedUpdate(Game * _game, float _dt)
 {
     // Boat position
     const int limit = _game->cameraRect.x / 2; // Boat cannot go outside camera
@@ -230,11 +238,11 @@ static void gameFixedUpdate(Game * _game, float _dt)
 
         if(shark->position.y <= -(_game->cameraRect.y / 2))
         {
-            s_game.explosionsArray[i] = &(s_explosionsPool[i]);
-            s_game.explosionsArray[i]->position.x = shark->position.x;
-            s_game.explosionsArray[i]->position.y = shark->position.y;
-            s_game.explosionsArray[i]->anim.currentFrameIndex = 0;
-            s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
+            _game->explosionsArray[i] = &(s_explosionsPool[i]);
+            _game->explosionsArray[i]->position.x = shark->position.x;
+            _game->explosionsArray[i]->position.y = shark->position.y;
+            _game->explosionsArray[i]->anim.currentFrameIndex = 0;
+            _game->explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
             spwanSharkInGame(_game, i);
         }
 
@@ -243,11 +251,11 @@ static void gameFixedUpdate(Game * _game, float _dt)
         {
             if(checkIfCollide(&(shark->collider), &(_game->anchor->collider)) != -1)
             {
-                s_game.explosionsArray[i] = &(s_explosionsPool[i]);
-                s_game.explosionsArray[i]->position.x = shark->position.x;
-                s_game.explosionsArray[i]->position.y = shark->position.y;
-                s_game.explosionsArray[i]->anim.currentFrameIndex = 0;
-                s_game.explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
+                _game->explosionsArray[i] = &(s_explosionsPool[i]);
+                _game->explosionsArray[i]->position.x = shark->position.x;
+                _game->explosionsArray[i]->position.y = shark->position.y;
+                _game->explosionsArray[i]->anim.currentFrameIndex = 0;
+                _game->explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
                 _game->anchor = NULL;
                 _game->score++;
                 spwanSharkInGame(_game, i);
@@ -272,7 +280,7 @@ static void gameFixedUpdate(Game * _game, float _dt)
     }
 }
 
-static void gameRender(Game * _game)
+void gameRender(Game * _game)
 {
     drawBackground(_game->background, s_shaderID);
 
@@ -306,26 +314,26 @@ static void gameRender(Game * _game)
 
 
 // -----------------------------------------------------------------------------
-// Game Methods
-// -----------------------------------------------------------------------------
 
-void gameInit()
+void gameInit(Game * _game)
 {
-    s_window = createWindowGLFW(GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT, GAME_WINDOW_TITLE);
+    LOG_INFO("[Game] Initializing the game");
 
     s_shaderID = createShaderProgramFromFile(
-            GAME_SHADERS_DIR"/vertex_shader.glsl",
-            GAME_SHADERS_DIR"/fragment_shader.glsl");
+            GAME_SHADERS_DIR "/vertex_shader.glsl",
+            GAME_SHADERS_DIR "/fragment_shader.glsl");
 
-    s_game.isPaused = -1;
-    s_game.score = 0;
-    s_game.timeAtStartInSec = GAME_TIME_AT_START_IN_SEC;
-    s_game.remainingTime = s_game.timeAtStartInSec;
-    s_game.cameraRect.x = GAME_CAMERA_RECT_WIDTH;
-    s_game.cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
+    _game->isPaused = -1;
+    _game->score = 0;
+    _game->timeAtStartInSec = GAME_TIME_AT_START_IN_SEC;
+    _game->remainingTime = _game->timeAtStartInSec;
+    _game->cameraRect.x = GAME_CAMERA_RECT_WIDTH;
+    _game->cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
+
+    glfwSetWindowSize(_game->engine->window, GAME_WINDOW_HEIGHT, GAME_WINDOW_WIDTH);
 
     // Camera is hardcoded with a default rect of vision
-    setShaderProgramUniform(s_shaderID, "cameraRect", s_game.cameraRect.x, s_game.cameraRect.y);
+    setShaderProgramUniform(s_shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);
 
     // Variables temporary used for loading
     vecf2 origin = {0.0f, 0.0f};
@@ -338,12 +346,12 @@ void gameInit()
     // Resource background
     texID = resourceLoadTexture(GAME_RESOURCES_DIR"/background.png");
     sprite_id = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
-    s_game.background = resourceGetSprite(sprite_id);
+    _game->background = resourceGetSprite(sprite_id);
 
     // Resource foreground
     texID = resourceLoadTexture(GAME_RESOURCES_DIR"/foreground.png");
     sprite_id = resourceLoadSprite(resourceGetTexture(texID), 200, 35, origin);
-    s_game.foreground = resourceGetSprite(sprite_id);
+    _game->foreground = resourceGetSprite(sprite_id);
 
     // Resource anchor
     texID = resourceLoadTexture(GAME_RESOURCES_DIR"/spritesheet.png");
@@ -356,7 +364,7 @@ void gameInit()
     s_anchor.sprite = resourceGetSprite(sprite_id);
     s_anchor.collider.width = 10.0f;
     s_anchor.collider.height= 12.0f;
-    s_game.anchor = NULL;
+    _game->anchor = NULL;
 
     // Resource shark
     sprite1_id = 0;
@@ -372,23 +380,23 @@ void gameInit()
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
-        s_game.sharksArray[i] = (Shark*)malloc(sizeof(Shark));
-        ASSERT_MSG(s_game.sharksArray[i] != NULL, "malloc(Shark) failed");
+        _game->sharksArray[i] = (Shark*)malloc(sizeof(Shark));
+        ASSERT_MSG(_game->sharksArray[i] != NULL, "malloc(Shark) failed");
 
-        s_game.sharksArray[i]->velocity = GAME_SHARK_SPEED;
-        s_game.sharksArray[i]->collider.width = 12.0f;
-        s_game.sharksArray[i]->collider.height= 11.0f;
+        _game->sharksArray[i]->velocity = GAME_SHARK_SPEED;
+        _game->sharksArray[i]->collider.width = 12.0f;
+        _game->sharksArray[i]->collider.height= 11.0f;
 
-        s_game.sharksArray[i]->spritesArray[0] = resourceGetSprite(sprite1_id);
-        s_game.sharksArray[i]->spritesArray[1] = resourceGetSprite(sprite2_id);
-        s_game.sharksArray[i]->spritesArray[2] = resourceGetSprite(sprite3_id);
+        _game->sharksArray[i]->spritesArray[0] = resourceGetSprite(sprite1_id);
+        _game->sharksArray[i]->spritesArray[1] = resourceGetSprite(sprite2_id);
+        _game->sharksArray[i]->spritesArray[2] = resourceGetSprite(sprite3_id);
 
-        s_game.sharksArray[i]->anim.currentFrameDurationInSec = 0.0f;
-        s_game.sharksArray[i]->anim.currentFrameIndex = 0;
-        s_game.sharksArray[i]->anim.frameDurationInSec = GAME_SHARK_ANIM_FRAME_DURATION_IN_SEC;
-        s_game.sharksArray[i]->anim.nbFrames = GAME_SHARK_ANIM_NB_FRAMES;
+        _game->sharksArray[i]->anim.currentFrameDurationInSec = 0.0f;
+        _game->sharksArray[i]->anim.currentFrameIndex = 0;
+        _game->sharksArray[i]->anim.frameDurationInSec = GAME_SHARK_ANIM_FRAME_DURATION_IN_SEC;
+        _game->sharksArray[i]->anim.nbFrames = GAME_SHARK_ANIM_NB_FRAMES;
 
-        spwanSharkInGame(&s_game, i);
+        spwanSharkInGame(_game, i);
     }
 
     // Resource explosion
@@ -411,22 +419,22 @@ void gameInit()
     }
 
     // Resource boat
-    s_game.boat.position.x = 0.0f;
-    s_game.boat.position.y = -81.0f;
-    s_game.boat.velocity = GAME_BOAT_SPEED;
-    s_game.boat.direction = 1; // Look at the right by default
-    s_game.boat.anim.nbFrames = GAME_BOAT_ANIM_NB_FRAMES;
-    s_game.boat.anim.currentFrameIndex = 0;
-    s_game.boat.anim.frameDurationInSec = GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC;
-    s_game.boat.anim.currentFrameDurationInSec = 0.0f;
+    _game->boat.position.x = 0.0f;
+    _game->boat.position.y = -81.0f;
+    _game->boat.velocity = GAME_BOAT_SPEED;
+    _game->boat.direction = 1; // Look at the right by default
+    _game->boat.anim.nbFrames = GAME_BOAT_ANIM_NB_FRAMES;
+    _game->boat.anim.currentFrameIndex = 0;
+    _game->boat.anim.frameDurationInSec = GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC;
+    _game->boat.anim.currentFrameDurationInSec = 0.0f;
 
     origin.x = 0.0f;
     origin.y = 20.0f;
-    for(int i = 0; i < s_game.boat.anim.nbFrames; ++i)
+    for(int i = 0; i < _game->boat.anim.nbFrames; ++i)
     {
         origin.x = i * 45.0f;
         sprite_id = resourceLoadSprite(resourceGetTexture(texID), 45, 35, origin);
-        s_game.boat.spritesArray[i] = resourceGetSprite(sprite_id);
+        _game->boat.spritesArray[i] = resourceGetSprite(sprite_id);
     }
 
     // Resource fonts
@@ -436,71 +444,22 @@ void gameInit()
     for(int k = 0; k < 10; ++k)
     {
         sprite_id = resourceLoadSprite(resourceGetTexture(texID), 6, 8, origin);
-        s_game.textBitMap[k] = resourceGetSprite(sprite_id);
+        _game->textBitMap[k] = resourceGetSprite(sprite_id);
         origin.x += 6;
     }
+
+    LOG_INFO("[Game] Game successfully initialized");
 }
 
-void gameDestroy()
+void gameDestroy(Game * _game)
 {
-    destroyWindowGLFW(s_window);
+    LOG_INFO("[Game] Destroying the game");
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
-        ASSERT_MSG(s_game.sharksArray[i] != NULL, "Shark array has an unexpected NULL value");
-        free(s_game.sharksArray[i]);
+        ASSERT_MSG(_game->sharksArray[i] != NULL, "Shark array has an unexpected NULL value");
+        free(_game->sharksArray[i]);
     }
+
+    LOG_INFO("[Game] Game successfully destroyed");
 }
-
-void gameRunLoop()
-{
-    ASSERT_MSG(s_window != NULL, "[Game] You must init the game before running it");
-    ASSERT_MSG(s_shaderID != 0, "[Game] You must init the game before running it");
-
-    glfwSwapInterval(1); // vsync
-
-    float timeBeginInSec = glfwGetTime();
-    float timeEndInSec = 0.0f;
-    float dt = 1.0f / 60.0f;
-
-    float elapsedFixedDeltaTime = 0.0f;
-    const float fixedDeltaTime = 1.0f / 45.0f; // Physic capped at 45 fps
-
-    while(!isWindowClosed(s_window))
-    {
-        // const int fps = (int)(1.0f / dt);
-        // LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
-
-        if(s_game.isPaused == 1)
-        {
-            dt = 0.0f;
-        }
-
-        s_game.remainingTime -= dt;
-        if(s_game.remainingTime <= 0)
-        {
-            s_game.isPaused = 1;
-        }
-
-        clearWindow(s_window);
-
-        elapsedFixedDeltaTime += dt;
-        if(elapsedFixedDeltaTime >= fixedDeltaTime)
-        {
-            // DevNotes: in case of long render loop (high dt), we don't try to
-            // recover the elapsed physics steps and only play one step instead.
-            elapsedFixedDeltaTime = 0.0f;
-            gameFixedUpdate(&s_game, fixedDeltaTime);
-        }
-
-        gameUpdate(&s_game, dt);
-        gameRender(&s_game);
-        swapWindow(s_window);
-
-        timeEndInSec = glfwGetTime();
-        dt = timeEndInSec - timeBeginInSec;
-        timeBeginInSec = timeEndInSec;
-    }
-}
-
-
