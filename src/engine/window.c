@@ -4,8 +4,6 @@
 
 
 // -----------------------------------------------------------------------------
-// Internal static methods
-// -----------------------------------------------------------------------------
 
 static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
@@ -28,10 +26,8 @@ static void glfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _
 
 
 // -----------------------------------------------------------------------------
-// Public methods
-// -----------------------------------------------------------------------------
 
-GLFWwindow * createWindowGLFW(const int width, const int height, const char* title)
+GLFWwindow * createWindow(const int width, const int height, const char* title)
 {
     // Init GLFW
     if(!glfwInit())
@@ -78,7 +74,7 @@ GLFWwindow * createWindowGLFW(const int width, const int height, const char* tit
     return window;
 }
 
-void destroyWindowGLFW(GLFWwindow * _window)
+void destroyWindow(GLFWwindow * _window)
 {
     LOG_INFO("[Window] Destroy GLFW window and terminate GLFW");
     ASSERT_MSG(_window != NULL, "[Window] Cannot destroy NULL window");

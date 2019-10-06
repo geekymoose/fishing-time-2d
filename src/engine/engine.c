@@ -12,7 +12,7 @@ void engineRun(Engine * _engine, void * _game)
 
     _engine->timescale = 1.0f;
 
-    _engine->window = createWindowGLFW(600, 600, "Shark engine 2D"); // Default init values
+    _engine->window = createWindow(600, 600, "Shark engine 2D"); // Default init values
     if(_engine->window == NULL)
     {
         ASSERT_MSG(_engine->window != NULL, "[Engine] A Window is required to run the engine");
@@ -65,5 +65,5 @@ void engineRun(Engine * _engine, void * _game)
 
     _engine->gameDestroy(_game);
 
-    destroyWindowGLFW(_engine->window);
+    destroyWindow(_engine->window);
 }

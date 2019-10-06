@@ -9,12 +9,12 @@
 /// @param _height Heigh of the window.
 /// @param _title Title of the window.
 /// @return Returns a pointer to the created window.
-GLFWwindow * createWindowGLFW(const int _width, const int _height, const char* _title);
+GLFWwindow * createWindow(const int _width, const int _height, const char* _title);
 
 /// Destroys a GLFW window, the GLcontext and terminates GLFW.
 /// This is the last method to call.
 /// @param _window The GLFW window to destroy.
-void destroyWindowGLFW(GLFWwindow * _window);
+void destroyWindow(GLFWwindow * _window);
 
 /// Clears the whole window content.
 /// @param _window the window to clear.
