@@ -74,7 +74,13 @@ static inline void _log(const int level, const char* format, ...)
 {
     va_list ap;
     va_start(ap, format);
+
+#if defined(_WIN32) || defined(_WIN64)
+    fprintf(stdout, "%s", _logLevelHeader(level));
+#else
     fprintf(stdout, "\e[%dm%s\e[0m", _logLevelColor(level), _logLevelHeader(level));
+#endif
+
     vfprintf(stdout, format, ap);
     fprintf(stdout, "\n");
     va_end(ap);
@@ -96,13 +102,23 @@ static inline void _log(const int level, const char* format, ...)
 // Assert macros
 // -----------------------------------------------------------------------------
 
+
+#if defined(_WIN32) || defined(_WIN64)
+
 /// Evaluate the given expression and assert if is false.
 /// The msg is displayed if exp is false
+#define ASSERT_MSG(exp, msg) \
+    if(!(exp)) { \
+        fprintf(stderr, "[ASSERT][%s:%d]: %s\n", __FILE__, __LINE__, msg); \
+    } \
+    assert(exp)
+#else
+
 #define ASSERT_MSG(exp, msg) \
     if(!(exp)) { \
         fprintf(stderr, "\e[%dm[ASSERT][%s:%d]: %s\e[0m\n", \
                 _XTERM_COLOR_RED, __FILE__, __LINE__, msg); \
     } \
     assert(exp)
-
+#endif
 

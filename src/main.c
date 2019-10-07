@@ -13,7 +13,7 @@ int main(int argc, char** argv)
     LOG_INFO("Game version %d.%d", GAME_VERSION_MAJOR, GAME_VERSION_MINOR);
     LOG_INFO("--- Start your engines ---");
 
-    Engine engine = {};
+    Engine engine = {0};
 
     engine.gameInit = gameInit;
     engine.gameDestroy = gameDestroy;
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     engine.gameFixedUpdate = gameFixedUpdate;
     engine.gameRender = gameRender;
 
-    Game game = {};
+    Game game = {0};
     game.fishingGame.engine = &engine;
 
     engineRun(&engine, &game);
