@@ -1,10 +1,7 @@
 #include "shader.h"
 
 #include <stdio.h>
-
-#if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
-#endif
 
 #include "engine/log.h"
 
@@ -49,7 +46,6 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
     const long file_size = ftell(file);
     rewind(file);
 
-#if defined(_WIN32) || defined(_WIN64)
     char * filebuffer = NULL;
     filebuffer = malloc(file_size * sizeof(*filebuffer));
     if (filebuffer == NULL)
@@ -57,9 +53,6 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
         LOG_ERR("Unable to read %s (malloc %d bytes failed)", _path, filebuffer);
         return 0;
     }
-#else
-    char filebuffer[file_size];
-#endif
 
     const size_t toRead = file_size - 1; // -1 because st_size includes '\0'
     size_t elementsRead = fread(filebuffer, sizeof(char), toRead, file);
@@ -70,11 +63,9 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
     }
     GLuint id = createShaderFromSource(filebuffer, _type);
 
-#if defined(_WIN32) || defined(_WIN64)
     free(filebuffer);
-#endif
-
     fclose(file);
+
     return id;
 }
 
