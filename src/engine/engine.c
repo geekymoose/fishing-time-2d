@@ -56,6 +56,8 @@ void engineRun(Engine * _engine, void * _game)
 
         swapWindow(_engine->window);
 
+        glfwPollEvents();
+
         timeEndInSec = glfwGetTime();
         dt = timeEndInSec - timeBeginInSec;
         timeBeginInSec = timeEndInSec;

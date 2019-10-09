@@ -92,7 +92,6 @@ void clearWindow(GLFWwindow * _window)
 void swapWindow(GLFWwindow * _window)
 {
     glfwSwapBuffers(_window);
-    glfwPollEvents();
 }
 
 void closeWindow(GLFWwindow * _window)
