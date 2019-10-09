@@ -10,8 +10,8 @@
 
 int main(int argc, char** argv)
 {
-    LOG_INFO("Game version %d.%d", GAME_VERSION_MAJOR, GAME_VERSION_MINOR);
     LOG_INFO("--- Start your engines ---");
+    LOG_INFO("Game version %d.%d", GAME_VERSION_MAJOR, GAME_VERSION_MINOR);
 
     Engine engine = {0};
 

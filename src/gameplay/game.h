@@ -4,17 +4,17 @@
 
 // Game entry point (with menu flow scenes, ingame scene etc)
 
+typedef enum
+{
+    GAME_SCREEN_WELCOME,
+    GAME_SCREEN_FISHING
+} GameScreen;
+
 typedef struct
 {
     FishingGame fishingGame;
+    GameScreen currentScreen;
 } Game;
-
-// TODO: Not used yet
-typedef enum
-{
-    GAMESTATE_WELCOME,
-    GAMESTATE_INGAME
-} GameState;
 
 
 // -----------------------------------------------------------------------------
