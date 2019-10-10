@@ -7,21 +7,12 @@
 
 static void glfwWindowSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
-    LOG_DBG("[Window] Resizing: w = %d, h = %d", _width, _height);
     glViewport(0, 0, _width, _height);
 }
 
 static void glfwErrorCallback(int _error, const char* _description)
 {
     LOG_ERR("[Window] GLFW error %d: %s", _error, _description);
-}
-
-static void glfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _modes)
-{
-    if(_key == GLFW_KEY_ESCAPE && _action == GLFW_PRESS)
-    {
-        closeWindow(_window);
-    }
 }
 
 
@@ -54,7 +45,6 @@ GLFWwindow * createWindow(const int width, const int height, const char* title)
     // Callbacks
     glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
     glfwSetErrorCallback(glfwErrorCallback);
-    glfwSetKeyCallback(window, glfwKeyCallback);
 
     // Init GLEW
     GLenum glewinit = glewInit();

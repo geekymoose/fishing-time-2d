@@ -124,6 +124,12 @@ static void spwanSharkInGame(FishingTime * _game, int _index)
 
 void fishingTimeUpdate(FishingTime * _game, float _dt)
 {
+    // Quit game
+    if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        closeWindow(_game->engine->window);
+    }
+
     // End game
     _game->remainingTime -= _dt;
     if(_game->remainingTime <= 0)
