@@ -5,7 +5,7 @@
 #include "engine/animation.h"
 #include "engine/collision.h"
 #include "engine/engine.h"
-#include "config.h"
+#include "gameplay/config.h"
 
 
 // -----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ typedef struct
 {
     vecf2 cameraRect; // Rectangle of camera vision
     Boat boat;
-    Engine * engine; // TODO: to remove if not used anymore
+    Engine * engine;
     Shark * sharksArray[GAME_NB_MAX_SHARKS];
     Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
     Anchor * anchor; // Anchor not NULL means boat is firing
@@ -58,13 +58,13 @@ typedef struct
     int score;
     float remainingTime; // Remaining time
     float timeAtStartInSec; // Available amount of time at beginning
-} FishingGame;
+} FishingTime;
 
 
 // -----------------------------------------------------------------------------
 
-void fishingGameInit(FishingGame * _game);
-void fishingGameDestroy(FishingGame * _game);
-void fishingGameUpdate(FishingGame * _game, float _dt);
-void fishingGameFixedUpdate(FishingGame * _game, float _dt);
-void fishingGameRender(FishingGame * _game);
+void fishingTimeInit(FishingTime * _game);
+void fishingTimeDestroy(FishingTime * _game);
+void fishingTimeUpdate(FishingTime * _game, float _dt);
+void fishingTimeFixedUpdate(FishingTime * _game, float _dt);
+void fishingTimeRender(FishingTime * _game);

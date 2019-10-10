@@ -22,7 +22,8 @@ int main(int argc, char** argv)
     engine.gameRender = gameRender;
 
     Game game = {0};
-    game.fishingGame.engine = &engine;
+    game.engine = &engine;
+    game.fishingTime.engine = &engine;
 
     engineRun(&engine, &game);
 

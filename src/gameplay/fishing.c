@@ -71,7 +71,7 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
     drawSprite(_anchor->sprite, _anchor->position, scale, _shaderID);
 }
 
-static void drawGameUI(FishingGame const * _game, const GLuint _shaderID)
+static void drawGameUI(FishingTime const * _game, const GLuint _shaderID)
 {
     // UI position is in World units (as beeing seen by camera).
     // Positions are hard coded (simply based on the visual results on screen)
@@ -105,7 +105,7 @@ static void drawGameUI(FishingGame const * _game, const GLuint _shaderID)
 
 // Spawn a shark on game. The given index is the shark position in the array.
 // This assume the index is not a living shark.
-static void spwanSharkInGame(FishingGame * _game, int _index)
+static void spwanSharkInGame(FishingTime * _game, int _index)
 {
     // Since 0:0 is at the center, this returns a position X between left to righ coords
     int randomX = (rand() % (int)_game->cameraRect.x) - (_game->cameraRect.x / 2);
@@ -122,7 +122,7 @@ static void spwanSharkInGame(FishingGame * _game, int _index)
 
 // -----------------------------------------------------------------------------
 
-void fishingGameUpdate(FishingGame * _game, float _dt)
+void fishingTimeUpdate(FishingTime * _game, float _dt)
 {
     // End game
     _game->remainingTime -= _dt;
@@ -213,7 +213,7 @@ void fishingGameUpdate(FishingGame * _game, float _dt)
     }
 }
 
-void fishingGameFixedUpdate(FishingGame * _game, float _dt)
+void fishingTimeFixedUpdate(FishingTime * _game, float _dt)
 {
     // Boat position
     const int limit = _game->cameraRect.x / 2; // Boat cannot go outside camera
@@ -278,7 +278,7 @@ void fishingGameFixedUpdate(FishingGame * _game, float _dt)
     }
 }
 
-void fishingGameRender(FishingGame * _game)
+void fishingTimeRender(FishingTime * _game)
 {
     drawBackground(_game->background, s_shaderID);
 
@@ -313,7 +313,7 @@ void fishingGameRender(FishingGame * _game)
 
 // -----------------------------------------------------------------------------
 
-void fishingGameInit(FishingGame * _game)
+void fishingTimeInit(FishingTime * _game)
 {
     LOG_INFO("[Game] Initializing the game");
 
@@ -449,7 +449,7 @@ void fishingGameInit(FishingGame * _game)
     LOG_INFO("[Game] Game successfully initialized");
 }
 
-void fishingGameDestroy(FishingGame * _game)
+void fishingTimeDestroy(FishingTime * _game)
 {
     LOG_INFO("[Game] Destroying the game");
 

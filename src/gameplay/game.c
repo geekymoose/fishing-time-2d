@@ -6,16 +6,17 @@
 void gameInit(void * _gamePtr)
 {
     Game * game = (Game*)_gamePtr;
-    //game->currentScreen = GAME_SCREEN_WELCOME;
-    game->currentScreen = GAME_SCREEN_FISHING;
-    fishingGameInit(&game->fishingGame);
+    ASSERT_MSG(game->engine != NULL, "game->engine should not be NULL");
+
+    game->currentScreen = GAME_SCREEN_WELCOME;
+    fishingTimeInit(&game->fishingTime);
 }
 
 void gameDestroy(void * _gamePtr)
 {
     // Nothing yet
     Game * game = (Game*)_gamePtr;
-    fishingGameDestroy(&game->fishingGame);
+    fishingTimeDestroy(&game->fishingTime);
 }
 
 void gameUpdate(void * _gamePtr, float _dt)
@@ -29,7 +30,7 @@ void gameUpdate(void * _gamePtr, float _dt)
             break;
 
         case GAME_SCREEN_FISHING:
-            fishingGameUpdate(&game->fishingGame, _dt);
+            fishingTimeUpdate(&game->fishingTime, _dt);
             break;
 
         default:
@@ -48,7 +49,7 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
             welcomeRender(game);
             break;
         case GAME_SCREEN_FISHING:
-            fishingGameFixedUpdate(&game->fishingGame, _dt);
+            fishingTimeFixedUpdate(&game->fishingTime, _dt);
             break;
         default:
             ASSERT_MSG(1==2, "Not implemented switch-case value");
@@ -66,7 +67,7 @@ void gameRender(void * _gamePtr)
             welcomeRender(game);
             break;
         case GAME_SCREEN_FISHING:
-            fishingGameRender(&game->fishingGame);
+            fishingTimeRender(&game->fishingTime);
             break;
         default:
             ASSERT_MSG(1==2, "Not implemented switch-case value");
