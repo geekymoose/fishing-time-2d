@@ -1,5 +1,6 @@
 #include "shader.h"
 
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glew.h>
@@ -7,7 +8,7 @@
 #include "engine/log.h"
 
 
-uint32 createShaderFromSource(const char * _sources, const uint32 _type)
+uint32 createShaderFromSource(const char * _sources, const int32 _type)
 {
     uint32 id = glCreateShader(_type);
     if(id == 0)
@@ -32,7 +33,7 @@ uint32 createShaderFromSource(const char * _sources, const uint32 _type)
     return id;
 }
 
-uint32 createShadeFromFile(const char* _path, const uint32 _type)
+uint32 createShadeFromFile(const char* _path, const int32 _type)
 {
     LOG_INFO("[Shader] Create shader %s", _path);
 
@@ -44,26 +45,26 @@ uint32 createShadeFromFile(const char* _path, const uint32 _type)
         return 0;
     }
 
-    fseek(file, 0L, SEEK_END);
+    fseek(file, 0, SEEK_END);
     const long file_size = ftell(file);
     rewind(file);
 
     char * filebuffer = NULL;
-    filebuffer = malloc(file_size * sizeof(*filebuffer));
-    if (filebuffer == NULL)
+    filebuffer = malloc((file_size + 1) * sizeof(*filebuffer)); // +1 for '\0'
+    if(filebuffer == NULL)
     {
         LOG_ERR("[Shader] Unable to read %s (malloc %d bytes failed)", _path, filebuffer);
         return 0;
     }
 
-    const size_t toRead = file_size - 1; // -1 because st_size includes '\0'
-    size_t elementsRead = fread(filebuffer, sizeof(char), toRead, file);
-    if(elementsRead != toRead)
+    size_t elementsRead = fread(filebuffer, sizeof(char), file_size, file);
+    if(elementsRead != file_size)
     {
         LOG_ERR("[Shader] Unable to read %s", _path);
         free(filebuffer);
         return 0;
     }
+    filebuffer[file_size] = '\0';
     uint32 id = createShaderFromSource(filebuffer, _type);
 
     free(filebuffer);
