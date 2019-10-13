@@ -60,6 +60,7 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
     if(elementsRead != toRead)
     {
         LOG_ERR("[Shader] Unable to read %s", _path);
+        free(filebuffer);
         return 0;
     }
     GLuint id = createShaderFromSource(filebuffer, _type);
