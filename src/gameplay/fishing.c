@@ -7,6 +7,7 @@
 #include "engine/log.h"
 #include "engine/resources.h"
 #include "engine/shader.h"
+#include "engine/window.h"
 
 
 // -----------------------------------------------------------------------------
@@ -334,7 +335,7 @@ void fishingTimeInit(FishingTime * _game)
     _game->cameraRect.x = GAME_CAMERA_RECT_WIDTH;
     _game->cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
 
-    glfwSetWindowSize(_game->engine->window, GAME_WINDOW_HEIGHT, GAME_WINDOW_WIDTH);
+    resizeWindow(_game->engine->window, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);

@@ -94,3 +94,7 @@ int isWindowClosed(GLFWwindow * _window)
     return glfwWindowShouldClose(_window);
 }
 
+void resizeWindow(GLFWwindow * _window, int _width, int _height)
+{
+    glfwSetWindowSize(_window, _width, _height);
+}
