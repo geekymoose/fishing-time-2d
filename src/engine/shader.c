@@ -2,13 +2,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <GL/glew.h>
 
 #include "engine/log.h"
 
 
-GLuint createShaderFromSource(const char* _sources, const GLenum _type)
+uint32 createShaderFromSource(const char * _sources, const uint32 _type)
 {
-    GLuint id = glCreateShader(_type);
+    uint32 id = glCreateShader(_type);
     if(id == 0)
     {
         LOG_ERR("[Shader] Unable to create a shader for type %d", _type);
@@ -18,7 +19,7 @@ GLuint createShaderFromSource(const char* _sources, const GLenum _type)
     glShaderSource(id, 1, &_sources, NULL);
     glCompileShader(id);
 
-    GLint success;
+    int32 success;
     glGetShaderiv(id, GL_COMPILE_STATUS, &success);
     if(success != GL_TRUE)
     {
@@ -31,7 +32,7 @@ GLuint createShaderFromSource(const char* _sources, const GLenum _type)
     return id;
 }
 
-GLuint createShadeFromFile(const char* _path, const GLenum _type)
+uint32 createShadeFromFile(const char* _path, const uint32 _type)
 {
     LOG_INFO("[Shader] Create shader %s", _path);
 
@@ -63,7 +64,7 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
         free(filebuffer);
         return 0;
     }
-    GLuint id = createShaderFromSource(filebuffer, _type);
+    uint32 id = createShaderFromSource(filebuffer, _type);
 
     free(filebuffer);
     fclose(file);
@@ -71,9 +72,9 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
     return id;
 }
 
-GLuint createShaderProgram(const GLuint _idVertexShader, const GLuint _idFragShader)
+uint32 createShaderProgram(const uint32 _idVertexShader, const uint32 _idFragShader)
 {
-    GLuint id = glCreateProgram();
+    uint32 id = glCreateProgram();
     if(id == 0)
     {
         LOG_ERR("[Shader] Unable to create shader program");
@@ -83,7 +84,7 @@ GLuint createShaderProgram(const GLuint _idVertexShader, const GLuint _idFragSha
     glAttachShader(id, _idFragShader);
 
     glLinkProgram(id);
-    GLint result;
+    int32 result;
     glGetProgramiv(id, GL_LINK_STATUS, &result);
     if(result != GL_TRUE)
     {
@@ -96,14 +97,14 @@ GLuint createShaderProgram(const GLuint _idVertexShader, const GLuint _idFragSha
     return id;
 }
 
-GLuint createShaderProgramFromFile(const char* _vertexPath, const char* _fragPath)
+uint32 createShaderProgramFromFile(const char* _vertexPath, const char* _fragPath)
 {
-    GLuint idVertex = createShadeFromFile(_vertexPath, GL_VERTEX_SHADER);
-    GLuint idFrag = createShadeFromFile(_fragPath, GL_FRAGMENT_SHADER);
+    uint32 idVertex = createShadeFromFile(_vertexPath, GL_VERTEX_SHADER);
+    uint32 idFrag = createShadeFromFile(_fragPath, GL_FRAGMENT_SHADER);
     return createShaderProgram(idVertex, idFrag);
 }
 
-void setShaderProgramUniform(GLuint _shaderID, const char* _name, float _x, float _y)
+void setShaderProgramUniform(uint32 _shaderID, const char* _name, float _x, float _y)
 {
     glUseProgram(_shaderID);
     glUniform2f(glGetUniformLocation(_shaderID, _name), _x, _y);

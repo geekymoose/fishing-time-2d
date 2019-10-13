@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "build_config.h"
+#include "engine/types.h"
 #include "engine/animation.h"
 #include "engine/log.h"
 #include "engine/resources.h"
@@ -15,14 +16,14 @@
 // Statics vars
 // Since there are few elements, we use static instantiations.
 // It is easier and OK for our purpose (instead of malloc / free).
-static GLuint s_shaderID = 0;
+static uint32 s_shaderID = 0;
 static Anchor s_anchor;
 static Explosion s_explosionsPool[GAME_NB_MAX_SHARKS]; // Static pool of explosions
 
 
 // -----------------------------------------------------------------------------
 
-static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
+static void drawBackground(Sprite const * _sprite, const uint32 _shaderID)
 {
     ASSERT_MSG(_sprite != NULL, "[Draw] Cannot draw if foreground ptr is NULL");
 
@@ -33,7 +34,7 @@ static void drawBackground(Sprite const * _sprite, const GLuint _shaderID)
     drawSprite(_sprite, center, scale, _shaderID);
 }
 
-static void drawForeground(Sprite const * _sprite, const GLuint _shaderID)
+static void drawForeground(Sprite const * _sprite, const uint32 _shaderID)
 {
     ASSERT_MSG(_sprite != NULL, "[Draw] Cannot draw if foreground ptr is NULL");
 
@@ -44,7 +45,7 @@ static void drawForeground(Sprite const * _sprite, const GLuint _shaderID)
     drawSprite(_sprite, center, scale, _shaderID);
 }
 
-static void drawShark(Shark const * _shark, const GLuint _shaderID)
+static void drawShark(Shark const * _shark, const uint32 _shaderID)
 {
     ASSERT_MSG(_shark != NULL, "[Draw] Cannot draw if shark ptr is NULL");
     ASSERT_MSG(_shark->spritesArray[_shark->anim.currentFrameIndex] != NULL, "[Draw] Shark has no sprite");
@@ -53,7 +54,7 @@ static void drawShark(Shark const * _shark, const GLuint _shaderID)
     drawSprite(_shark->spritesArray[_shark->anim.currentFrameIndex], _shark->position, scale, _shaderID);
 }
 
-static void drawBoat(Boat const * _boat, const GLuint _shaderID)
+static void drawBoat(Boat const * _boat, const uint32 _shaderID)
 {
     ASSERT_MSG(_boat != NULL, "[Draw] Boat pointer NULL");
     ASSERT_MSG(_boat->spritesArray[_boat->anim.currentFrameIndex] != NULL, "[Draw] Boat sprite in spritesArray is NULL");
@@ -63,7 +64,7 @@ static void drawBoat(Boat const * _boat, const GLuint _shaderID)
     drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _boat->position, scale, _shaderID);
 }
 
-static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
+static void drawAnchor(Anchor const * _anchor, const uint32 _shaderID)
 {
     ASSERT_MSG(_anchor != NULL, "[Draw] Anchor NULL");
     ASSERT_MSG(_anchor->sprite != NULL, "[Draw] Anchor has no sprite");
@@ -72,7 +73,7 @@ static void drawAnchor(Anchor const * _anchor, const GLuint _shaderID)
     drawSprite(_anchor->sprite, _anchor->position, scale, _shaderID);
 }
 
-static void drawGameUI(FishingTime const * _game, const GLuint _shaderID)
+static void drawGameUI(FishingTime const * _game, const uint32 _shaderID)
 {
     // UI position is in World units (as beeing seen by camera).
     // Positions are hard coded (simply based on the visual results on screen)

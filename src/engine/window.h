@@ -1,6 +1,7 @@
 #pragma once
 
-#include "engine/shader.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 
 /// Creates a GLFW window and GL context.

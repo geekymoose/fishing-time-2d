@@ -1,6 +1,7 @@
 #include "sprite.h"
 
 #include <stddef.h> // offsetof
+#include <GL/glew.h> // OpenGL lib
 
 #include "engine/log.h"
 #include "engine/shader.h"

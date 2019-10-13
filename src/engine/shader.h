@@ -1,14 +1,12 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "engine/types.h"
 
-GLuint createShaderFromSource(const char*, const GLenum);
-GLuint createShadeFromFile(const char*, const GLenum);
+uint32 createShaderFromSource(const char *, const uint32);
+uint32 createShadeFromFile(const char *, const uint32);
 
-GLuint createShaderProgram(const GLuint _idVertexShader, const GLuint _idFragShader);
-GLuint createShaderProgramFromFile(const char* _vertexPath, const char* _fragPath);
+uint32 createShaderProgram(const uint32 _idVertexShader, const uint32 _idFragShader);
+uint32 createShaderProgramFromFile(const char * _vertexPath, const char * _fragPath);
 
-void setShaderProgramUniform(GLuint _shaderID, const char* _name, float _x, float _y);
-
+void setShaderProgramUniform(uint32 _shaderID, const char * _name, float _x, float _y);
 

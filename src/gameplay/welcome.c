@@ -1,8 +1,6 @@
 #include "gameplay/welcome.h"
 
-#include "engine/libmath.h"
-#include "engine/texture.h"
-#include "engine/sprite.h"
+#include "engine/window.h"
 
 
 void welcomeUpdate(Game * _game)
@@ -31,7 +29,6 @@ void welcomeRender(Game * _game)
     const vecf2 center = {0.0f, 0.0f};
     const vecf2 scale = {1.0f, 1.0f};
     //drawSprite(_sprite, center, scale, _shaderID);
-
     // Texture makeTexture(const char* _path);
     // Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin);
 }

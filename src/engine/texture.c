@@ -1,10 +1,11 @@
 #include "texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
+
 #include <stb_image.h>
+#include <GL/glew.h>
 
 #include "engine/types.h"
-#include "engine/shader.h"
 #include "engine/log.h"
 
 
@@ -25,7 +26,7 @@ Texture makeTexture(const char* _path)
         return tex;
     }
 
-    GLenum format;
+    uint32 format;
     switch(channels)
     {
         case 1:
@@ -46,7 +47,7 @@ Texture makeTexture(const char* _path)
             break;
     }
 
-    GLuint textureID;
+    uint32 textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
 

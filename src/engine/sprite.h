@@ -1,7 +1,7 @@
 #pragma once
 
+#include "engine/types.h"
 #include "engine/libmath.h"
-#include "engine/shader.h"
 #include "engine/texture.h"
 
 
@@ -19,9 +19,9 @@ typedef struct
 {
     vecf2 size;
     Texture * texture;
-    GLuint vertex_vao;
-    GLuint vertex_vbo;
-    GLuint vertex_ebo;
+    uint32 vertex_vao;
+    uint32 vertex_vbo;
+    uint32 vertex_ebo;
     Vertex1P1UV vertices[4];
 } Sprite;
 
@@ -49,6 +49,6 @@ void destroySprite(Sprite * _sprite);
 /// @param _center Position of the sprite's center in world coordinates.
 /// @param _scale Sprite scaling.
 /// @param _shaderID ID of the OpenGL shader to use.
-void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const GLuint _shaderID);
+void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const uint32 _shaderID);
 
 
