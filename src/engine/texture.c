@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#include "engine/types.h"
 #include "engine/shader.h"
 #include "engine/log.h"
 
@@ -19,7 +20,7 @@ Texture makeTexture(const char* _path)
     if(data == NULL)
     {
         LOG_ERR("[Texture] Unable to load texture %s", _path);
-        ASSERT_MSG(0==1, "[Texture] Unable to load texture");
+        ASSERT_MSG(FALSE, "[Texture] Unable to load texture");
         tex.id = (unsigned int)-1; // Invalid tex. Kinda ugly but ok for now
         return tex;
     }
@@ -40,7 +41,7 @@ Texture makeTexture(const char* _path)
             format = GL_RGBA;
             break;
         default:
-            ASSERT_MSG(0==1, "Invalid channels value");
+            ASSERT_MSG(FALSE, "Invalid channels value");
             format = GL_RGBA;
             break;
     }
@@ -58,7 +59,7 @@ Texture makeTexture(const char* _path)
     if(glGetError() != GL_NO_ERROR)
     {
         LOG_ERR("[Texture] Method glGetError failed with GLenum = %d", glGetError());
-        ASSERT_MSG(0==1, "[Texture] Error from glTexImage2D");
+        ASSERT_MSG(FALSE, "[Texture] Error from glTexImage2D");
     }
 
     stbi_image_free(data);

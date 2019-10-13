@@ -11,7 +11,7 @@ GLuint createShaderFromSource(const char* _sources, const GLenum _type)
     GLuint id = glCreateShader(_type);
     if(id == 0)
     {
-        LOG_ERR("Unable to create a shader for type %d", _type);
+        LOG_ERR("[Shader] Unable to create a shader for type %d", _type);
         return 0;
     }
 
@@ -24,7 +24,7 @@ GLuint createShaderFromSource(const char* _sources, const GLenum _type)
     {
         char strlog[256];
         glGetShaderInfoLog(id, 255, NULL, strlog);
-        LOG_ERR("Unable to compile shader %d: %s", _type, strlog);
+        LOG_ERR("[Shader] Unable to compile shader %d: %s", _type, strlog);
         return 0;
     }
 
@@ -33,12 +33,13 @@ GLuint createShaderFromSource(const char* _sources, const GLenum _type)
 
 GLuint createShadeFromFile(const char* _path, const GLenum _type)
 {
-    LOG_INFO("Create shader %s", _path);
+    LOG_INFO("[Shader] Create shader %s", _path);
+
     FILE * file;
     file = fopen(_path, "r");
     if(file == NULL)
     {
-        LOG_ERR("Unable to open the shader %s", _path);
+        LOG_ERR("[Shader] Unable to open the shader %s", _path);
         return 0;
     }
 
@@ -50,7 +51,7 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
     filebuffer = malloc(file_size * sizeof(*filebuffer));
     if (filebuffer == NULL)
     {
-        LOG_ERR("Unable to read %s (malloc %d bytes failed)", _path, filebuffer);
+        LOG_ERR("[Shader] Unable to read %s (malloc %d bytes failed)", _path, filebuffer);
         return 0;
     }
 
@@ -58,7 +59,7 @@ GLuint createShadeFromFile(const char* _path, const GLenum _type)
     size_t elementsRead = fread(filebuffer, sizeof(char), toRead, file);
     if(elementsRead != toRead)
     {
-        LOG_ERR("Unable to read %s", _path);
+        LOG_ERR("[Shader] Unable to read %s", _path);
         return 0;
     }
     GLuint id = createShaderFromSource(filebuffer, _type);
@@ -74,7 +75,7 @@ GLuint createShaderProgram(const GLuint _idVertexShader, const GLuint _idFragSha
     GLuint id = glCreateProgram();
     if(id == 0)
     {
-        LOG_ERR("Unable to create shader program");
+        LOG_ERR("[Shader] Unable to create shader program");
         return 0;
     }
     glAttachShader(id, _idVertexShader);
@@ -87,7 +88,7 @@ GLuint createShaderProgram(const GLuint _idVertexShader, const GLuint _idFragSha
     {
         char loginfo[256];
         glGetProgramInfoLog(id, 255, NULL, loginfo);
-        LOG_ERR("Unable to link shader program %s", loginfo);
+        LOG_ERR("[Shader] Unable to link shader program %s", loginfo);
         return 0;
     }
 
