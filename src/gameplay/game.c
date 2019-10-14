@@ -16,6 +16,7 @@ void gameInit(void * _gamePtr)
             GAME_SHADERS_DIR "/vertex_shader.glsl",
             GAME_SHADERS_DIR "/fragment_shader.glsl");
 
+    welcomeInit(game);
     fishingTimeInit(game->engine, &game->fishingTime);
 }
 
@@ -23,6 +24,8 @@ void gameDestroy(void * _gamePtr)
 {
     // Nothing yet
     Game * game = (Game*)_gamePtr;
+
+    welcomeDestroy(game);
     fishingTimeDestroy(game->engine, &game->fishingTime);
 }
 
