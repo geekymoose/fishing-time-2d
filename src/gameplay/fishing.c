@@ -124,12 +124,12 @@ static void spwanSharkInGame(FishingTime * _game, int _index)
 
 // -----------------------------------------------------------------------------
 
-void fishingTimeUpdate(FishingTime * _game, float _dt)
+void fishingTimeUpdate(Engine * _engine, FishingTime * _game, float _dt)
 {
     // Quit game
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(glfwGetKey(_engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
-        closeWindow(_game->engine->window);
+        closeWindow(_engine->window);
     }
 
     // End game
@@ -142,15 +142,15 @@ void fishingTimeUpdate(FishingTime * _game, float _dt)
     // Pause
     if(_game->isPaused == 1)
     {
-        _game->engine->timescale = 0.0f;
+        _engine->timescale = 0.0f;
     }
     else
     {
-        _game->engine->timescale = 1.0f;
+        _engine->timescale = 1.0f;
     }
 
     static int wasPausePressed = -1;
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_P) == GLFW_PRESS)
+    if(glfwGetKey(_engine->window, GLFW_KEY_P) == GLFW_PRESS)
     {
         if(wasPausePressed == -1)
         {
@@ -165,12 +165,12 @@ void fishingTimeUpdate(FishingTime * _game, float _dt)
 
     // Boat movement
     _game->boat.velocity = 0.0f;
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    if(glfwGetKey(_engine->window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         _game->boat.direction = -1;
         _game->boat.velocity = -GAME_BOAT_SPEED;
     }
-    else if(glfwGetKey(_game->engine->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    else if(glfwGetKey(_engine->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
         _game->boat.direction = 1;
         _game->boat.velocity = GAME_BOAT_SPEED;
@@ -178,7 +178,7 @@ void fishingTimeUpdate(FishingTime * _game, float _dt)
 
     // Boat shoot anchor
     static int wasPressed = -1; // Maintain key pressed count for one shot
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if(glfwGetKey(_engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         if(_game->anchor == NULL && wasPressed != 1)
         {
@@ -221,7 +221,7 @@ void fishingTimeUpdate(FishingTime * _game, float _dt)
     }
 }
 
-void fishingTimeFixedUpdate(FishingTime * _game, float _dt)
+void fishingTimeFixedUpdate(Engine * _engine, FishingTime * _game, float _dt)
 {
     // Boat position
     const int limit = _game->cameraRect.x / 2; // Boat cannot go outside camera
@@ -286,7 +286,7 @@ void fishingTimeFixedUpdate(FishingTime * _game, float _dt)
     }
 }
 
-void fishingTimeRender(FishingTime * _game)
+void fishingTimeRender(Engine * _engine, FishingTime * _game)
 {
     drawBackground(_game->background, s_shaderID);
 
@@ -321,7 +321,7 @@ void fishingTimeRender(FishingTime * _game)
 
 // -----------------------------------------------------------------------------
 
-void fishingTimeInit(FishingTime * _game)
+void fishingTimeInit(Engine * _engine, FishingTime * _game)
 {
     LOG_INFO("[Game] Initializing the game");
 
@@ -336,7 +336,7 @@ void fishingTimeInit(FishingTime * _game)
     _game->cameraRect.x = GAME_CAMERA_RECT_WIDTH;
     _game->cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
 
-    resizeWindow(_game->engine->window, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
+    resizeWindow(_engine->window, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(s_shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);
@@ -457,7 +457,7 @@ void fishingTimeInit(FishingTime * _game)
     LOG_INFO("[Game] Game successfully initialized");
 }
 
-void fishingTimeDestroy(FishingTime * _game)
+void fishingTimeDestroy(Engine * _engine, FishingTime * _game)
 {
     LOG_INFO("[Game] Destroying the game");
 

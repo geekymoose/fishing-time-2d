@@ -23,7 +23,6 @@ int main(int argc, char** argv)
 
     Game game = {0};
     game.engine = &engine;
-    game.fishingTime.engine = &engine;
 
     engineRun(&engine, &game);
 
