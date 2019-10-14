@@ -16,7 +16,6 @@
 // Statics vars
 // Since there are few elements, we use static instantiations.
 // It is easier and OK for our purpose (instead of malloc / free).
-static uint32 s_shaderID = 0;
 static Anchor s_anchor;
 static Explosion s_explosionsPool[GAME_NB_MAX_SHARKS]; // Static pool of explosions
 
@@ -288,19 +287,19 @@ void fishingTimeFixedUpdate(Engine * _engine, FishingTime * _game, float _dt)
 
 void fishingTimeRender(Engine * _engine, FishingTime * _game)
 {
-    drawBackground(_game->background, s_shaderID);
+    drawBackground(_game->background, _engine->shaderID);
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
-        drawShark(_game->sharksArray[i], s_shaderID);
+        drawShark(_game->sharksArray[i], _engine->shaderID);
     }
 
-    drawBoat(&_game->boat, s_shaderID);
+    drawBoat(&_game->boat, _engine->shaderID);
 
     if(_game->anchor != NULL)
     {
-        drawAnchor(_game->anchor, s_shaderID);
+        drawAnchor(_game->anchor, _engine->shaderID);
     }
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
@@ -310,12 +309,12 @@ void fishingTimeRender(Engine * _engine, FishingTime * _game)
             Explosion * explosion = _game->explosionsArray[i];
             Sprite * sprite = explosion->spritesArray[explosion->anim.currentFrameIndex];
             const vecf2 scale = {1.0f, 1.0f};
-            drawSprite(sprite, explosion->position, scale, s_shaderID);
+            drawSprite(sprite, explosion->position, scale, _engine->shaderID);
         }
     }
 
-    drawForeground(_game->foreground, s_shaderID);
-    drawGameUI(_game, s_shaderID);
+    drawForeground(_game->foreground, _engine->shaderID);
+    drawGameUI(_game, _engine->shaderID);
 }
 
 
@@ -324,10 +323,6 @@ void fishingTimeRender(Engine * _engine, FishingTime * _game)
 void fishingTimeInit(Engine * _engine, FishingTime * _game)
 {
     LOG_INFO("[Game] Initializing the game");
-
-    s_shaderID = createShaderProgramFromFile(
-            GAME_SHADERS_DIR "/vertex_shader.glsl",
-            GAME_SHADERS_DIR "/fragment_shader.glsl");
 
     _game->isPaused = -1;
     _game->score = 0;
@@ -339,7 +334,7 @@ void fishingTimeInit(Engine * _engine, FishingTime * _game)
     resizeWindow(_engine->window, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
 
     // Camera is hardcoded with a default rect of vision
-    setShaderProgramUniform(s_shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);
+    setShaderProgramUniform(_engine->shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);
 
     // Variables temporary used for loading
     vecf2 origin = {0.0f, 0.0f};

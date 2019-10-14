@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/types.h"
 #include "engine/window.h"
 
 typedef void (*gameInitFct)(void* _game);
@@ -22,6 +23,7 @@ typedef struct
     gameRenderFct gameRender;
 
     float timescale; // 1 for normal speed (dt = dt * timescale)
+    uint32 shaderID; // One shader for now. To update with array if several shaders required.
 } Engine;
 
 

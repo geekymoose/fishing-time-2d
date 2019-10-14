@@ -1,4 +1,6 @@
+#include "build_config.h"
 #include "engine/log.h"
+#include "engine/shader.h"
 #include "gameplay/game.h"
 #include "gameplay/welcome.h"
 
@@ -9,6 +11,11 @@ void gameInit(void * _gamePtr)
     ASSERT_MSG(game->engine != NULL, "game->engine should not be NULL");
 
     game->currentScreen = GAME_SCREEN_WELCOME;
+
+    game->engine->shaderID = createShaderProgramFromFile(
+            GAME_SHADERS_DIR "/vertex_shader.glsl",
+            GAME_SHADERS_DIR "/fragment_shader.glsl");
+
     fishingTimeInit(game->engine, &game->fishingTime);
 }
 
