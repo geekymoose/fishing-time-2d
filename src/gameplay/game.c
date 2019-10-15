@@ -1,8 +1,11 @@
 #include "build_config.h"
 #include "engine/log.h"
+#include "engine/types.h"
 #include "engine/shader.h"
 #include "gameplay/game.h"
 #include "gameplay/welcome.h"
+#include "gameplay/gameover.h"
+#include "gameplay/credits.h"
 
 
 void gameInit(void * _gamePtr)
@@ -17,15 +20,18 @@ void gameInit(void * _gamePtr)
             GAME_SHADERS_DIR "/fragment_shader.glsl");
 
     welcomeInit(game);
+    creditsInit(game);
+    gameoverInit(game);
     fishingTimeInit(game->engine, &game->fishingTime);
 }
 
 void gameDestroy(void * _gamePtr)
 {
-    // Nothing yet
     Game * game = (Game*)_gamePtr;
 
     welcomeDestroy(game);
+    creditsDestroy(game);
+    gameoverDestroy(game);
     fishingTimeDestroy(game->engine, &game->fishingTime);
 }
 
@@ -39,12 +45,20 @@ void gameUpdate(void * _gamePtr, float _dt)
             welcomeUpdate(game);
             break;
 
+        case GAME_SCREEN_CREDITS:
+            creditsUpdate(game);
+            break;
+
+        case GAME_SCREEN_GAMEOVER:
+            gameoverUpdate(game);
+            break;
+
         case GAME_SCREEN_FISHING:
             fishingTimeUpdate(game->engine, &game->fishingTime, _dt);
             break;
 
         default:
-            ASSERT_MSG(1==2, "Not implemented switch-case value");
+            ASSERT_MSG(FALSE, "Not implemented switch-case value");
             break;
     }
 }
@@ -58,11 +72,21 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
         case GAME_SCREEN_WELCOME:
             welcomeRender(game);
             break;
+
+        case GAME_SCREEN_CREDITS:
+            creditsFixedUpdate(game);
+            break;
+
+        case GAME_SCREEN_GAMEOVER:
+            gameoverFixedUpdate(game);
+            break;
+
         case GAME_SCREEN_FISHING:
             fishingTimeFixedUpdate(game->engine, &game->fishingTime, _dt);
             break;
+
         default:
-            ASSERT_MSG(1==2, "Not implemented switch-case value");
+            ASSERT_MSG(FALSE, "Not implemented switch-case value");
             break;
     }
 }
@@ -76,11 +100,21 @@ void gameRender(void * _gamePtr)
         case GAME_SCREEN_WELCOME:
             welcomeRender(game);
             break;
+
+        case GAME_SCREEN_CREDITS:
+            creditsRender(game);
+            break;
+
+        case GAME_SCREEN_GAMEOVER:
+            gameoverRender(game);
+            break;
+
         case GAME_SCREEN_FISHING:
             fishingTimeRender(game->engine, &game->fishingTime);
             break;
+
         default:
-            ASSERT_MSG(1==2, "Not implemented switch-case value");
+            ASSERT_MSG(FALSE, "Not implemented switch-case value");
             break;
     }
 }

@@ -3,11 +3,13 @@
 #include "engine/types.h"
 #include "engine/window.h"
 
-typedef void (*gameInitFct)(void* _game);
-typedef void (*gameDestroyFct)(void* _game);
-typedef void (*gameUpdateFct)(void* _game, float _dt);
-typedef void (*gameFixedUpdateFct)(void* _game, float _dt);
-typedef void (*gameRenderFct)(void* _game);
+// Engine entry point
+
+typedef void (*gameInitFct)(void * _game);
+typedef void (*gameDestroyFct)(void * _game);
+typedef void (*gameUpdateFct)(void * _game, float _dt);
+typedef void (*gameFixedUpdateFct)(void * _game, float _dt);
+typedef void (*gameRenderFct)(void * _game);
 
 
 // -----------------------------------------------------------------------------

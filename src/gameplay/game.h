@@ -8,7 +8,9 @@
 typedef enum
 {
     GAME_SCREEN_WELCOME,
-    GAME_SCREEN_FISHING
+    GAME_SCREEN_FISHING,
+    GAME_SCREEN_GAMEOVER,
+    GAME_SCREEN_CREDITS
 } GameScreen;
 
 typedef struct

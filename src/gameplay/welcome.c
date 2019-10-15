@@ -4,6 +4,7 @@
 #include "engine/window.h"
 #include "engine/resources.h"
 
+
 Sprite * s_welcomeSprite = NULL;
 
 
@@ -18,19 +19,22 @@ void welcomeInit(Game * _game)
 
 void welcomeDestroy(Game * _game)
 {
+    // Nothing to do
 }
 
 void welcomeUpdate(Game * _game)
 {
-    // Quit game
     if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         closeWindow(_game->engine->window);
     }
-
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_ENTER) == GLFW_PRESS)
+    else if(glfwGetKey(_game->engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
         _game->currentScreen = GAME_SCREEN_FISHING;
+    }
+    else if(glfwGetKey(_game->engine->window, GLFW_KEY_ENTER) == GLFW_PRESS)
+    {
+        _game->currentScreen = GAME_SCREEN_CREDITS;
     }
 }
 
