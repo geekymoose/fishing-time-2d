@@ -78,7 +78,7 @@ static void drawGameUI(FishingTime const * _game, const uint32 _shaderID)
     // Positions are hard coded (simply based on the visual results on screen)
 
     // Score (max supported 999)
-    vecf2 score_position = {GAME_CAMERA_RECT_WIDTH / 2.3f, -GAME_CAMERA_RECT_HEIGHT / 2.1f};
+    vecf2 score_position = {-14.0f, GAME_CAMERA_RECT_HEIGHT / 2.1f};
     vecf2 scale = {1.0f, 1.0f};
 
     const int score = _game->score;
@@ -90,7 +90,7 @@ static void drawGameUI(FishingTime const * _game, const uint32 _shaderID)
     drawSprite(_game->textBitMap[digit_2], score_position, scale, _shaderID);
 
     // Remaining time (max supported 99 secs)
-    vecf2 time_position = {0.0f , GAME_CAMERA_RECT_HEIGHT / 2.1f};
+    vecf2 time_position = {7.0f , GAME_CAMERA_RECT_HEIGHT / 2.1f};
 
     const int time = _game->remainingTime;
     digit_1 = (time / 10) % 10;   // 92 -> gives 9
