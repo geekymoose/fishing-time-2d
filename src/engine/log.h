@@ -6,8 +6,6 @@
 
 
 // -----------------------------------------------------------------------------
-// Constants
-// -----------------------------------------------------------------------------
 
 enum
 {
@@ -30,7 +28,7 @@ enum
 
 
 // -----------------------------------------------------------------------------
-// Static log methods (internal)
+// Internal methods
 // -----------------------------------------------------------------------------
 
 // Returns a string representation of a log level
@@ -91,17 +89,30 @@ static inline void _log(const int level, const char* format, ...)
 // Log macros
 // -----------------------------------------------------------------------------
 
+#if defined(ENGINE_ENABLE_LOG)
+
 #define LOG_DBG(format, ...) _log(_LOG_LEVEL_DBG, format, ##__VA_ARGS__)
 #define LOG_INFO(format, ...) _log(_LOG_LEVEL_INFO, format, ##__VA_ARGS__)
 #define LOG_WARN(format, ...) _log(_LOG_LEVEL_WARN, format, ##__VA_ARGS__)
 #define LOG_ERR(format, ...) _log(_LOG_LEVEL_ERR, format, ##__VA_ARGS__)
 #define LOG_OMG(format, ...) _log(_LOG_LEVEL_OMG, format, ##__VA_ARGS__)
 
+#else
+
+#define LOG_DBG(format, ...)
+#define LOG_INFO(format, ...)
+#define LOG_WARN(format, ...)
+#define LOG_ERR(format, ...)
+#define LOG_OMG(format, ...)
+
+#endif
+
 
 // -----------------------------------------------------------------------------
 // Assert macros
 // -----------------------------------------------------------------------------
 
+#if defined(ENGINE_ENABLE_ASSERT)
 
 #if defined(_WIN32) || defined(_WIN64)
 
@@ -120,5 +131,11 @@ static inline void _log(const int level, const char* format, ...)
                 _XTERM_COLOR_RED, __FILE__, __LINE__, msg); \
     } \
     assert(exp)
+#endif
+
+#else
+
+#define ASSERT_MSG(exp, msg)
+
 #endif
 
