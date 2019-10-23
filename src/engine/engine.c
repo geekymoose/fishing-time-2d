@@ -4,7 +4,7 @@
 #include "engine/log.h"
 
 
-void engineRun(Engine * _engine, void * _game)
+int engineRun(Engine * _engine, void * _game)
 {
     ASSERT_MSG(_engine != NULL, "[Engine] Engine ptr must be given");
     ASSERT_MSG(_game != NULL, "[Engine] Game ptr must be given");
@@ -16,8 +16,9 @@ void engineRun(Engine * _engine, void * _game)
     _engine->window = createWindow(600, 600, "Shark engine 2D"); // Default init values
     if(_engine->window == NULL)
     {
+        LOG_ERR("[Engine] A Window is required to run the engine");
         ASSERT_MSG(FALSE, "[Engine] A Window is required to run the engine");
-        return;
+        return 1;
     }
 
     glfwSwapInterval(1); // vsync
@@ -30,7 +31,13 @@ void engineRun(Engine * _engine, void * _game)
     float elapsedFixedDeltaTime = 0.0f;
     const float fixedDeltaTime = 1.0f / 45.0f; // Physic capped at 45 fps
 
-    _engine->gameInit(_game);
+    int success = _engine->gameInit(_game);
+    if(success != 0)
+    {
+        LOG_ERR("[Engine] The engine failed to init the game");
+        ASSERT_MSG(FALSE, "[Engine] The engine failed to init the game");
+        return 1;
+    }
 
     // Main Loop
 
@@ -66,7 +73,15 @@ void engineRun(Engine * _engine, void * _game)
 
     // Shutdown
 
-    _engine->gameDestroy(_game);
+    destroyWindow(_engine->window); // First, remove the window to look responsive
 
-    destroyWindow(_engine->window);
+    success = _engine->gameDestroy(_game);
+    if(success != 0)
+    {
+        LOG_ERR("[Engine] The engine failed to destroy the game");
+        ASSERT_MSG(FALSE, "[Engine] The engine failed to destroy the game");
+        return 1;
+    }
+
+    return 0;
 }

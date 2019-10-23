@@ -16,10 +16,10 @@
 static FishingTime * s_fishingTime = NULL;
 
 
-void gameInit(void * _gamePtr)
+int gameInit(void * _gamePtr)
 {
     GameApp * game = (GameApp *)_gamePtr;
-    ASSERT_MSG(game->engine != NULL, "game->engine should not be NULL");
+    ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
     game->engine->shaderID = createShaderProgramFromFile(
             GAME_SHADERS_DIR "/vertex_shader.glsl",
@@ -28,17 +28,25 @@ void gameInit(void * _gamePtr)
     game->currentScreen = GAME_SCREEN_WELCOME;
 
     s_fishingTime = malloc(sizeof(FishingTime));
-    ASSERT_MSG(s_fishingTime != NULL, "Failed to malloc fishingtime");
+    if(s_fishingTime == NULL)
+    {
+        LOG_ERR("[Game] Failed to malloc fishingtime");
+        ASSERT_MSG(FALSE, "Failed to malloc fishingtime");
+        return 1;
+    }
 
     welcomeInit(game);
     creditsInit(game);
     gameoverInit(game);
     fishingTimeInit(game->engine, s_fishingTime);
+
+    return 0;
 }
 
-void gameDestroy(void * _gamePtr)
+int gameDestroy(void * _gamePtr)
 {
     GameApp * game = (GameApp *)_gamePtr;
+    ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
     welcomeDestroy(game);
     creditsDestroy(game);
@@ -46,11 +54,14 @@ void gameDestroy(void * _gamePtr)
     fishingTimeDestroy(game->engine, s_fishingTime);
 
     free(s_fishingTime);
+
+    return 0;
 }
 
 void gameUpdate(void * _gamePtr, float _dt)
 {
     GameApp * game = (GameApp *)_gamePtr;
+    ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
     switch (game->currentScreen)
     {
@@ -79,6 +90,7 @@ void gameUpdate(void * _gamePtr, float _dt)
 void gameFixedUpdate(void * _gamePtr, float _dt)
 {
     GameApp * game = (GameApp *)_gamePtr;
+    ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
     switch (game->currentScreen)
     {
@@ -107,6 +119,7 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
 void gameRender(void * _gamePtr)
 {
     GameApp * game = (GameApp *)_gamePtr;
+    ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
     switch (game->currentScreen)
     {

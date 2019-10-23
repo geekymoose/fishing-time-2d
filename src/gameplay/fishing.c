@@ -322,6 +322,9 @@ void fishingTimeRender(Engine * _engine, FishingTime * _game)
 
 void fishingTimeInit(Engine * _engine, FishingTime * _game)
 {
+    ASSERT_MSG(_engine != NULL, "Invalid parameter (should not be NULL");
+    ASSERT_MSG(_game != NULL, "Invalid parameter (should not be NULL");
+
     LOG_INFO("[Game] Initializing the game");
 
     _game->isPaused = -1;
@@ -454,6 +457,9 @@ void fishingTimeInit(Engine * _engine, FishingTime * _game)
 
 void fishingTimeDestroy(Engine * _engine, FishingTime * _game)
 {
+    ASSERT_MSG(_engine != NULL, "Invalid parameter (should not be NULL");
+    ASSERT_MSG(_game != NULL, "Invalid parameter (should not be NULL");
+
     LOG_INFO("[Game] Destroying the game");
 
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)

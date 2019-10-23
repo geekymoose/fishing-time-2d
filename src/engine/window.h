@@ -37,6 +37,6 @@ int isWindowClosed(GLFWwindow * _window);
 
 /// Resize the window.
 /// @param _window The window to resize.
-/// @parma _width The new window's width to apply.
+/// @param _width The new window's width to apply.
 /// @param _height The new Window's height to apply.
 void resizeWindow(GLFWwindow * _window, int _width, int _height);
