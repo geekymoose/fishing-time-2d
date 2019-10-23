@@ -38,7 +38,7 @@ int gameInit(void * _gamePtr)
     welcomeInit(game);
     creditsInit(game);
     gameoverInit(game);
-    fishingTimeInit(game->engine, s_fishingTime);
+    fishingTimeInit(game->engine, game, s_fishingTime);
 
     return 0;
 }
@@ -51,7 +51,7 @@ int gameDestroy(void * _gamePtr)
     welcomeDestroy(game);
     creditsDestroy(game);
     gameoverDestroy(game);
-    fishingTimeDestroy(game->engine, s_fishingTime);
+    fishingTimeDestroy(game->engine, game, s_fishingTime);
 
     free(s_fishingTime);
 
@@ -78,7 +78,7 @@ void gameUpdate(void * _gamePtr, float _dt)
             break;
 
         case GAME_SCREEN_FISHING:
-            fishingTimeUpdate(game->engine, s_fishingTime, _dt);
+            fishingTimeUpdate(game->engine, game, s_fishingTime, _dt);
             break;
 
         default:
@@ -107,7 +107,7 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
             break;
 
         case GAME_SCREEN_FISHING:
-            fishingTimeFixedUpdate(game->engine, s_fishingTime, _dt);
+            fishingTimeFixedUpdate(game->engine, game, s_fishingTime, _dt);
             break;
 
         default:
@@ -136,7 +136,7 @@ void gameRender(void * _gamePtr)
             break;
 
         case GAME_SCREEN_FISHING:
-            fishingTimeRender(game->engine, s_fishingTime);
+            fishingTimeRender(game->engine, game, s_fishingTime);
             break;
 
         default:

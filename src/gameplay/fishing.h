@@ -5,7 +5,9 @@
 #include "engine/animation.h"
 #include "engine/collision.h"
 #include "engine/engine.h"
+
 #include "gameplay/config.h"
+#include "gameplay/game_app.h"
 
 
 // -----------------------------------------------------------------------------
@@ -62,8 +64,8 @@ typedef struct
 
 // -----------------------------------------------------------------------------
 
-void fishingTimeInit(Engine * _engine, FishingTime * _game);
-void fishingTimeDestroy(Engine * _engine, FishingTime * _game);
-void fishingTimeUpdate(Engine * _engine, FishingTime * _game, float _dt);
-void fishingTimeFixedUpdate(Engine * _engine, FishingTime * _game, float _dt);
-void fishingTimeRender(Engine * _engine, FishingTime * _game);
+void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game);
+void fishingTimeDestroy(Engine * _engine, GameApp * _gameapp, FishingTime * _game);
+void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game, float _dt);
+void fishingTimeFixedUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game, float _dt);
+void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game);

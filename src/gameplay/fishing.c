@@ -123,12 +123,21 @@ static void spwanSharkInGame(FishingTime * _game, int _index)
 
 // -----------------------------------------------------------------------------
 
-void fishingTimeUpdate(Engine * _engine, FishingTime * _game, float _dt)
+void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game, float _dt)
 {
     // Quit game
     if(glfwGetKey(_engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
-        closeWindow(_engine->window);
+        _gameapp->currentScreen = GAME_SCREEN_WELCOME;
+        return;
+    }
+    if(_game->remainingTime <= 100.0f)
+    {
+        if(glfwGetKey(_engine->window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        {
+            _gameapp->currentScreen = GAME_SCREEN_CREDITS;
+            return;
+        }
     }
 
     // End game
@@ -220,7 +229,7 @@ void fishingTimeUpdate(Engine * _engine, FishingTime * _game, float _dt)
     }
 }
 
-void fishingTimeFixedUpdate(Engine * _engine, FishingTime * _game, float _dt)
+void fishingTimeFixedUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game, float _dt)
 {
     // Boat position
     const int limit = _game->cameraRect.x / 2; // Boat cannot go outside camera
@@ -285,7 +294,7 @@ void fishingTimeFixedUpdate(Engine * _engine, FishingTime * _game, float _dt)
     }
 }
 
-void fishingTimeRender(Engine * _engine, FishingTime * _game)
+void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
 {
     drawBackground(_game->background, _engine->shaderID);
 
@@ -320,7 +329,7 @@ void fishingTimeRender(Engine * _engine, FishingTime * _game)
 
 // -----------------------------------------------------------------------------
 
-void fishingTimeInit(Engine * _engine, FishingTime * _game)
+void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
 {
     ASSERT_MSG(_engine != NULL, "Invalid parameter (should not be NULL");
     ASSERT_MSG(_game != NULL, "Invalid parameter (should not be NULL");
@@ -455,7 +464,7 @@ void fishingTimeInit(Engine * _engine, FishingTime * _game)
     LOG_INFO("[Game] Game successfully initialized");
 }
 
-void fishingTimeDestroy(Engine * _engine, FishingTime * _game)
+void fishingTimeDestroy(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
 {
     ASSERT_MSG(_engine != NULL, "Invalid parameter (should not be NULL");
     ASSERT_MSG(_game != NULL, "Invalid parameter (should not be NULL");
