@@ -3,7 +3,7 @@
 #include "build_config.h"
 #include "engine/log.h"
 #include "engine/engine.h"
-#include "gameplay/game.h"
+#include "gameplay/game_app.h"
 
 
 // -----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     engine.gameFixedUpdate = gameFixedUpdate;
     engine.gameRender = gameRender;
 
-    Game game = {0};
+    GameApp game = {0};
     game.engine = &engine;
 
     engineRun(&engine, &game);

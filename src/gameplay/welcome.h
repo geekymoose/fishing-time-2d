@@ -1,9 +1,9 @@
 #pragma once
 
-#include "gameplay/game.h"
+#include "gameplay/game_app.h"
 
-void welcomeInit(Game * _game);
-void welcomeDestroy(Game * _game);
-void welcomeUpdate(Game * _game);
-void welcomeFixedUpdate(Game * _game);
-void welcomeRender(Game * _game);
+void welcomeInit(GameApp * _game);
+void welcomeDestroy(GameApp * _game);
+void welcomeUpdate(GameApp * _game);
+void welcomeFixedUpdate(GameApp * _game);
+void welcomeRender(GameApp * _game);

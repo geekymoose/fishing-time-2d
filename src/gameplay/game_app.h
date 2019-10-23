@@ -18,7 +18,7 @@ typedef struct
     FishingTime fishingTime;
     GameScreen currentScreen;
     Engine * engine;
-} Game;
+} GameApp;
 
 
 // -----------------------------------------------------------------------------

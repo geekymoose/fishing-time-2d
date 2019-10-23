@@ -1,9 +1,9 @@
 #pragma once
 
-#include "gameplay/game.h"
+#include "gameplay/game_app.h"
 
-void creditsInit(Game * _game);
-void creditsDestroy(Game * _game);
-void creditsUpdate(Game * _game);
-void creditsFixedUpdate(Game * _game);
-void creditsRender(Game * _game);
+void creditsInit(GameApp * _game);
+void creditsDestroy(GameApp * _game);
+void creditsUpdate(GameApp * _game);
+void creditsFixedUpdate(GameApp * _game);
+void creditsRender(GameApp * _game);

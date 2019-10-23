@@ -8,7 +8,7 @@
 Sprite * s_welcomeSprite = NULL;
 
 
-void welcomeInit(Game * _game)
+void welcomeInit(GameApp * _game)
 {
     vecf2 origin = {0.0f, 0.0f};
     unsigned int texID = resourceLoadTexture(GAME_RESOURCES_DIR "/welcome.png");
@@ -17,12 +17,12 @@ void welcomeInit(Game * _game)
     s_welcomeSprite = resourceGetSprite(spriteID);
 }
 
-void welcomeDestroy(Game * _game)
+void welcomeDestroy(GameApp * _game)
 {
     // Nothing to do
 }
 
-void welcomeUpdate(Game * _game)
+void welcomeUpdate(GameApp * _game)
 {
     if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
@@ -38,12 +38,12 @@ void welcomeUpdate(Game * _game)
     }
 }
 
-void welcomeFixedUpdate(Game * _game)
+void welcomeFixedUpdate(GameApp * _game)
 {
     // Nothing to do
 }
 
-void welcomeRender(Game * _game)
+void welcomeRender(GameApp * _game)
 {
     // The world center 0:0 is the center of the screen.
 

@@ -8,7 +8,7 @@
 Sprite * s_creditsSprite = NULL;
 
 
-void creditsInit(Game * _game)
+void creditsInit(GameApp * _game)
 {
     vecf2 origin = {0.0f, 0.0f};
     unsigned int texID = resourceLoadTexture(GAME_RESOURCES_DIR "/placeholder.png");
@@ -17,12 +17,12 @@ void creditsInit(Game * _game)
     s_creditsSprite = resourceGetSprite(spriteID);
 }
 
-void creditsDestroy(Game * _game)
+void creditsDestroy(GameApp * _game)
 {
     // Nothing to do
 }
 
-void creditsUpdate(Game * _game)
+void creditsUpdate(GameApp * _game)
 {
     if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
@@ -34,12 +34,12 @@ void creditsUpdate(Game * _game)
     }
 }
 
-void creditsFixedUpdate(Game * _game)
+void creditsFixedUpdate(GameApp * _game)
 {
     // Nothing to do
 }
 
-void creditsRender(Game * _game)
+void creditsRender(GameApp * _game)
 {
     // The world center 0:0 is the center of the screen.
     const vecf2 center = {0.0f, 0.0f};

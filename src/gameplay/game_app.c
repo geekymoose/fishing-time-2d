@@ -2,7 +2,7 @@
 #include "engine/log.h"
 #include "engine/types.h"
 #include "engine/shader.h"
-#include "gameplay/game.h"
+#include "gameplay/game_app.h"
 #include "gameplay/welcome.h"
 #include "gameplay/gameover.h"
 #include "gameplay/credits.h"
@@ -10,7 +10,7 @@
 
 void gameInit(void * _gamePtr)
 {
-    Game * game = (Game*)_gamePtr;
+    GameApp * game = (GameApp *)_gamePtr;
     ASSERT_MSG(game->engine != NULL, "game->engine should not be NULL");
 
     game->currentScreen = GAME_SCREEN_WELCOME;
@@ -27,7 +27,7 @@ void gameInit(void * _gamePtr)
 
 void gameDestroy(void * _gamePtr)
 {
-    Game * game = (Game*)_gamePtr;
+    GameApp * game = (GameApp *)_gamePtr;
 
     welcomeDestroy(game);
     creditsDestroy(game);
@@ -37,7 +37,7 @@ void gameDestroy(void * _gamePtr)
 
 void gameUpdate(void * _gamePtr, float _dt)
 {
-    Game * game = (Game*)_gamePtr;
+    GameApp * game = (GameApp *)_gamePtr;
 
     switch (game->currentScreen)
     {
@@ -65,7 +65,7 @@ void gameUpdate(void * _gamePtr, float _dt)
 
 void gameFixedUpdate(void * _gamePtr, float _dt)
 {
-    Game * game = (Game*)_gamePtr;
+    GameApp * game = (GameApp *)_gamePtr;
 
     switch (game->currentScreen)
     {
@@ -93,7 +93,7 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
 
 void gameRender(void * _gamePtr)
 {
-    Game * game = (Game*)_gamePtr;
+    GameApp * game = (GameApp *)_gamePtr;
 
     switch (game->currentScreen)
     {

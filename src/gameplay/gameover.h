@@ -1,9 +1,9 @@
 #pragma once
 
-#include "gameplay/game.h"
+#include "gameplay/game_app.h"
 
-void gameoverInit(Game * _game);
-void gameoverDestroy(Game * _game);
-void gameoverUpdate(Game * _game);
-void gameoverFixedUpdate(Game * _game);
-void gameoverRender(Game * _game);
+void gameoverInit(GameApp * _game);
+void gameoverDestroy(GameApp * _game);
+void gameoverUpdate(GameApp * _game);
+void gameoverFixedUpdate(GameApp * _game);
+void gameoverRender(GameApp * _game);
