@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/engine.h"
-#include "gameplay/fishing.h"
 
 // Game entry point (with menu flow scenes, ingame scene etc)
 
@@ -15,9 +14,8 @@ typedef enum
 
 typedef struct
 {
-    FishingTime fishingTime;
-    GameScreen currentScreen;
     Engine * engine;
+    GameScreen currentScreen;
 } GameApp;
 
 

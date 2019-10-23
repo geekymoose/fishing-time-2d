@@ -1,11 +1,19 @@
+#include <stdlib.h>
+
 #include "build_config.h"
+
 #include "engine/log.h"
 #include "engine/types.h"
 #include "engine/shader.h"
-#include "gameplay/game_app.h"
-#include "gameplay/welcome.h"
-#include "gameplay/gameover.h"
+
 #include "gameplay/credits.h"
+#include "gameplay/fishing.h"
+#include "gameplay/game_app.h"
+#include "gameplay/gameover.h"
+#include "gameplay/welcome.h"
+
+
+static FishingTime * s_fishingTime = NULL;
 
 
 void gameInit(void * _gamePtr)
@@ -13,16 +21,19 @@ void gameInit(void * _gamePtr)
     GameApp * game = (GameApp *)_gamePtr;
     ASSERT_MSG(game->engine != NULL, "game->engine should not be NULL");
 
-    game->currentScreen = GAME_SCREEN_WELCOME;
-
     game->engine->shaderID = createShaderProgramFromFile(
             GAME_SHADERS_DIR "/vertex_shader.glsl",
             GAME_SHADERS_DIR "/fragment_shader.glsl");
 
+    game->currentScreen = GAME_SCREEN_WELCOME;
+
+    s_fishingTime = malloc(sizeof(FishingTime));
+    ASSERT_MSG(s_fishingTime != NULL, "Failed to malloc fishingtime");
+
     welcomeInit(game);
     creditsInit(game);
     gameoverInit(game);
-    fishingTimeInit(game->engine, &game->fishingTime);
+    fishingTimeInit(game->engine, s_fishingTime);
 }
 
 void gameDestroy(void * _gamePtr)
@@ -32,7 +43,9 @@ void gameDestroy(void * _gamePtr)
     welcomeDestroy(game);
     creditsDestroy(game);
     gameoverDestroy(game);
-    fishingTimeDestroy(game->engine, &game->fishingTime);
+    fishingTimeDestroy(game->engine, s_fishingTime);
+
+    free(s_fishingTime);
 }
 
 void gameUpdate(void * _gamePtr, float _dt)
@@ -54,7 +67,7 @@ void gameUpdate(void * _gamePtr, float _dt)
             break;
 
         case GAME_SCREEN_FISHING:
-            fishingTimeUpdate(game->engine, &game->fishingTime, _dt);
+            fishingTimeUpdate(game->engine, s_fishingTime, _dt);
             break;
 
         default:
@@ -82,7 +95,7 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
             break;
 
         case GAME_SCREEN_FISHING:
-            fishingTimeFixedUpdate(game->engine, &game->fishingTime, _dt);
+            fishingTimeFixedUpdate(game->engine, s_fishingTime, _dt);
             break;
 
         default:
@@ -110,7 +123,7 @@ void gameRender(void * _gamePtr)
             break;
 
         case GAME_SCREEN_FISHING:
-            fishingTimeRender(game->engine, &game->fishingTime);
+            fishingTimeRender(game->engine, s_fishingTime);
             break;
 
         default:
