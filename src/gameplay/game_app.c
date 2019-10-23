@@ -35,6 +35,14 @@ int gameInit(void * _gamePtr)
         return 1;
     }
 
+    int success = gameResourcesLoadAll(&game->resources, GAME_RESOURCES_DIR);
+    if(success != 0)
+    {
+        LOG_ERR("[Game] Failed to load all resources");
+        ASSERT_MSG(FALSE, "[Game] Failed to load all resources");
+        return 42;
+    }
+
     welcomeInit(game);
     creditsInit(game);
     gameoverInit(game);

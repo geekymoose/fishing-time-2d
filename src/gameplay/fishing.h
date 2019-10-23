@@ -18,7 +18,6 @@ typedef struct
     float direction; // Vect director on x axis
     float velocity; // Boat can move only on x axis
     Animation anim;
-    Sprite * spritesArray[GAME_BOAT_ANIM_NB_FRAMES];
 } Boat;
 
 typedef struct
@@ -27,7 +26,6 @@ typedef struct
     float velocity; // Moves only on Y axis
     RectCollider collider;
     Animation anim;
-    Sprite * spritesArray[GAME_SHARK_ANIM_NB_FRAMES];
 } Shark;
 
 typedef struct
@@ -35,14 +33,12 @@ typedef struct
     vecf2 position;
     float velocity; // Moves only on Y axis
     RectCollider collider;
-    Sprite * sprite;
 } Anchor;
 
 typedef struct
 {
     vecf2 position;
     Animation anim;
-    Sprite * spritesArray[GAME_EXPLOSION_ANIM_NB_FRAMES];
 } Explosion;
 
 typedef struct
@@ -52,9 +48,6 @@ typedef struct
     Shark * sharksArray[GAME_NB_MAX_SHARKS];
     Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
     Anchor * anchor; // Anchor not NULL means boat is firing
-    Sprite * background;
-    Sprite * foreground;
-    Sprite * textBitMap[10]; // The font is only 10 chars
     int isPaused;
     int score;
     float remainingTime; // Remaining time

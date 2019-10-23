@@ -25,8 +25,8 @@
 #define GAME_EXPLOSION_ANIM_FRAME_DURATION_IN_SEC 0.150f
 #define GAME_EXPLOSION_ANIM_NB_FRAMES 3
 
-#define GAME_SHARK_ANIM_FRAME_DURATION_IN_SEC 0.250f
-#define GAME_SHARK_ANIM_NB_FRAMES 3
+#define GAME_FISH_ANIM_FRAME_DURATION_IN_SEC 0.250f
+#define GAME_FISH_ANIM_NB_FRAMES 3
 
 
 // -----------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/engine.h"
+#include "gameplay/game_resources.h"
 
 // Game entry point (with menu flow scenes, ingame scene etc)
 
@@ -16,6 +17,7 @@ typedef struct
 {
     Engine * engine;
     GameScreen currentScreen;
+    GameResources resources;
 } GameApp;
 
 

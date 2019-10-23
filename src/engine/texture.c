@@ -22,7 +22,7 @@ Texture makeTexture(const char* _path)
     {
         LOG_ERR("[Texture] Unable to load texture %s", _path);
         ASSERT_MSG(FALSE, "[Texture] Unable to load texture");
-        tex.id = (unsigned int)-1; // Invalid tex. Kinda ugly but ok for now
+        tex.id = 0; // Zero is not a valid ID
         return tex;
     }
 

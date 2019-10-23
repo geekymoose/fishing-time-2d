@@ -22,57 +22,7 @@ static Explosion s_explosionsPool[GAME_NB_MAX_SHARKS]; // Static pool of explosi
 
 // -----------------------------------------------------------------------------
 
-static void drawBackground(Sprite const * _sprite, const uint32 _shaderID)
-{
-    ASSERT_MSG(_sprite != NULL, "[Draw] Cannot draw if foreground ptr is NULL");
-
-    // The world center 0:0 is the center of the screen.
-    // We hard coded to place the background in the center.
-    const vecf2 center = {0.0f, 0.0f};
-    const vecf2 scale = {1.0f, 1.0f};
-    drawSprite(_sprite, center, scale, _shaderID);
-}
-
-static void drawForeground(Sprite const * _sprite, const uint32 _shaderID)
-{
-    ASSERT_MSG(_sprite != NULL, "[Draw] Cannot draw if foreground ptr is NULL");
-
-    // Hardcoded position but basically it is (backgroundSize - 35) / 2
-    // See the background sprite size
-    const vecf2 center = {0.0f, 82.5f};
-    const vecf2 scale = {1.0f, 1.0f};
-    drawSprite(_sprite, center, scale, _shaderID);
-}
-
-static void drawShark(Shark const * _shark, const uint32 _shaderID)
-{
-    ASSERT_MSG(_shark != NULL, "[Draw] Cannot draw if shark ptr is NULL");
-    ASSERT_MSG(_shark->spritesArray[_shark->anim.currentFrameIndex] != NULL, "[Draw] Shark has no sprite");
-
-    const vecf2 scale = {1.0f, 1.0f};
-    drawSprite(_shark->spritesArray[_shark->anim.currentFrameIndex], _shark->position, scale, _shaderID);
-}
-
-static void drawBoat(Boat const * _boat, const uint32 _shaderID)
-{
-    ASSERT_MSG(_boat != NULL, "[Draw] Boat pointer NULL");
-    ASSERT_MSG(_boat->spritesArray[_boat->anim.currentFrameIndex] != NULL, "[Draw] Boat sprite in spritesArray is NULL");
-
-    vecf2 scale = {1.0f, 1.0f};
-    scale.x *= _boat->direction;
-    drawSprite(_boat->spritesArray[_boat->anim.currentFrameIndex], _boat->position, scale, _shaderID);
-}
-
-static void drawAnchor(Anchor const * _anchor, const uint32 _shaderID)
-{
-    ASSERT_MSG(_anchor != NULL, "[Draw] Anchor NULL");
-    ASSERT_MSG(_anchor->sprite != NULL, "[Draw] Anchor has no sprite");
-
-    const vecf2 scale = {1.0f, 1.0f};
-    drawSprite(_anchor->sprite, _anchor->position, scale, _shaderID);
-}
-
-static void drawGameUI(FishingTime const * _game, const uint32 _shaderID)
+static void drawGameUI(GameApp * _gameapp, FishingTime const * _game, const uint32 _shaderID)
 {
     // UI position is in World units (as beeing seen by camera).
     // Positions are hard coded (simply based on the visual results on screen)
@@ -85,9 +35,9 @@ static void drawGameUI(FishingTime const * _game, const uint32 _shaderID)
     int digit_1 = (score / 10) % 10;   // 92 -> gives 9
     int digit_2 = score % 10;          // 92 -> gives 2
 
-    drawSprite(_game->textBitMap[digit_1], score_position, scale, _shaderID);
-    score_position.x += _game->textBitMap[digit_1]->size.x;
-    drawSprite(_game->textBitMap[digit_2], score_position, scale, _shaderID);
+    drawSprite(_gameapp->resources.fontsBitmap[digit_1], score_position, scale, _shaderID);
+    score_position.x += _gameapp->resources.fontsBitmap[digit_1]->size.x;
+    drawSprite(_gameapp->resources.fontsBitmap[digit_2], score_position, scale, _shaderID);
 
     // Remaining time (max supported 99 secs)
     vecf2 time_position = {7.0f , GAME_CAMERA_RECT_HEIGHT / 2.1f};
@@ -96,9 +46,9 @@ static void drawGameUI(FishingTime const * _game, const uint32 _shaderID)
     digit_1 = (time / 10) % 10;   // 92 -> gives 9
     digit_2 = time % 10;          // 92 -> gives 2
 
-    drawSprite(_game->textBitMap[digit_1], time_position, scale, _shaderID);
-    time_position.x += _game->textBitMap[digit_1]->size.x;
-    drawSprite(_game->textBitMap[digit_2], time_position, scale, _shaderID);
+    drawSprite(_gameapp->resources.fontsBitmap[digit_1], time_position, scale, _shaderID);
+    time_position.x += _gameapp->resources.fontsBitmap[digit_1]->size.x;
+    drawSprite(_gameapp->resources.fontsBitmap[digit_2], time_position, scale, _shaderID);
 }
 
 
@@ -296,34 +246,61 @@ void fishingTimeFixedUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * 
 
 void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
 {
-    drawBackground(_game->background, _engine->shaderID);
+    // Background
+    // The world center 0:0 is the center of the screen.
+    // We hard coded to place the background in the center.
+    vecf2 center = {0.0f, 0.0f};
+    vecf2 scale = {1.0f, 1.0f};
+    drawSprite(_gameapp->resources.background, center, scale, _engine->shaderID);
 
+    // Fishes
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
-        drawShark(_game->sharksArray[i], _engine->shaderID);
+
+        Shark * shark = _game->sharksArray[i];
+        const vecf2 scale = {1.0f, 1.0f};
+        drawSprite(_gameapp->resources.fish[shark->anim.currentFrameIndex], shark->position, scale, _engine->shaderID);
     }
 
-    drawBoat(&_game->boat, _engine->shaderID);
+    // Boat
+    /*
+    Boat * boat;
+    scale.x = 1.0f * boat->direction;
+    scale.y = 1.0f;
+    drawSprite(_gameapp->resources.boat[boat->anim.currentFrameIndex], boat->position, scale, _engine->shaderID);
+    */
 
+    // Anchor
     if(_game->anchor != NULL)
     {
-        drawAnchor(_game->anchor, _engine->shaderID);
+        const vecf2 scale = {1.0f, 1.0f};
+        drawSprite(_gameapp->resources.anchor, _game->anchor->position, scale, _engine->shaderID);
     }
 
+    // Explosions
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         if(_game->explosionsArray[i] != NULL)
         {
             Explosion * explosion = _game->explosionsArray[i];
-            Sprite * sprite = explosion->spritesArray[explosion->anim.currentFrameIndex];
+            Sprite * sprite = _gameapp->resources.explosion[explosion->anim.currentFrameIndex];
             const vecf2 scale = {1.0f, 1.0f};
             drawSprite(sprite, explosion->position, scale, _engine->shaderID);
         }
     }
 
-    drawForeground(_game->foreground, _engine->shaderID);
-    drawGameUI(_game, _engine->shaderID);
+    // Foreground
+    // Hardcoded position but basically it is (backgroundSize - 35) / 2
+    // See the background sprite size
+    center.x = 0.0f;
+    center.y = 82.5f;
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    drawSprite(_gameapp->resources.foreground, center, scale, _engine->shaderID);
+
+    // UI
+    drawGameUI(_gameapp, _game, _engine->shaderID);
 }
 
 
@@ -348,49 +325,15 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(_engine->shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);
 
-    // Variables temporary used for loading
-    vecf2 origin = {0.0f, 0.0f};
-    unsigned int texID = 0;
-    unsigned int sprite_id;
-    unsigned int sprite1_id = 0;
-    unsigned int sprite2_id = 0;
-    unsigned int sprite3_id = 0;
-
-    // Resource background
-    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/background.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
-    _game->background = resourceGetSprite(sprite_id);
-
-    // Resource foreground
-    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/foreground.png");
-    sprite_id = resourceLoadSprite(resourceGetTexture(texID), 200, 35, origin);
-    _game->foreground = resourceGetSprite(sprite_id);
-
     // Resource anchor
-    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/spritesheet.png");
-    origin.x = 153.0f;
-    origin.y = 5.0f;
-    sprite_id = resourceLoadSprite(resourceGetTexture(texID), 10, 11, origin);
     s_anchor.position.x = 0.0f;
     s_anchor.position.y = 0.0f;
     s_anchor.velocity = GAME_ANCHOR_SPEED;
-    s_anchor.sprite = resourceGetSprite(sprite_id);
     s_anchor.collider.width = 10.0f;
     s_anchor.collider.height= 12.0f;
     _game->anchor = NULL;
 
     // Resource shark
-    sprite1_id = 0;
-    sprite2_id = 0;
-    sprite3_id = 0;
-    origin.x = 0;
-    origin.y = 0;
-    sprite1_id = resourceLoadSprite(resourceGetTexture(texID), 14, 12, origin);
-    origin.x += 14.0f;
-    sprite2_id = resourceLoadSprite(resourceGetTexture(texID), 14, 12, origin);
-    origin.x += 14.0f;
-    sprite3_id = resourceLoadSprite(resourceGetTexture(texID), 14, 12, origin);
-
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
         _game->sharksArray[i] = (Shark*)malloc(sizeof(Shark));
@@ -400,31 +343,17 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
         _game->sharksArray[i]->collider.width = 12.0f;
         _game->sharksArray[i]->collider.height= 11.0f;
 
-        _game->sharksArray[i]->spritesArray[0] = resourceGetSprite(sprite1_id);
-        _game->sharksArray[i]->spritesArray[1] = resourceGetSprite(sprite2_id);
-        _game->sharksArray[i]->spritesArray[2] = resourceGetSprite(sprite3_id);
-
         _game->sharksArray[i]->anim.currentFrameDurationInSec = 0.0f;
         _game->sharksArray[i]->anim.currentFrameIndex = 0;
-        _game->sharksArray[i]->anim.frameDurationInSec = GAME_SHARK_ANIM_FRAME_DURATION_IN_SEC;
-        _game->sharksArray[i]->anim.nbFrames = GAME_SHARK_ANIM_NB_FRAMES;
+        _game->sharksArray[i]->anim.frameDurationInSec = GAME_FISH_ANIM_FRAME_DURATION_IN_SEC;
+        _game->sharksArray[i]->anim.nbFrames = GAME_FISH_ANIM_NB_FRAMES;
 
         spwanSharkInGame(_game, i);
     }
 
     // Resource explosion
-    origin.x = 43.0f;
-    origin.y = 3.0f;
-    sprite1_id = resourceLoadSprite(resourceGetTexture(texID), 14, 14, origin);
-    origin.x += 14.0f;
-    sprite2_id = resourceLoadSprite(resourceGetTexture(texID), 14, 14, origin);
-    origin.x += 14.0f;
-    sprite3_id = resourceLoadSprite(resourceGetTexture(texID), 14, 14, origin);
     for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
     {
-        s_explosionsPool[i].spritesArray[0] = resourceGetSprite(sprite1_id);
-        s_explosionsPool[i].spritesArray[1] = resourceGetSprite(sprite2_id);
-        s_explosionsPool[i].spritesArray[2] = resourceGetSprite(sprite3_id);
         s_explosionsPool[i].anim.nbFrames = GAME_EXPLOSION_ANIM_NB_FRAMES;
         s_explosionsPool[i].anim.currentFrameIndex = 0;
         s_explosionsPool[i].anim.frameDurationInSec = GAME_EXPLOSION_ANIM_FRAME_DURATION_IN_SEC;
@@ -440,26 +369,6 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
     _game->boat.anim.currentFrameIndex = 0;
     _game->boat.anim.frameDurationInSec = GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC;
     _game->boat.anim.currentFrameDurationInSec = 0.0f;
-
-    origin.x = 0.0f;
-    origin.y = 20.0f;
-    for(int i = 0; i < _game->boat.anim.nbFrames; ++i)
-    {
-        origin.x = i * 45.0f;
-        sprite_id = resourceLoadSprite(resourceGetTexture(texID), 45, 35, origin);
-        _game->boat.spritesArray[i] = resourceGetSprite(sprite_id);
-    }
-
-    // Resource fonts
-    texID = resourceLoadTexture(GAME_RESOURCES_DIR"/fonts.png");
-    origin.x = 0.0f;
-    origin.y = 0.0f;
-    for(int k = 0; k < 10; ++k)
-    {
-        sprite_id = resourceLoadSprite(resourceGetTexture(texID), 6, 8, origin);
-        _game->textBitMap[k] = resourceGetSprite(sprite_id);
-        origin.x += 6;
-    }
 
     LOG_INFO("[Game] Game successfully initialized");
 }
