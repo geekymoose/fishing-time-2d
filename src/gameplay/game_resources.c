@@ -104,6 +104,30 @@ int gameResourcesLoadAll(GameResources * _resources, const char * _resourcesDirP
         ASSERT_MSG(_resources->boat[k] != NULL, "Invalid NULL resource");
     }
 
+    // Welcome
+    origin.x = 0.0f;
+    origin.y = 0.0f;
+    texID = internalLoadTexture(_resourcesDirPath, "/welcome.png");
+    spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
+    _resources->welcome = resourceGetSprite(spriteID);
+    ASSERT_MSG(_resources->welcome != NULL, "Invalid NULL resource");
+
+    // Gameover
+    origin.x = 0.0f;
+    origin.y = 0.0f;
+    texID = internalLoadTexture(_resourcesDirPath, "/placeholder.png");
+    spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
+    _resources->gameover = resourceGetSprite(spriteID);
+    ASSERT_MSG(_resources->gameover != NULL, "Invalid NULL resource");
+
+    // Credits
+    origin.x = 0.0f;
+    origin.y = 0.0f;
+    texID = internalLoadTexture(_resourcesDirPath, "/placeholder.png");
+    spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
+    _resources->credits = resourceGetSprite(spriteID);
+    ASSERT_MSG(_resources->credits != NULL, "Invalid NULL resource");
+
 
     LOG_INFO("[GameResources] Game resources successfully loaded");
     return 0;

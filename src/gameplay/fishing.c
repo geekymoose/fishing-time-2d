@@ -17,7 +17,7 @@
 // Since there are few elements, we use static instantiations.
 // It is easier and OK for our purpose (instead of malloc / free).
 static Anchor s_anchor;
-static Explosion s_explosionsPool[GAME_NB_MAX_SHARKS]; // Static pool of explosions
+static Explosion s_explosionsPool[GAME_FISH_COUNT]; // Static pool of explosions
 
 
 // -----------------------------------------------------------------------------
@@ -157,7 +157,7 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     updateAnimation(&(_game->boat.anim), _dt);
 
     // Explosion anim
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         if(_game->explosionsArray[i] != NULL)
         {
@@ -173,7 +173,7 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     }
 
     // Shark
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         updateAnimation(&(_game->sharksArray[i]->anim), _dt);
     }
@@ -190,7 +190,7 @@ void fishingTimeFixedUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * 
     }
 
     // Sharks positions and collision
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
 
@@ -254,7 +254,7 @@ void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     drawSprite(_gameapp->resources.background, center, scale, _engine->shaderID);
 
     // Fishes
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
 
@@ -264,12 +264,10 @@ void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     }
 
     // Boat
-    /*
     Boat * boat;
     scale.x = 1.0f * boat->direction;
     scale.y = 1.0f;
     drawSprite(_gameapp->resources.boat[boat->anim.currentFrameIndex], boat->position, scale, _engine->shaderID);
-    */
 
     // Anchor
     if(_game->anchor != NULL)
@@ -279,7 +277,7 @@ void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     }
 
     // Explosions
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         if(_game->explosionsArray[i] != NULL)
         {
@@ -334,12 +332,12 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
     _game->anchor = NULL;
 
     // Resource shark
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         _game->sharksArray[i] = (Shark*)malloc(sizeof(Shark));
         ASSERT_MSG(_game->sharksArray[i] != NULL, "malloc(Shark) failed");
 
-        _game->sharksArray[i]->velocity = GAME_SHARK_SPEED;
+        _game->sharksArray[i]->velocity = GAME_FISH_SPEED;
         _game->sharksArray[i]->collider.width = 12.0f;
         _game->sharksArray[i]->collider.height= 11.0f;
 
@@ -352,7 +350,7 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
     }
 
     // Resource explosion
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         s_explosionsPool[i].anim.nbFrames = GAME_EXPLOSION_ANIM_NB_FRAMES;
         s_explosionsPool[i].anim.currentFrameIndex = 0;
@@ -380,7 +378,7 @@ void fishingTimeDestroy(Engine * _engine, GameApp * _gameapp, FishingTime * _gam
 
     LOG_INFO("[Game] Destroying the game");
 
-    for(int i = 0; i < GAME_NB_MAX_SHARKS; ++i)
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         ASSERT_MSG(_game->sharksArray[i] != NULL, "Shark array has an unexpected NULL value");
         free(_game->sharksArray[i]);

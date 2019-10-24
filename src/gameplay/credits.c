@@ -5,16 +5,9 @@
 #include "engine/resources.h"
 
 
-Sprite * s_creditsSprite = NULL;
-
-
 void creditsInit(GameApp * _game)
 {
-    vecf2 origin = {0.0f, 0.0f};
-    unsigned int texID = resourceLoadTexture(GAME_RESOURCES_DIR "/placeholder.png");
-    unsigned int spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
-
-    s_creditsSprite = resourceGetSprite(spriteID);
+    // Nothing to do
 }
 
 void creditsDestroy(GameApp * _game)
@@ -44,5 +37,5 @@ void creditsRender(GameApp * _game)
     // The world center 0:0 is the center of the screen.
     const vecf2 center = {0.0f, 0.0f};
     const vecf2 scale = {1.0f, 1.0f};
-    drawSprite(s_creditsSprite, center, scale, _game->engine->shaderID);
+    drawSprite(_game->resources.credits, center, scale, _game->engine->shaderID);
 }

@@ -18,6 +18,9 @@ typedef struct
     Sprite * fish[GAME_FISH_ANIM_NB_FRAMES];
     Sprite * explosion[GAME_EXPLOSION_ANIM_NB_FRAMES];
     Sprite * fontsBitmap[10]; // The font has only 10 hard coded digits
+    Sprite * welcome;
+    Sprite * gameover;
+    Sprite * credits;
 } GameResources;
 
 

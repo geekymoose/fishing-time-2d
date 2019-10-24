@@ -45,12 +45,12 @@ typedef struct
 {
     vecf2 cameraRect; // Rectangle of camera vision
     Boat boat;
-    Shark * sharksArray[GAME_NB_MAX_SHARKS];
-    Explosion * explosionsArray[GAME_NB_MAX_SHARKS]; // Basically, only sharks explode
-    Anchor * anchor; // Anchor not NULL means boat is firing
+    Shark * sharksArray[GAME_FISH_COUNT];
+    Explosion * explosionsArray[GAME_FISH_COUNT];
+    Anchor * anchor;
     int isPaused;
     int score;
-    float remainingTime; // Remaining time
+    float remainingTime;
     float timeAtStartInSec; // Available amount of time at beginning
 } FishingTime;
 
