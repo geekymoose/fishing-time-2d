@@ -30,7 +30,7 @@ int gameInit(void * _gamePtr)
     {
         LOG_ERR("[Game] Failed to malloc fishingtime");
         ASSERT_MSG(FALSE, "Failed to malloc fishingtime");
-        return 1;
+        return 42;
     }
 
     int success = gameResourcesLoadAll(&game->resources, GAME_RESOURCES_DIR);

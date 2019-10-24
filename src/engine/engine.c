@@ -18,7 +18,7 @@ int engineRun(Engine * _engine, void * _game)
     {
         LOG_ERR("[Engine] A Window is required to run the engine");
         ASSERT_MSG(FALSE, "[Engine] A Window is required to run the engine");
-        return 1;
+        return 42;
     }
 
     glfwSwapInterval(1); // vsync
@@ -36,7 +36,7 @@ int engineRun(Engine * _engine, void * _game)
     {
         LOG_ERR("[Engine] The engine failed to init the game");
         ASSERT_MSG(FALSE, "[Engine] The engine failed to init the game");
-        return 1;
+        return 42;
     }
 
     // Main Loop
@@ -80,7 +80,7 @@ int engineRun(Engine * _engine, void * _game)
     {
         LOG_ERR("[Engine] The engine failed to destroy the game");
         ASSERT_MSG(FALSE, "[Engine] The engine failed to destroy the game");
-        return 1;
+        return 42;
     }
 
     return 0;
