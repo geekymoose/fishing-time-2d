@@ -6,11 +6,9 @@
 #include "engine/types.h"
 #include "engine/shader.h"
 
-#include "gameplay/credits.h"
 #include "gameplay/fishing.h"
 #include "gameplay/game_app.h"
-#include "gameplay/gameover.h"
-#include "gameplay/welcome.h"
+#include "gameplay/game_menus.h"
 
 
 static FishingTime * s_fishingTime = NULL;
@@ -43,9 +41,6 @@ int gameInit(void * _gamePtr)
         return 42;
     }
 
-    welcomeInit(game);
-    creditsInit(game);
-    gameoverInit(game);
     fishingTimeInit(game->engine, game, s_fishingTime);
 
     return 0;
@@ -56,9 +51,6 @@ int gameDestroy(void * _gamePtr)
     GameApp * game = (GameApp *)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    welcomeDestroy(game);
-    creditsDestroy(game);
-    gameoverDestroy(game);
     fishingTimeDestroy(game->engine, game, s_fishingTime);
 
     free(s_fishingTime);
@@ -73,6 +65,10 @@ void gameUpdate(void * _gamePtr, float _dt)
 
     switch (game->currentScreen)
     {
+        case GAME_SCREEN_FISHING:
+            fishingTimeUpdate(game->engine, game, s_fishingTime, _dt);
+            break;
+
         case GAME_SCREEN_WELCOME:
             welcomeUpdate(game);
             break;
@@ -83,10 +79,6 @@ void gameUpdate(void * _gamePtr, float _dt)
 
         case GAME_SCREEN_GAMEOVER:
             gameoverUpdate(game);
-            break;
-
-        case GAME_SCREEN_FISHING:
-            fishingTimeUpdate(game->engine, game, s_fishingTime, _dt);
             break;
 
         default:
@@ -102,20 +94,13 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
 
     switch (game->currentScreen)
     {
-        case GAME_SCREEN_WELCOME:
-            welcomeRender(game);
-            break;
-
-        case GAME_SCREEN_CREDITS:
-            creditsFixedUpdate(game);
-            break;
-
-        case GAME_SCREEN_GAMEOVER:
-            gameoverFixedUpdate(game);
-            break;
-
         case GAME_SCREEN_FISHING:
             fishingTimeFixedUpdate(game->engine, game, s_fishingTime, _dt);
+            break;
+
+        case GAME_SCREEN_WELCOME:
+        case GAME_SCREEN_CREDITS:
+        case GAME_SCREEN_GAMEOVER:
             break;
 
         default:
@@ -131,6 +116,10 @@ void gameRender(void * _gamePtr)
 
     switch (game->currentScreen)
     {
+        case GAME_SCREEN_FISHING:
+            fishingTimeRender(game->engine, game, s_fishingTime);
+            break;
+
         case GAME_SCREEN_WELCOME:
             welcomeRender(game);
             break;
@@ -143,12 +132,9 @@ void gameRender(void * _gamePtr)
             gameoverRender(game);
             break;
 
-        case GAME_SCREEN_FISHING:
-            fishingTimeRender(game->engine, game, s_fishingTime);
-            break;
-
         default:
             ASSERT_MSG(FALSE, "Not implemented switch-case value");
             break;
     }
 }
+
