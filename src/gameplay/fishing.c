@@ -94,11 +94,11 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     _game->remainingTime -= _dt;
     if(_game->remainingTime <= 0)
     {
-        _game->isPaused = 1;
+        _game->isPaused = TRUE;
     }
 
     // Pause
-    if(_game->isPaused == 1)
+    if(_game->isPaused == TRUE)
     {
         _engine->timescale = 0.0f;
     }
@@ -113,7 +113,7 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
         if(wasPausePressed == -1)
         {
             wasPausePressed = 1;
-            _game->isPaused = (_game->isPaused == -1) ? 1 : -1;
+            _game->isPaused = (_game->isPaused == FALSE) ? TRUE : FALSE;
         }
     }
     else
@@ -311,10 +311,10 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
 
     LOG_INFO("[Game] Initializing the game");
 
-    _game->isPaused = -1;
+    _game->isPaused = FALSE;
     _game->score = 0;
     _game->timeAtStartInSec = GAME_TIME_AT_START_IN_SEC;
-    _game->remainingTime = _game->timeAtStartInSec;
+    _game->remainingTime = GAME_TIME_AT_START_IN_SEC;
     _game->cameraRect.x = GAME_CAMERA_RECT_WIDTH;
     _game->cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
 
@@ -323,7 +323,7 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(_engine->shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);
 
-    // Resource anchor
+    // Anchor
     s_anchor.position.x = 0.0f;
     s_anchor.position.y = 0.0f;
     s_anchor.velocity = GAME_ANCHOR_SPEED;
@@ -331,7 +331,7 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
     s_anchor.collider.height= 12.0f;
     _game->anchor = NULL;
 
-    // Resource shark
+    // Fish
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         _game->sharksArray[i] = (Shark*)malloc(sizeof(Shark));
