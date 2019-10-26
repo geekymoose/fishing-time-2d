@@ -90,6 +90,13 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
         }
     }
 
+    // Restart game
+    if(glfwGetKey(_engine->window, GLFW_KEY_R) == GLFW_PRESS)
+    {
+        fishingTimeRestart(_game);
+        return;
+    }
+
     // End game
     _game->remainingTime -= _dt;
     if(_game->remainingTime <= 0)
