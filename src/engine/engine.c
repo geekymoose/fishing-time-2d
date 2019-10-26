@@ -6,8 +6,8 @@
 
 int engineRun(Engine * _engine, void * _game)
 {
-    ASSERT_MSG(_engine != NULL, "[Engine] Engine ptr must be given");
-    ASSERT_MSG(_game != NULL, "[Engine] Game ptr must be given");
+    ASSERT_MSG(_engine != NULL, "[Engine] parameter should not be NULL");
+    ASSERT_MSG(_game != NULL, "[Engine] parameter should not be NULL");
 
     // Init
 
@@ -16,8 +16,8 @@ int engineRun(Engine * _engine, void * _game)
     _engine->window = createWindow(600, 600, "Shark engine 2D"); // Default init values
     if(_engine->window == NULL)
     {
-        LOG_ERR("[Engine] A Window is required to run the engine");
-        ASSERT_MSG(FALSE, "[Engine] A Window is required to run the engine");
+        LOG_ERR("[Engine] Failed to create the main window");
+        ASSERT_MSG(FALSE, "[Engine] Failed to create the main window");
         return 42;
     }
 

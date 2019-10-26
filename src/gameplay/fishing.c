@@ -54,20 +54,20 @@ static void drawGameUI(GameApp * _gameapp, FishingTime const * _game, const uint
 
 // -----------------------------------------------------------------------------
 
-// Spawn a shark on game. The given index is the shark position in the array.
-// This assume the index is not a living shark.
-static void spwanSharkInGame(FishingTime * _game, int _index)
+// Spawn a fish on game. The given index is the fish position in the array.
+// This assume the index is not a living fish.
+static void spwanFishInGame(FishingTime * _game, int _index)
 {
     // Since 0:0 is at the center, this returns a position X between left to righ coords
     int randomX = (rand() % (int)_game->cameraRect.x) - (_game->cameraRect.x / 2);
 
-    // This is super arbitraty, the only goal is to place the shark outside the screen.
+    // This is super arbitraty, the only goal is to place the fish outside the screen.
     // at a random distance so that he will be back in a random x seconds.
     int randomY = (rand() % (int)_game->cameraRect.y) + _game->cameraRect.y;
 
-    Shark * shark = _game->sharksArray[_index];
-    shark->position.x = randomX;
-    shark->position.y = randomY;
+    Fish * fish = _game->fishes[_index];
+    fish->position.x = randomX;
+    fish->position.y = randomY;
 }
 
 
@@ -159,23 +159,23 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     // Explosion anim
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
-        if(_game->explosionsArray[i] != NULL)
+        if(_game->explosions[i] != NULL)
         {
-            Animation * anim = &(_game->explosionsArray[i]->anim);
+            Animation * anim = &(_game->explosions[i]->anim);
             updateAnimation(anim, _dt);
             if(anim->currentFrameIndex >= anim->nbFrames - 1)
             {
                 // DevNote: note that if _dt is high (game freeze), we may bypass
                 // the last frame because anim 'plays' several frame instead of one
-                _game->explosionsArray[i] = NULL;
+                _game->explosions[i] = NULL;
             }
         }
     }
 
-    // Shark
+    // Fishes
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
-        updateAnimation(&(_game->sharksArray[i]->anim), _dt);
+        updateAnimation(&(_game->fishes[i]->anim), _dt);
     }
 }
 
@@ -189,40 +189,40 @@ void fishingTimeFixedUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * 
         _game->boat.position.x = nextpos;
     }
 
-    // Sharks positions and collision
+    // Fish positions and collision
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
-        ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
+        ASSERT_MSG(_game->fishes != NULL, "Unexpected NULL element in array");
 
-        Shark * shark = _game->sharksArray[i];
+        Fish * fish = _game->fishes[i];
 
-        shark->position.y -= (shark->velocity * _dt);
-        shark->collider.center.x = shark->position.x;
-        shark->collider.center.y = shark->position.y;
+        fish->position.y -= (fish->velocity * _dt);
+        fish->collider.center.x = fish->position.x;
+        fish->collider.center.y = fish->position.y;
 
-        if(shark->position.y <= -(_game->cameraRect.y / 2))
+        if(fish->position.y <= -(_game->cameraRect.y / 2))
         {
-            _game->explosionsArray[i] = &(s_explosionsPool[i]);
-            _game->explosionsArray[i]->position.x = shark->position.x;
-            _game->explosionsArray[i]->position.y = shark->position.y;
-            _game->explosionsArray[i]->anim.currentFrameIndex = 0;
-            _game->explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
-            spwanSharkInGame(_game, i);
+            _game->explosions[i] = &(s_explosionsPool[i]);
+            _game->explosions[i]->position.x = fish->position.x;
+            _game->explosions[i]->position.y = fish->position.y;
+            _game->explosions[i]->anim.currentFrameIndex = 0;
+            _game->explosions[i]->anim.currentFrameDurationInSec = 0.0f;
+            spwanFishInGame(_game, i);
         }
 
         // Check collision if anchor
         if(_game->anchor != NULL)
         {
-            if(checkIfCollide(&(shark->collider), &(_game->anchor->collider)) != -1)
+            if(checkIfCollide(&(fish->collider), &(_game->anchor->collider)) != -1)
             {
-                _game->explosionsArray[i] = &(s_explosionsPool[i]);
-                _game->explosionsArray[i]->position.x = shark->position.x;
-                _game->explosionsArray[i]->position.y = shark->position.y;
-                _game->explosionsArray[i]->anim.currentFrameIndex = 0;
-                _game->explosionsArray[i]->anim.currentFrameDurationInSec = 0.0f;
+                _game->explosions[i] = &(s_explosionsPool[i]);
+                _game->explosions[i]->position.x = fish->position.x;
+                _game->explosions[i]->position.y = fish->position.y;
+                _game->explosions[i]->anim.currentFrameIndex = 0;
+                _game->explosions[i]->anim.currentFrameDurationInSec = 0.0f;
                 _game->anchor = NULL;
                 _game->score++;
-                spwanSharkInGame(_game, i);
+                spwanFishInGame(_game, i);
             }
         }
     }
@@ -256,15 +256,15 @@ void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     // Fishes
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
-        ASSERT_MSG(_game->sharksArray != NULL, "Unexpected NULL shark in sharksArray");
+        ASSERT_MSG(_game->fishes != NULL, "Unexpected NULL element");
 
-        Shark * shark = _game->sharksArray[i];
+        Fish * fish = _game->fishes[i];
         const vecf2 scale = {1.0f, 1.0f};
-        drawSprite(_gameapp->resources.fish[shark->anim.currentFrameIndex], shark->position, scale, _engine->shaderID);
+        drawSprite(_gameapp->resources.fish[fish->anim.currentFrameIndex], fish->position, scale, _engine->shaderID);
     }
 
     // Boat
-    Boat * boat;
+    Boat * boat = &_game->boat;
     scale.x = 1.0f * boat->direction;
     scale.y = 1.0f;
     drawSprite(_gameapp->resources.boat[boat->anim.currentFrameIndex], boat->position, scale, _engine->shaderID);
@@ -279,9 +279,9 @@ void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     // Explosions
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
-        if(_game->explosionsArray[i] != NULL)
+        if(_game->explosions[i] != NULL)
         {
-            Explosion * explosion = _game->explosionsArray[i];
+            Explosion * explosion = _game->explosions[i];
             Sprite * sprite = _gameapp->resources.explosion[explosion->anim.currentFrameIndex];
             const vecf2 scale = {1.0f, 1.0f};
             drawSprite(sprite, explosion->position, scale, _engine->shaderID);
@@ -304,6 +304,52 @@ void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game
 
 // -----------------------------------------------------------------------------
 
+void fishingTimeRestart(FishingTime * _game)
+{
+    ASSERT_MSG(_game != NULL, "Invalid parameter (should not be NULL");
+
+    LOG_INFO("[Game] Reseting the game data");
+
+    _game->score = 0;
+    _game->timeAtStartInSec = GAME_TIME_AT_START_IN_SEC;
+    _game->remainingTime = GAME_TIME_AT_START_IN_SEC;
+    _game->isPaused = FALSE;
+
+    // Boat
+    _game->boat.position.x = 0.0f;
+    _game->boat.position.y = -81.0f;
+    _game->boat.velocity = GAME_BOAT_SPEED;
+    _game->boat.direction = 1; // Look at the right by default
+    _game->boat.anim.currentFrameIndex = 0;
+    _game->boat.anim.currentFrameDurationInSec = 0.0f;
+
+    // Anchor
+    s_anchor.velocity = GAME_ANCHOR_SPEED;
+    s_anchor.collider.width = 10.0f;
+    s_anchor.collider.height = 12.0f;
+    _game->anchor = NULL;
+
+    // Fishes
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
+    {
+        _game->fishes[i]->velocity = GAME_FISH_SPEED;
+
+        _game->fishes[i]->anim.currentFrameDurationInSec = 0.0f;
+        _game->fishes[i]->anim.currentFrameIndex = 0;
+
+        spwanFishInGame(_game, i);
+    }
+
+    // Explosions
+    for(int i = 0; i < GAME_FISH_COUNT; ++i)
+    {
+        // Remove all explosion from the current running game
+        _game->explosions[i] = NULL;
+    }
+
+    LOG_INFO("[Game] Successfully reset the game data");
+}
+
 void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
 {
     ASSERT_MSG(_engine != NULL, "Invalid parameter (should not be NULL");
@@ -311,62 +357,35 @@ void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game)
 
     LOG_INFO("[Game] Initializing the game");
 
-    _game->isPaused = FALSE;
-    _game->score = 0;
-    _game->timeAtStartInSec = GAME_TIME_AT_START_IN_SEC;
-    _game->remainingTime = GAME_TIME_AT_START_IN_SEC;
     _game->cameraRect.x = GAME_CAMERA_RECT_WIDTH;
     _game->cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
-
     resizeWindow(_engine->window, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(_engine->shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);
 
-    // Anchor
-    s_anchor.position.x = 0.0f;
-    s_anchor.position.y = 0.0f;
-    s_anchor.velocity = GAME_ANCHOR_SPEED;
-    s_anchor.collider.width = 10.0f;
-    s_anchor.collider.height= 12.0f;
-    _game->anchor = NULL;
-
-    // Fish
+    // Fishes
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
-        _game->sharksArray[i] = (Shark*)malloc(sizeof(Shark));
-        ASSERT_MSG(_game->sharksArray[i] != NULL, "malloc(Shark) failed");
+        _game->fishes[i] = (Fish*)malloc(sizeof(Fish));
+        ASSERT_MSG(_game->fishes[i] != NULL, "malloc failed");
 
-        _game->sharksArray[i]->velocity = GAME_FISH_SPEED;
-        _game->sharksArray[i]->collider.width = 12.0f;
-        _game->sharksArray[i]->collider.height= 11.0f;
-
-        _game->sharksArray[i]->anim.currentFrameDurationInSec = 0.0f;
-        _game->sharksArray[i]->anim.currentFrameIndex = 0;
-        _game->sharksArray[i]->anim.frameDurationInSec = GAME_FISH_ANIM_FRAME_DURATION_IN_SEC;
-        _game->sharksArray[i]->anim.nbFrames = GAME_FISH_ANIM_NB_FRAMES;
-
-        spwanSharkInGame(_game, i);
+        _game->fishes[i]->collider.width = 12.0f;
+        _game->fishes[i]->collider.height= 11.0f;
+        _game->fishes[i]->anim.frameDurationInSec = GAME_FISH_ANIM_FRAME_DURATION_IN_SEC;
+        _game->fishes[i]->anim.nbFrames = GAME_FISH_ANIM_NB_FRAMES;
     }
 
-    // Resource explosion
+    // Explosions
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
         s_explosionsPool[i].anim.nbFrames = GAME_EXPLOSION_ANIM_NB_FRAMES;
-        s_explosionsPool[i].anim.currentFrameIndex = 0;
         s_explosionsPool[i].anim.frameDurationInSec = GAME_EXPLOSION_ANIM_FRAME_DURATION_IN_SEC;
-        s_explosionsPool[i].anim.currentFrameDurationInSec = 0.0f;
     }
 
-    // Resource boat
-    _game->boat.position.x = 0.0f;
-    _game->boat.position.y = -81.0f;
-    _game->boat.velocity = GAME_BOAT_SPEED;
-    _game->boat.direction = 1; // Look at the right by default
-    _game->boat.anim.nbFrames = GAME_BOAT_ANIM_NB_FRAMES;
-    _game->boat.anim.currentFrameIndex = 0;
+    // Boat
     _game->boat.anim.frameDurationInSec = GAME_BOAT_ANIM_FRAME_DURATION_IN_SEC;
-    _game->boat.anim.currentFrameDurationInSec = 0.0f;
+    _game->boat.anim.nbFrames = GAME_BOAT_ANIM_NB_FRAMES;
 
     LOG_INFO("[Game] Game successfully initialized");
 }
@@ -380,8 +399,8 @@ void fishingTimeDestroy(Engine * _engine, GameApp * _gameapp, FishingTime * _gam
 
     for(int i = 0; i < GAME_FISH_COUNT; ++i)
     {
-        ASSERT_MSG(_game->sharksArray[i] != NULL, "Shark array has an unexpected NULL value");
-        free(_game->sharksArray[i]);
+        ASSERT_MSG(_game->fishes[i] != NULL, "Shark array has an unexpected NULL value");
+        free(_game->fishes[i]);
     }
 
     LOG_INFO("[Game] Game successfully destroyed");

@@ -42,6 +42,7 @@ int gameInit(void * _gamePtr)
     }
 
     fishingTimeInit(game->engine, game, s_fishingTime);
+    fishingTimeRestart(s_fishingTime);
 
     return 0;
 }

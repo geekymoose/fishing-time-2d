@@ -26,7 +26,7 @@ typedef struct
     float velocity; // Moves only on Y axis
     RectCollider collider;
     Animation anim;
-} Shark;
+} Fish;
 
 typedef struct
 {
@@ -45,8 +45,8 @@ typedef struct
 {
     vecf2 cameraRect; // Rectangle of camera vision
     Boat boat;
-    Shark * sharksArray[GAME_FISH_COUNT];
-    Explosion * explosionsArray[GAME_FISH_COUNT];
+    Fish * fishes[GAME_FISH_COUNT];
+    Explosion * explosions[GAME_FISH_COUNT];
     Anchor * anchor;
     int isPaused;
     int score;
@@ -59,6 +59,9 @@ typedef struct
 
 void fishingTimeInit(Engine * _engine, GameApp * _gameapp, FishingTime * _game);
 void fishingTimeDestroy(Engine * _engine, GameApp * _gameapp, FishingTime * _game);
+
+void fishingTimeRestart(FishingTime * _game);
+
 void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game, float _dt);
 void fishingTimeFixedUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game, float _dt);
 void fishingTimeRender(Engine * _engine, GameApp * _gameapp, FishingTime * _game);
