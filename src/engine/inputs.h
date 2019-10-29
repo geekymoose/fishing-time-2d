@@ -8,6 +8,8 @@
 
 typedef enum
 {
+    KEY_SPACE,
+
     KEY_0,
     KEY_1,
     KEY_2,

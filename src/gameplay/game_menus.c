@@ -1,16 +1,17 @@
 #include "gameplay/game_menus.h"
 
-#include "engine/window.h"
 #include "engine/sprite.h"
 #include "engine/resources.h"
+#include "engine/inputs.h"
+
 
 void creditsUpdate(GameApp * _game)
 {
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
         _game->currentScreen = GAME_SCREEN_WELCOME;
     }
-    else if(glfwGetKey(_game->engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    else if(isKeyDown(KEY_SPACE) == TRUE)
     {
         _game->currentScreen = GAME_SCREEN_WELCOME;
     }
@@ -29,11 +30,11 @@ void creditsRender(GameApp * _game)
 
 void gameoverUpdate(GameApp * _game)
 {
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
         _game->currentScreen = GAME_SCREEN_WELCOME;
     }
-    else if(glfwGetKey(_game->engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    else if(isKeyDown(KEY_SPACE) == TRUE)
     {
         _game->currentScreen = GAME_SCREEN_WELCOME;
     }
@@ -52,15 +53,15 @@ void gameoverRender(GameApp * _game)
 
 void welcomeUpdate(GameApp * _game)
 {
-    if(glfwGetKey(_game->engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
         closeWindow(_game->engine->window);
     }
-    else if(glfwGetKey(_game->engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    else if(isKeyDown(KEY_SPACE) == TRUE)
     {
         _game->currentScreen = GAME_SCREEN_FISHING;
     }
-    else if(glfwGetKey(_game->engine->window, GLFW_KEY_ENTER) == GLFW_PRESS)
+    else if(isKeyDown(KEY_ENTER) == TRUE)
     {
         _game->currentScreen = GAME_SCREEN_CREDITS;
     }

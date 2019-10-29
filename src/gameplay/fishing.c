@@ -9,6 +9,7 @@
 #include "engine/resources.h"
 #include "engine/shader.h"
 #include "engine/window.h"
+#include "engine/inputs.h"
 
 
 // -----------------------------------------------------------------------------
@@ -76,14 +77,14 @@ static void spwanFishInGame(FishingTime * _game, int _index)
 void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game, float _dt)
 {
     // Quit game
-    if(glfwGetKey(_engine->window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
         _gameapp->currentScreen = GAME_SCREEN_WELCOME;
         return;
     }
     if(_game->remainingTime <= 100.0f)
     {
-        if(glfwGetKey(_engine->window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        if(isKeyDown(KEY_ENTER) == TRUE)
         {
             _gameapp->currentScreen = GAME_SCREEN_CREDITS;
             return;
@@ -91,7 +92,7 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     }
 
     // Restart game
-    if(glfwGetKey(_engine->window, GLFW_KEY_R) == GLFW_PRESS)
+    if(isKeyDown(KEY_R) == TRUE)
     {
         fishingTimeRestart(_game);
         return;
@@ -115,7 +116,7 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     }
 
     static int wasPausePressed = -1;
-    if(glfwGetKey(_engine->window, GLFW_KEY_P) == GLFW_PRESS)
+    if(isKeyDown(KEY_P) == TRUE)
     {
         if(wasPausePressed == -1)
         {
@@ -130,6 +131,7 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
 
     // Boat movement
     _game->boat.velocity = 0.0f;
+    // TODO: Update with new input system (not working yet)
     if(glfwGetKey(_engine->window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
         _game->boat.direction = -1;
@@ -143,7 +145,7 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
 
     // Boat shoot anchor
     static int wasPressed = -1; // Maintain key pressed count for one shot
-    if(glfwGetKey(_engine->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if(isKeyDown(KEY_SPACE) == TRUE)
     {
         if(_game->anchor == NULL && wasPressed != 1)
         {

@@ -33,6 +33,7 @@ void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, 
     int keymap = 0;
     switch (_key)
     {
+        case GLFW_KEY_SPACE: keymap = KEY_SPACE; break;
         case GLFW_KEY_0: keymap = KEY_0; break;
         case GLFW_KEY_1: keymap = KEY_1; break;
         case GLFW_KEY_2: keymap = KEY_2; break;
