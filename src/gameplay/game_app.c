@@ -5,6 +5,7 @@
 #include "engine/log.h"
 #include "engine/types.h"
 #include "engine/shader.h"
+#include "engine/inputs.h"
 
 #include "gameplay/fishing.h"
 #include "gameplay/game_app.h"

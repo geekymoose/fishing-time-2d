@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include "engine/log.h"
+#include "engine/inputs.h"
 
 
 // -----------------------------------------------------------------------------
@@ -45,6 +46,7 @@ GLFWwindow * createWindow(const int width, const int height, const char* title)
     // Callbacks
     glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
     glfwSetErrorCallback(glfwErrorCallback);
+    glfwSetKeyCallback(window, handleKeyEvents);
 
     // Init GLEW
     GLenum glewinit = glewInit();

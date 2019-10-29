@@ -2,6 +2,7 @@
 
 #include "engine/types.h"
 #include "engine/log.h"
+#include "engine/inputs.h"
 
 
 int engineRun(Engine * _engine, void * _game)
@@ -64,7 +65,7 @@ int engineRun(Engine * _engine, void * _game)
 
         swapWindow(_engine->window);
 
-        glfwPollEvents();
+        updateInputs();
 
         timeEndInSec = glfwGetTime();
         dt = timeEndInSec - timeBeginInSec;
