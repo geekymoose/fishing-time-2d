@@ -9,11 +9,11 @@ void creditsUpdate(GameApp * _game)
 {
     if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
-        _game->currentScreen = GAME_SCREEN_WELCOME;
+        enterWelcomeScreen(_game);
     }
     else if(isKeyDown(KEY_SPACE) == TRUE)
     {
-        _game->currentScreen = GAME_SCREEN_WELCOME;
+        enterWelcomeScreen(_game);
     }
 }
 
@@ -32,11 +32,11 @@ void gameoverUpdate(GameApp * _game)
 {
     if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
-        _game->currentScreen = GAME_SCREEN_WELCOME;
+        enterWelcomeScreen(_game);
     }
     else if(isKeyDown(KEY_SPACE) == TRUE)
     {
-        _game->currentScreen = GAME_SCREEN_WELCOME;
+        enterWelcomeScreen(_game);
     }
 }
 
@@ -55,15 +55,15 @@ void welcomeUpdate(GameApp * _game)
 {
     if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
-        closeWindow(_game->engine->window);
+        leaveApp(_game);
     }
     else if(isKeyDown(KEY_SPACE) == TRUE)
     {
-        _game->currentScreen = GAME_SCREEN_FISHING;
+        enterFishingScreen(_game);
     }
     else if(isKeyDown(KEY_ENTER) == TRUE)
     {
-        _game->currentScreen = GAME_SCREEN_CREDITS;
+        enterCreditScreen(_game);
     }
 }
 

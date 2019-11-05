@@ -28,3 +28,9 @@ int gameDestroy(void * _gamePtr);
 void gameUpdate(void * _gamePtr, float _dt);
 void gameFixedUpdate(void * _gamePtr, float _dt);
 void gameRender(void * _gamePtr);
+
+void leaveApp(GameApp * _gameApp);
+void enterFishingScreen(GameApp * _gameApp);
+void enterWelcomeScreen(GameApp * _gameApp);
+void enterCreditScreen(GameApp * _gameApp);
+void enterGameoverScreen(GameApp * _gameApp);

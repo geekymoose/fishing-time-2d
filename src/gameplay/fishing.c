@@ -79,14 +79,14 @@ void fishingTimeUpdate(Engine * _engine, GameApp * _gameapp, FishingTime * _game
     // Quit game
     if(isKeyDown(KEY_ESCAPE) == TRUE)
     {
-        _gameapp->currentScreen = GAME_SCREEN_WELCOME;
+        enterWelcomeScreen(_gameapp);
         return;
     }
     if(_game->remainingTime <= 100.0f)
     {
         if(isKeyDown(KEY_ENTER) == TRUE)
         {
-            _gameapp->currentScreen = GAME_SCREEN_CREDITS;
+            enterGameoverScreen(_gameapp);
             return;
         }
     }

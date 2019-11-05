@@ -24,8 +24,6 @@ int gameInit(void * _gamePtr)
             GAME_SHADERS_DIR "/vertex_shader.glsl",
             GAME_SHADERS_DIR "/fragment_shader.glsl");
 
-    game->currentScreen = GAME_SCREEN_WELCOME;
-
     s_fishingTime = malloc(sizeof(FishingTime));
     if(s_fishingTime == NULL)
     {
@@ -43,7 +41,7 @@ int gameInit(void * _gamePtr)
     }
 
     fishingTimeInit(game->engine, game, s_fishingTime);
-    fishingTimeRestart(s_fishingTime);
+    game->currentScreen = GAME_SCREEN_WELCOME;
 
     return 0;
 }
@@ -138,5 +136,42 @@ void gameRender(void * _gamePtr)
             ASSERT_MSG(FALSE, "Not implemented switch-case value");
             break;
     }
+}
+
+
+void leaveApp(GameApp * _gameApp)
+{
+    ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
+
+    closeWindow(_gameApp->engine->window);
+}
+
+void enterFishingScreen(GameApp * _gameApp)
+{
+    ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
+
+    fishingTimeRestart(s_fishingTime);
+    _gameApp->currentScreen = GAME_SCREEN_FISHING;
+}
+
+void enterWelcomeScreen(GameApp * _gameApp)
+{
+    ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
+
+    _gameApp->currentScreen = GAME_SCREEN_WELCOME;
+}
+
+void enterCreditScreen(GameApp * _gameApp)
+{
+    ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
+
+    _gameApp->currentScreen = GAME_SCREEN_CREDITS;
+}
+
+void enterGameoverScreen(GameApp * _gameApp)
+{
+    ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
+
+    _gameApp->currentScreen = GAME_SCREEN_GAMEOVER;
 }
 
