@@ -13,7 +13,7 @@ static int internalLoadTexture(const char * _resourceDirPath, const char * _reso
     const size_t dirPathSize = strlen(_resourceDirPath);
     const size_t nameSize = strlen(_resourceName);
 
-    const char fullPathSize = (dirPathSize + nameSize + 1); // +1 for NUL char
+    const size_t fullPathSize = (dirPathSize + nameSize + 1); // +1 for NUL char
     char fullpath[fullPathSize];
     memset(fullpath, 0, fullPathSize);
     strncat(fullpath, _resourceDirPath, dirPathSize);
