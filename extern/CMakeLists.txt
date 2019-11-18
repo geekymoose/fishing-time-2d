@@ -8,3 +8,4 @@ add_subdirectory("glfw/")
 
 # GLEW
 add_subdirectory("glew/build/cmake/")
+add_definitions(-DGLEW_STATIC)

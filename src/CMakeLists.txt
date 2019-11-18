@@ -18,11 +18,15 @@ file(GLOB_RECURSE src_files *.c)
 add_executable(fishing-time-2d ${src_files})
 add_custom_target(rungame fishing-time-2d)
 
+# OpenGL
+find_package(OpenGL REQUIRED)
+
 # GLFW
 include_directories("${PROJECT_SOURCE_DIR}/extern/glfw/include/")
 target_link_libraries(fishing-time-2d glfw)
 
 # GLEW
+add_definitions(-DGLEW_NO_GLU)
 include_directories("${PROJECT_SOURCE_DIR}/extern/glew/include/")
 target_link_libraries(fishing-time-2d glew)
 
