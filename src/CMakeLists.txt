@@ -32,3 +32,8 @@ target_link_libraries(fishing-time-2d glew)
 
 # STB
 include_directories("${PROJECT_SOURCE_DIR}/extern/stb/include/")
+
+# Freetype
+include_directories("${PROJECT_SOURCE_DIR}/extern/freetype/include/")
+target_link_libraries(fishing-time-2d freetype)
+
