@@ -83,6 +83,7 @@ int engineRun(Engine * _engine, void * _game)
 
     // Shutdown
 
+    destroyFontLibrary();
     destroyWindow(_engine->window); // First, remove the window to look responsive
 
     error = _engine->gameDestroy(_game);
