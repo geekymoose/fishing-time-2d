@@ -16,8 +16,7 @@
 FT_Library s_ftLibrary;
 
 
-// Assumes W is never bigger than font size H
-// Use pixel size == 1 Byte
+// Assumes 1 Pixel == 1 Byte
 Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int charEnd)
 {
     FT_Face face;
@@ -53,21 +52,19 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         return NULL;
     }
 
-    // Each glyph is placed in a square box with arbitrary dimension w=h=fontsize+1 (all boxes are the same)
-    // We add an empty row and column to devide glyphs in the bitmap (prevents shaders texture approx)
-    const size_t rectBoxSizeInPixels = (fontSixeInPx + 1) * (fontSixeInPx + 1);
-    const size_t pixelSizeInBytes = sizeof(unsigned char); // Assumes 1 Pixel = 1 Byte
-    const size_t bufferSizeInBytes = nbChars * rectBoxSizeInPixels * pixelSizeInBytes;
-    const size_t bufferWidthInBytes = (fontSixeInPx + 1) * pixelSizeInBytes;
+    // Buffer size is arbitrary (square and big enough)
+    const size_t bufferWidth = 512;
+    const size_t bufferHeight = 512;
+    const size_t bufferSize = bufferWidth * bufferHeight;
 
-    unsigned char * bitmapBuffer = malloc(bufferSizeInBytes);
+    unsigned char * bitmapBuffer = malloc(bufferSize);
     if(bitmapBuffer == NULL)
     {
         ASSERT_MSG(FALSE, "[Font] Unable to malloc");
-        LOG_ERR(FALSE, "[Font] Unable to malloc %d bytes", bufferSizeInBytes);
+        LOG_ERR(FALSE, "[Font] Unable to malloc %d bytes", bufferSize);
         return NULL;
     }
-    memset(bitmapBuffer, 0, bufferSizeInBytes);
+    memset(bitmapBuffer, 0, bufferSize);
 
     Font * font = malloc(sizeof(Font));
     if(font == NULL)
@@ -86,7 +83,8 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         return NULL;
     }
 
-    unsigned char * codepointBufferPtr = bitmapBuffer;
+    int currentX = 0;
+    int currentY = 0;
 
     for(int codepoint = charStart; codepoint <= charEnd; ++codepoint)
     {
@@ -94,28 +92,39 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
         FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
 
-        const int bmpWidthInBytes = face->glyph->bitmap.width * pixelSizeInBytes;
-        LOG_DBG("codepoint %d / width: %d / index: %d", codepoint, face->glyph->bitmap.width, glyph_index);
-        ASSERT_MSG(bmpWidthInBytes != 0, "[Font] FT_Render_Glyph generated a bitmap with invalid width=0");
+        int glyphWidth = face->glyph->bitmap.width;
+        int glyphHeight = face->glyph->bitmap.rows;
+        ASSERT_MSG(glyphWidth != 0, "FT_Render_Glyph generated a bitmap invalid width=0")
+        ASSERT_MSG(glyphHeight != 0, "FT_Render_Glyph generated a bitmap invalid height=0")
 
+        if(currentX + glyphWidth >= bufferWidth)
+        {
+            currentX = 0;
+            currentY += fontSixeInPx;
+        }
+
+        LOG_DBG("glyph_index: %d / width = %d / height = %d / currentX = %d / currentY = %d", glyph_index, glyphWidth, glyphHeight, currentX, currentY);
+
+        /* TODO UV for texture
         const float uvX = 0.0f;
         const float uvY = 0.0f;
         font->glyphs[codepoint].uvX = uvX;
         font->glyphs[codepoint].uvY = uvY;
+        */
 
         for(int rowY = 0; rowY < face->glyph->bitmap.rows; ++rowY)
         {
-            const void * bufferRowSrc = face->glyph->bitmap.buffer + (bmpWidthInBytes * rowY);
-            void * bufferRowDst = codepointBufferPtr + (bufferWidthInBytes * rowY);
+            const void * bufferRowSrc = face->glyph->bitmap.buffer + (glyphWidth * rowY);
+            void * bufferRowDst = bitmapBuffer + currentX + (currentY * bufferWidth) + (bufferWidth * rowY);
 
-            memcpy(bufferRowDst, bufferRowSrc, bmpWidthInBytes);
+            memcpy(bufferRowDst, bufferRowSrc, glyphWidth);
         }
 
-        codepointBufferPtr += rectBoxSizeInPixels * pixelSizeInBytes; // Advance to next outlineBox
+        currentX += glyphWidth;
     }
 
-    // TODO: tmp debug
-    stbi_write_png("font_generated_bitmap.png", (fontSixeInPx+1), (fontSixeInPx+1) * nbChars, 1, bitmapBuffer, 0);
+    // TODO tmp debug
+    stbi_write_png("font_generated_bitmap.png", bufferWidth, bufferHeight, 1, bitmapBuffer, 0);
 
     free(bitmapBuffer);
     FT_Done_Face(face);
