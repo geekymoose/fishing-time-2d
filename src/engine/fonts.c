@@ -16,6 +16,33 @@
 FT_Library s_ftLibrary;
 
 
+int initFontLibrary()
+{
+    FT_Error error = FT_Init_FreeType(&s_ftLibrary);
+    if(error)
+    {
+        LOG_ERR("[Font] Unable to load the font library (FT_Error %d)", error);
+        return error;
+    }
+
+    LOG_INFO("[Font] Font library successfully loaded");
+    return error;
+}
+
+int destroyFontLibrary()
+{
+    FT_Error error = FT_Done_FreeType(s_ftLibrary);
+    if(error)
+    {
+        LOG_ERR("[Font] Unable to destroy the font library (FT_Error %d)", error);
+        return error;
+    }
+
+    LOG_INFO("[Font] Font library successfully destroyed");
+
+    return error;
+}
+
 // Assumes 1 Pixel == 1 Byte
 Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int charEnd)
 {
@@ -85,6 +112,7 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
 
     int currentX = 0;
     int currentY = 0;
+    int gap = 10; // Arbitrary gap between letters
 
     for(int codepoint = charStart; codepoint <= charEnd; ++codepoint)
     {
@@ -100,7 +128,15 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         if(currentX + glyphWidth >= bufferWidth)
         {
             currentX = 0;
-            currentY += fontSixeInPx;
+            currentY += fontSixeInPx + gap;
+        }
+
+        if(currentY + glyphHeight > bufferHeight)
+        {
+            // This means the buffer size is too small!
+            LOG_ERR("[Font] The buffer size is to small to have all the requested glyphes");
+            ASSERT_MSG(FALSE, "[Font] The buffer size is to small to have all the requested glyphes");
+            break; // In release, if this appears, load glyphes until now
         }
 
         LOG_DBG("glyph_index: %d / width = %d / height = %d / currentX = %d / currentY = %d", glyph_index, glyphWidth, glyphHeight, currentX, currentY);
@@ -120,7 +156,7 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
             memcpy(bufferRowDst, bufferRowSrc, glyphWidth);
         }
 
-        currentX += glyphWidth;
+        currentX += glyphWidth + gap;
     }
 
     // TODO tmp debug
@@ -132,30 +168,14 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
     return font;
 }
 
-int initFontLibrary()
+void destroyFont(Font * font)
 {
-    FT_Error error = FT_Init_FreeType(&s_ftLibrary);
-    if(error)
+    ASSERT_MSG(font != NULL, "[Font] Invalid parameter");
+
+    if(font != NULL)
     {
-        LOG_ERR("[Font] Unable to load the font library (FT_Error %d)", error);
-        return error;
+        free(font->glyphs);
+        free(font);
     }
-
-    LOG_INFO("[Font] Font library successfully loaded");
-    return error;
-}
-
-int destroyFontLibrary()
-{
-    FT_Error error = FT_Done_FreeType(s_ftLibrary);
-    if(error)
-    {
-        LOG_ERR("[Font] Unable to destroy the font library (FT_Error %d)", error);
-        return error;
-    }
-
-    LOG_INFO("[Font] Font library successfully destroyed");
-
-    return error;
 }
 
