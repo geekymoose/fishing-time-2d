@@ -1,6 +1,8 @@
 #include "engine/resources.h"
 
-#include "engine/log.h"
+#include "engine/assertions.h"
+
+#include <stdlib.h>
 
 
 // DevNote:

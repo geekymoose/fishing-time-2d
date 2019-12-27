@@ -3,6 +3,7 @@
 #include "build_config.h"
 
 #include "engine/log.h"
+#include "engine/assertions.h"
 #include "engine/types.h"
 #include "engine/shader.h"
 #include "engine/inputs.h"

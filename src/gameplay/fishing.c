@@ -4,8 +4,9 @@
 
 #include "build_config.h"
 #include "engine/types.h"
-#include "engine/animation.h"
 #include "engine/log.h"
+#include "engine/assertions.h"
+#include "engine/animation.h"
 #include "engine/resources.h"
 #include "engine/shader.h"
 #include "engine/window.h"

@@ -1,6 +1,8 @@
 #include "engine/animation.h"
 
-#include "engine/log.h"
+#include "engine/assertions.h"
+
+#include <stdio.h>
 
 
 void updateAnimation(Animation * _anim, float _dt)

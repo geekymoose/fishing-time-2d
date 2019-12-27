@@ -1,5 +1,4 @@
 #include "engine/inputs.h"
-#include "engine/log.h"
 
 #include <string.h> // memset
 

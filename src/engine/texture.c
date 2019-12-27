@@ -7,6 +7,7 @@
 
 #include "engine/types.h"
 #include "engine/log.h"
+#include "engine/assertions.h"
 
 
 Texture makeTexture(const char* _path)

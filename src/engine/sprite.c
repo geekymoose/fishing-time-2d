@@ -4,6 +4,7 @@
 #include <GL/glew.h> // OpenGL lib
 
 #include "engine/log.h"
+#include "engine/assertions.h"
 #include "engine/shader.h"
 
 

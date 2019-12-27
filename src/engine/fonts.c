@@ -11,6 +11,7 @@
 #include <math.h>
 
 #include "engine/log.h"
+#include "engine/assertions.h"
 
 
 FT_Library s_ftLibrary;

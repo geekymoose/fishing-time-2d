@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include "engine/log.h"
+#include "engine/assertions.h"
 #include "engine/inputs.h"
 
 
