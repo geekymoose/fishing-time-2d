@@ -44,38 +44,38 @@ int destroyFontLibrary()
 }
 
 // Assumes 1 Pixel == 1 Byte
-Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int charEnd)
+Font * loadFontFromFile(const char * _path, int _fontSizeInPx, int _charStart, int _charEnd)
 {
     FT_Face face;
     FT_Error error;
 
-    error = FT_New_Face(s_ftLibrary, path, 0, &face);
+    error = FT_New_Face(s_ftLibrary, _path, 0, &face);
     if(error == FT_Err_Unknown_File_Format)
     {
         ASSERT_MSG(FALSE, "[Font] Unsupported font format");
-        LOG_ERR("[Font] Unsupported font format in %s (FT_Error %d)", path, error);
+        LOG_ERR("[Font] Unsupported font format in %s (FT_Error %d)", _path, error);
         return NULL;
     }
     else if(error != 0)
     {
         ASSERT_MSG(FALSE, "[Font] Unable to load font face");
-        LOG_ERR("[Font] Unable to load font face for %s", path);
+        LOG_ERR("[Font] Unable to load font face for %s", _path);
         return NULL;
     }
 
-    error = FT_Set_Pixel_Sizes(face, 0, fontSixeInPx);
+    error = FT_Set_Pixel_Sizes(face, 0, _fontSizeInPx);
     if(error != 0)
     {
         ASSERT_MSG(FALSE, "[Font] Unable to set the font size");
-        LOG_ERR(FALSE, "[Font] Unable to set the font size to %d", fontSixeInPx);
+        LOG_ERR(FALSE, "[Font] Unable to set the font size to %d", _fontSizeInPx);
         return NULL;
     }
 
-    const int nbChars = charEnd - charStart + 1; // +1 because 'a' - 'a' = 0
+    const int nbChars = _charEnd - _charStart + 1; // +1 because 'a' - 'a' = 0
     if(nbChars <= 0)
     {
         ASSERT_MSG(FALSE, "[Font] Invalid range of characters");
-        LOG_ERR(FALSE, "[Font] Invalid range of characters (%d to %d)", charStart, charEnd);
+        LOG_ERR(FALSE, "[Font] Invalid range of characters (%d to %d)", _charStart, _charEnd);
         return NULL;
     }
 
@@ -115,7 +115,7 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
     int currentY = 0;
     int gap = 5; // Arbitrary gap between letters
 
-    for(int codepoint = charStart; codepoint <= charEnd; ++codepoint)
+    for(int codepoint = _charStart; codepoint <= _charEnd; ++codepoint)
     {
         FT_UInt glyph_index = FT_Get_Char_Index(face, codepoint);
         FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
@@ -129,7 +129,7 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         if(currentX + glyphWidth >= bufferWidth)
         {
             currentX = 0;
-            currentY += fontSixeInPx + gap;
+            currentY += _fontSizeInPx + gap;
         }
 
         if(currentY + glyphHeight > bufferHeight)
@@ -141,11 +141,11 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         }
 
         // TODO this does not take the gap into account
-        font->glyphs[codepoint - charStart].uvX0 = currentX / bufferWidth;
-        font->glyphs[codepoint - charStart].uvX1 = (currentX + glyphWidth) / bufferWidth;
+        font->glyphs[codepoint - _charStart].uvX0 = currentX / bufferWidth;
+        font->glyphs[codepoint - _charStart].uvX1 = (currentX + glyphWidth) / bufferWidth;
 
-        font->glyphs[codepoint - charStart].uvY0 = currentY / bufferHeight;
-        font->glyphs[codepoint - charStart].uvY1 = (currentY + glyphHeight) / bufferHeight;
+        font->glyphs[codepoint - _charStart].uvY0 = currentY / bufferHeight;
+        font->glyphs[codepoint - _charStart].uvY1 = (currentY + glyphHeight) / bufferHeight;
 
         LOG_DBG("'%c'\tw=%d\th=%d\tX=%d\tY=%d", codepoint, glyphWidth, glyphHeight, currentX, currentY);
 
@@ -169,14 +169,14 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
     return font;
 }
 
-void destroyFont(Font * font)
+void destroyFont(Font * _font)
 {
-    ASSERT_MSG(font != NULL, "[Font] Invalid parameter");
+    ASSERT_MSG(_font != NULL, "[Font] Invalid parameter");
 
-    if(font != NULL)
+    if(_font != NULL)
     {
-        free(font->glyphs);
-        free(font);
+        free(_font->glyphs);
+        free(_font);
     }
 }
 

@@ -34,9 +34,9 @@ int destroyFontLibrary();
 /// @param charStart First character to load from ASCII (e.g., 'a')
 /// @param charEnd Last character to load from ASCII (e.g., 'z')
 /// @return The loaded font or NULL if error
-Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int charEnd);
+Font * loadFontFromFile(const char * _path, int _fontSizeInPx, int _charStart, int _charEnd);
 
 /// Free the font memory.
 /// @param font Pointer to the font to free
-void destroyFont(Font * font);
+void destroyFont(Font * _font);
 
