@@ -5,8 +5,10 @@
 
 typedef struct
 {
-    int uvX;
-    int uvY;
+    float uvX0;
+    float uvX1;
+    float uvY0;
+    float uvY1;
     uint32 textureID;
 } FontGlyph;
 

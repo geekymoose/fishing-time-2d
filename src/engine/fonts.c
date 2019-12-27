@@ -122,8 +122,8 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
 
         int glyphWidth = face->glyph->bitmap.width;
         int glyphHeight = face->glyph->bitmap.rows;
-        ASSERT_MSG(glyphWidth != 0, "FT_Render_Glyph generated a bitmap invalid width=0")
-        ASSERT_MSG(glyphHeight != 0, "FT_Render_Glyph generated a bitmap invalid height=0")
+        ASSERT_MSG(glyphWidth != 0, "FT_Render_Glyph generated a bitmap invalid width=0");
+        ASSERT_MSG(glyphHeight != 0, "FT_Render_Glyph generated a bitmap invalid height=0");
 
         if(currentX + glyphWidth >= bufferWidth)
         {
@@ -139,13 +139,14 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
             break; // In release, if this appears, load glyphes until now
         }
 
-        LOG_DBG("glyph_index: %d / width = %d / height = %d / currentX = %d / currentY = %d", glyph_index, glyphWidth, glyphHeight, currentX, currentY);
+        LOG_DBG("char: %c / w=%d / h=%d / currentX = %d / currentY = %d", codepoint, glyphWidth, glyphHeight, currentX, currentY);
 
-        /* TODO UV for texture
-        const float uvX = 0.0f;
-        const float uvY = 0.0f;
-        font->glyphs[codepoint].uvX = uvX;
-        font->glyphs[codepoint].uvY = uvY;
+        /*
+        font->glyphs[codepoint].uvX0 = 0.0f;
+        font->glyphs[codepoint].uvX1 = 0.0f;
+
+        font->glyphs[codepoint].uvY0 = 0.0f;
+        font->glyphs[codepoint].uvY1 = 0.0f;
         */
 
         for(int rowY = 0; rowY < face->glyph->bitmap.rows; ++rowY)
@@ -159,7 +160,7 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         currentX += glyphWidth + gap;
     }
 
-    // TODO tmp debug
+    // DEBUG: uncomment to create a debug png with the generated glyphes bitmap
     stbi_write_png("font_generated_bitmap.png", bufferWidth, bufferHeight, 1, bitmapBuffer, 0);
 
     free(bitmapBuffer);
