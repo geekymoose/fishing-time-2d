@@ -109,10 +109,11 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         LOG_ERR(FALSE, "[Font] Unable to malloc %d Bytes", sizeof(FontGlyph));
         return NULL;
     }
+    memset(font->glyphs, 0, sizeof(font->glyphs));
 
     int currentX = 0;
     int currentY = 0;
-    int gap = 10; // Arbitrary gap between letters
+    int gap = 5; // Arbitrary gap between letters
 
     for(int codepoint = charStart; codepoint <= charEnd; ++codepoint)
     {
@@ -139,15 +140,14 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
             break; // In release, if this appears, load glyphes until now
         }
 
-        LOG_DBG("char: %c / w=%d / h=%d / currentX = %d / currentY = %d", codepoint, glyphWidth, glyphHeight, currentX, currentY);
+        // TODO this does not take the gap into account
+        font->glyphs[codepoint - charStart].uvX0 = currentX / bufferWidth;
+        font->glyphs[codepoint - charStart].uvX1 = (currentX + glyphWidth) / bufferWidth;
 
-        /*
-        font->glyphs[codepoint].uvX0 = 0.0f;
-        font->glyphs[codepoint].uvX1 = 0.0f;
+        font->glyphs[codepoint - charStart].uvY0 = currentY / bufferHeight;
+        font->glyphs[codepoint - charStart].uvY1 = (currentY + glyphHeight) / bufferHeight;
 
-        font->glyphs[codepoint].uvY0 = 0.0f;
-        font->glyphs[codepoint].uvY1 = 0.0f;
-        */
+        LOG_DBG("'%c'\tw=%d\th=%d\tX=%d\tY=%d", codepoint, glyphWidth, glyphHeight, currentX, currentY);
 
         for(int rowY = 0; rowY < face->glyph->bitmap.rows; ++rowY)
         {
