@@ -24,7 +24,13 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
     FT_Error error;
 
     error = FT_New_Face(s_ftLibrary, path, 0, &face);
-    if(error != 0)
+    if(error == FT_Err_Unknown_File_Format)
+    {
+        ASSERT_MSG(FALSE, "[Font] Unsupported font format");
+        LOG_ERR("[Font] Unsupported font format in %s (FT_Error %d)", path, error);
+        return NULL;
+    }
+    else if(error != 0)
     {
         ASSERT_MSG(FALSE, "[Font] Unable to load font face");
         LOG_ERR("[Font] Unable to load font face for %s", path);
@@ -47,9 +53,12 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         return NULL;
     }
 
+    // Each glyph is placed in a square box with arbitrary dimension w=h=fontsize+1 (all boxes are the same)
+    // We add an empty row and column to devide glyphs in the bitmap (prevents shaders texture approx)
+    const size_t rectBoxSizeInPixels = (fontSixeInPx + 1) * (fontSixeInPx + 1);
     const size_t pixelSizeInBytes = sizeof(unsigned char); // Assumes 1 Pixel = 1 Byte
-    const size_t bufferSizeInBytes = fontSixeInPx * fontSixeInPx * nbChars * pixelSizeInBytes;
-    const size_t bufferWidthInBytes = fontSixeInPx * pixelSizeInBytes;
+    const size_t bufferSizeInBytes = nbChars * rectBoxSizeInPixels * pixelSizeInBytes;
+    const size_t bufferWidthInBytes = (fontSixeInPx + 1) * pixelSizeInBytes;
 
     unsigned char * bitmapBuffer = malloc(bufferSizeInBytes);
     if(bitmapBuffer == NULL)
@@ -86,6 +95,8 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
         FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
 
         const int bmpWidthInBytes = face->glyph->bitmap.width * pixelSizeInBytes;
+        LOG_DBG("codepoint %d / width: %d / index: %d", codepoint, face->glyph->bitmap.width, glyph_index);
+        ASSERT_MSG(bmpWidthInBytes != 0, "[Font] FT_Render_Glyph generated a bitmap with invalid width=0");
 
         const float uvX = 0.0f;
         const float uvY = 0.0f;
@@ -100,11 +111,11 @@ Font * loadFontFromFile(const char * path, int fontSixeInPx, int charStart, int 
             memcpy(bufferRowDst, bufferRowSrc, bmpWidthInBytes);
         }
 
-        codepointBufferPtr += fontSixeInPx * fontSixeInPx; // Advance to next outlineBox
+        codepointBufferPtr += rectBoxSizeInPixels * pixelSizeInBytes; // Advance to next outlineBox
     }
 
     // TODO: tmp debug
-    stbi_write_png("font_generated_bitmap.png", fontSixeInPx, fontSixeInPx * nbChars, 1, bitmapBuffer, 0);
+    stbi_write_png("font_generated_bitmap.png", (fontSixeInPx+1), (fontSixeInPx+1) * nbChars, 1, bitmapBuffer, 0);
 
     free(bitmapBuffer);
     FT_Done_Face(face);
@@ -139,30 +150,3 @@ int destroyFontLibrary()
     return error;
 }
 
-Font makeFont(const char * path)
-{
-    ASSERT_MSG(path != NULL, "[Font] Invalid parameter (Not NULL expected)");
-
-    FT_Face face;
-
-    // TODO method to finish
-
-    FT_Error error = FT_New_Face(s_ftLibrary, path, 0, &face);
-    if(error == FT_Err_Unknown_File_Format)
-    {
-        LOG_ERR("[Font] Unsupported font format in %s (FT_Error %d)", path, error);
-        //return error;
-    }
-    else if(error)
-    {
-        LOG_ERR("[Font] Unable to load font %s (FT_Error %d)", path, error);
-        //return error;
-    }
-
-    error = FT_Set_Pixel_Sizes(face, 0, 16);
-    if(error)
-    {
-        LOG_ERR("[Font] Unable to set font size for %s (FT_Error %d)", path, error);
-        //return error;
-    }
-}
