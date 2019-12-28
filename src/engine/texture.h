@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/images.h"
+
 
 /// 2D Texture data.
 typedef struct
@@ -10,9 +12,9 @@ typedef struct
 } Texture;
 
 
-/// Creates a texture from an image located at the given path.
+/// Creates a texture from an image.
 /// If the method fails, a structure with an invalid id is returned (id = 0).
-/// @param _path Path to the image.
+/// @param _image Image to use to create this texture.
 /// @return Returns the texture structure.
-Texture makeTexture(const char* _path);
+Texture makeTexture(const Image * _image);
 

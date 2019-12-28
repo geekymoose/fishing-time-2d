@@ -1,6 +1,7 @@
 #include "engine/resources.h"
 
 #include "engine/assertions.h"
+#include "engine/images.h"
 
 #include <stdlib.h>
 
@@ -38,9 +39,18 @@ unsigned int resourceLoadTexture(const char * _path)
 {
     ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE, "[Resource] Please increase S_ARRAY_TEXTURES_SIZE");
 
+    Image * image = loadImageFromFile(_path);
+    if(image == NULL)
+    {
+        return 0;
+    }
+
     const int resourceID = s_arrayTexturesHead;
-    s_arrayTextures[resourceID] = makeTexture(_path);
+
+    s_arrayTextures[resourceID] = makeTexture(image);
     s_arrayTexturesHead++;
+
+    destroyImage(image);
 
     return resourceID;
 }

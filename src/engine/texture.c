@@ -1,30 +1,16 @@
 #include "texture.h"
 
-#include <GL/glew.h>
-
 #include "engine/types.h"
 #include "engine/log.h"
 #include "engine/assertions.h"
-#include "engine/images.h"
+
+#include <GL/glew.h>
 
 
-Texture makeTexture(const char* _path)
+Texture makeTexture(const Image * _image)
 {
-    LOG_INFO("[Texture] Loading texture %s", _path);
-
-    Texture texture;
-    Image * image = loadImageFromFile(_path);
-    if(image == NULL)
-    {
-        texture.id = 0; // Zero is not a valid ID
-        return texture;
-    }
-
-    texture.width = image->width;
-    texture.height = image->height;
-
     uint32 format;
-    switch(image->channels)
+    switch(_image->channels)
     {
         case 1:
             format = GL_RED;
@@ -39,8 +25,8 @@ Texture makeTexture(const char* _path)
             format = GL_RGBA;
             break;
         default:
-            ASSERT_MSG(FALSE, "Invalid channels value");
             format = GL_RGBA;
+            ASSERT_MSG(FALSE, "[Texture] Invalid channels value %d", _image->channels);
             break;
     }
 
@@ -53,17 +39,20 @@ Texture makeTexture(const char* _path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, format, texture.width, texture.height, 0, format, GL_UNSIGNED_BYTE, image->buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, _image->width, _image->height, 0, format, GL_UNSIGNED_BYTE, _image->buffer);
     if(glGetError() != GL_NO_ERROR)
     {
         LOG_ERR("[Texture] Method glGetError failed with GLenum = %d", glGetError());
-        ASSERT_MSG(FALSE, "[Texture] Error from glTexImage2D");
+        ASSERT_MSG(FALSE, "[Texture] Method glGetError failed with GLenum = %d", glGetError());
     }
 
-    destroyImage(image);
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    Texture texture;
     texture.id = textureID;
+    texture.width = _image->width;
+    texture.height = _image->height;
+
     return texture;
 }
 
