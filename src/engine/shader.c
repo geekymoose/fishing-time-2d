@@ -6,6 +6,8 @@
 #include <GL/glew.h>
 
 #include "engine/log.h"
+#include "engine/assertions.h"
+#include "engine/files.h"
 
 
 uint32 createShaderFromSource(const char * _sources, const int32 _type)
@@ -35,40 +37,18 @@ uint32 createShaderFromSource(const char * _sources, const int32 _type)
 
 uint32 createShadeFromFile(const char* _path, const int32 _type)
 {
-    LOG_INFO("[Shader] Create shader %s", _path);
+    LOG_INFO("[Shader] Create shader from file %s", _path);
 
-    FILE * file;
-    file = fopen(_path, "r");
-    if(file == NULL)
-    {
-        LOG_ERR("[Shader] Unable to open the shader %s", _path);
-        return 0;
-    }
-
-    fseek(file, 0, SEEK_END);
-    const long file_size = ftell(file);
-    rewind(file);
-
-    char * filebuffer = NULL;
-    filebuffer = malloc((file_size + 1) * sizeof(*filebuffer)); // +1 for '\0'
+    char * filebuffer = readFileBuffer(_path);
     if(filebuffer == NULL)
     {
-        LOG_ERR("[Shader] Unable to read %s (malloc %d bytes failed)", _path, filebuffer);
+        LOG_ERR("[Shader] Unable to create shader from file %s", _path);
+        ASSERT_MSG(FALSE, "[Shader] Unable to create shader from file %s", _path);
         return 0;
     }
 
-    size_t elementsRead = fread(filebuffer, sizeof(char), file_size, file);
-    if(elementsRead != file_size)
-    {
-        LOG_ERR("[Shader] Unable to read %s", _path);
-        free(filebuffer);
-        return 0;
-    }
-    filebuffer[file_size] = '\0';
     uint32 id = createShaderFromSource(filebuffer, _type);
-
     free(filebuffer);
-    fclose(file);
 
     return id;
 }
