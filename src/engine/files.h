@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/types.h"
 
-char * readFileBuffer(const char * _path);
+
+uint8 * readFileBuffer(const char * _path);
 

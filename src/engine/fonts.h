@@ -1,10 +1,12 @@
 #pragma once
 
-
 #include "engine/types.h"
+
 
 typedef struct
 {
+    int width;
+    int height;
     float uvX0;
     float uvX1;
     float uvY0;
@@ -14,6 +16,10 @@ typedef struct
 
 typedef struct
 {
+    int sizeInPx;
+    int charStart;
+    int charEnd;
+    unsigned int textureID;
     FontGlyph * glyphs;
 } Font;
 

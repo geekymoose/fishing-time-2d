@@ -1,16 +1,15 @@
 #include "texture.h"
 
+#include <GL/glew.h>
+
 #include "engine/types.h"
 #include "engine/log.h"
 #include "engine/assertions.h"
 
-#include <GL/glew.h>
-
-
-Texture makeTexture(const Image * _image)
+Texture makeTexture(const uint8 * _buffer, int _width, int _height, int _channels)
 {
     uint32 format;
-    switch(_image->channels)
+    switch(_channels)
     {
         case 1:
             format = GL_RED;
@@ -26,7 +25,7 @@ Texture makeTexture(const Image * _image)
             break;
         default:
             format = GL_RGBA;
-            ASSERT_MSG(FALSE, "[Texture] Invalid channels value %d", _image->channels);
+            ASSERT_MSG(FALSE, "[Texture] Invalid channels value %d", _channels);
             break;
     }
 
@@ -39,7 +38,7 @@ Texture makeTexture(const Image * _image)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, format, _image->width, _image->height, 0, format, GL_UNSIGNED_BYTE, _image->buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, format, GL_UNSIGNED_BYTE, _buffer);
     if(glGetError() != GL_NO_ERROR)
     {
         LOG_ERR("[Texture] Method glGetError failed with GLenum = %d", glGetError());
@@ -50,9 +49,14 @@ Texture makeTexture(const Image * _image)
 
     Texture texture;
     texture.id = textureID;
-    texture.width = _image->width;
-    texture.height = _image->height;
+    texture.width = _width;
+    texture.height = _height;
 
     return texture;
+}
+
+Texture makeTextureFromImage(const Image * _image)
+{
+    return makeTexture(_image->buffer, _image->width, _image->height, _image->channels);
 }
 

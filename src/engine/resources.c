@@ -1,9 +1,9 @@
 #include "engine/resources.h"
 
+#include <stdlib.h>
+
 #include "engine/assertions.h"
 #include "engine/images.h"
-
-#include <stdlib.h>
 
 
 // DevNote:
@@ -47,7 +47,7 @@ unsigned int resourceLoadTexture(const char * _path)
 
     const int resourceID = s_arrayTexturesHead;
 
-    s_arrayTextures[resourceID] = makeTexture(image);
+    s_arrayTextures[resourceID] = makeTextureFromImage(image);
     s_arrayTexturesHead++;
 
     destroyImage(image);

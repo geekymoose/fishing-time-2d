@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 
-char * readFileBuffer(const char * _path)
+uint8 * readFileBuffer(const char * _path)
 {
     ASSERT_MSG(_path != NULL, "[File] Invalid values: parameter should not be NULL");
 

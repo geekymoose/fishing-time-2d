@@ -1,4 +1,4 @@
-#include "engine/fonts.h"
+#include "fonts.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -12,6 +12,7 @@
 
 #include "engine/log.h"
 #include "engine/assertions.h"
+#include "engine/texture.h"
 
 
 FT_Library s_ftLibrary;
@@ -85,7 +86,7 @@ Font * loadFontFromFile(const char * _path, int _fontSizeInPx, int _charStart, i
     const size_t bufferHeight = 512;
     const size_t bufferSize = bufferWidth * bufferHeight;
 
-    unsigned char * bitmapBuffer = malloc(bufferSize);
+    uint8 * bitmapBuffer = malloc(bufferSize);
     if(bitmapBuffer == NULL)
     {
         ASSERT_MSG(FALSE, "[Font] Unable to malloc");
@@ -136,17 +137,20 @@ Font * loadFontFromFile(const char * _path, int _fontSizeInPx, int _charStart, i
         if(currentY + glyphHeight > bufferHeight)
         {
             // This means the buffer size is too small!
-            LOG_ERR("[Font] The buffer size is to small to have all the requested glyphes");
-            ASSERT_MSG(FALSE, "[Font] The buffer size is to small to have all the requested glyphes");
-            break; // In release, if this appears, load glyphes until now
+            LOG_ERR("[Font] The buffer size is to small to have all the requested glyphs");
+            ASSERT_MSG(FALSE, "[Font] The buffer size is to small to have all the requested glyphs");
+            break; // In release, if this appears, load glyphs until now
         }
 
-        // TODO this does not take the gap into account
+        // TODO this does not take the gap into account (use a small gap until it is fixed)
         font->glyphs[codepoint - _charStart].uvX0 = currentX / bufferWidth;
         font->glyphs[codepoint - _charStart].uvX1 = (currentX + glyphWidth) / bufferWidth;
 
         font->glyphs[codepoint - _charStart].uvY0 = currentY / bufferHeight;
         font->glyphs[codepoint - _charStart].uvY1 = (currentY + glyphHeight) / bufferHeight;
+
+        font->glyphs[codepoint - _charStart].width = glyphWidth;
+        font->glyphs[codepoint - _charStart].height= glyphHeight;
 
         LOG_DBG("'%c'\tw=%d\th=%d\tX=%d\tY=%d", codepoint, glyphWidth, glyphHeight, currentX, currentY);
 
@@ -161,8 +165,15 @@ Font * loadFontFromFile(const char * _path, int _fontSizeInPx, int _charStart, i
         currentX += glyphWidth + gap;
     }
 
-    // DEBUG: uncomment to create a debug png with the generated glyphes bitmap
-    stbi_write_png("font_generated_bitmap.png", bufferWidth, bufferHeight, 1, bitmapBuffer, 0);
+    // DEBUG: uncomment to create a debug png with the generated glyphs bitmap
+    // stbi_write_png("font_generated_bitmap.png", bufferWidth, bufferHeight, 1, bitmapBuffer, 0);
+
+    Texture texture = makeTexture(bitmapBuffer, bufferWidth, bufferHeight, 1);
+
+    font->sizeInPx = _fontSizeInPx;
+    font->charStart = _charStart;
+    font->charEnd = _charEnd;
+    font->textureID = texture.id;
 
     free(bitmapBuffer);
     FT_Done_Face(face);

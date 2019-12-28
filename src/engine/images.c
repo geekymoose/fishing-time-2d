@@ -1,13 +1,13 @@
 #include "images.h"
 
-#include "engine/types.h"
-#include "engine/log.h"
-#include "engine/assertions.h"
-
 #include <stdlib.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+
+#include "engine/types.h"
+#include "engine/log.h"
+#include "engine/assertions.h"
 
 
 Image * loadImageFromFile(const char * _path)

@@ -1,9 +1,11 @@
 #pragma once
 
+#include "engine/types.h"
+
 
 typedef struct
 {
-    unsigned char * buffer;
+    uint8 * buffer;
     int width;
     int height;
     int channels;
