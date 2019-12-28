@@ -1,34 +1,30 @@
 #include "texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-
-#include <stb_image.h>
 #include <GL/glew.h>
 
 #include "engine/types.h"
 #include "engine/log.h"
 #include "engine/assertions.h"
+#include "engine/images.h"
 
 
 Texture makeTexture(const char* _path)
 {
-    Texture tex;
-    int channels;
-
     LOG_INFO("[Texture] Loading texture %s", _path);
 
-    stbi_set_flip_vertically_on_load(1);
-    unsigned char * data = stbi_load(_path, &(tex.width), &(tex.height), &channels, 0);
-    if(data == NULL)
+    Texture texture;
+    Image * image = loadImageFromFile(_path);
+    if(image == NULL)
     {
-        LOG_ERR("[Texture] Unable to load texture %s", _path);
-        ASSERT_MSG(FALSE, "[Texture] Unable to load texture");
-        tex.id = 0; // Zero is not a valid ID
-        return tex;
+        texture.id = 0; // Zero is not a valid ID
+        return texture;
     }
 
+    texture.width = image->width;
+    texture.height = image->height;
+
     uint32 format;
-    switch(channels)
+    switch(image->channels)
     {
         case 1:
             format = GL_RED;
@@ -57,18 +53,17 @@ Texture makeTexture(const char* _path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, format, tex.width, tex.height, 0, format, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, texture.width, texture.height, 0, format, GL_UNSIGNED_BYTE, image->buffer);
     if(glGetError() != GL_NO_ERROR)
     {
         LOG_ERR("[Texture] Method glGetError failed with GLenum = %d", glGetError());
         ASSERT_MSG(FALSE, "[Texture] Error from glTexImage2D");
     }
 
-    stbi_image_free(data);
+    destroyImage(image);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    tex.id = textureID;
-    return tex;
+    texture.id = textureID;
+    return texture;
 }
-
 

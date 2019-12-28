@@ -1,10 +1,6 @@
 #pragma once
 
 
-// -----------------------------------------------------------------------------
-// Data
-// -----------------------------------------------------------------------------
-
 /// 2D Texture data.
 typedef struct
 {
@@ -13,10 +9,6 @@ typedef struct
     int height;
 } Texture;
 
-
-// -----------------------------------------------------------------------------
-// Methods
-// -----------------------------------------------------------------------------
 
 /// Creates a texture from an image located at the given path.
 /// If the method fails, a structure with an invalid id is returned (id = 0).
