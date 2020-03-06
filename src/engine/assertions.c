@@ -3,8 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-
-void _printAssert(const char * _format, ...)
+void _printAssert(const char* _format, ...)
 {
     va_list ap;
     va_start(ap, _format);
@@ -21,4 +20,3 @@ void _printAssert(const char * _format, ...)
 
     va_end(ap);
 }
-

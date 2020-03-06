@@ -7,5 +7,3 @@ typedef struct
     float x;
     float y;
 } vecf2;
-
-

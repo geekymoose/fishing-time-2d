@@ -1,7 +1,6 @@
 #include "engine/collision.h"
 
-
-int checkIfCollide(RectCollider const * _c1, RectCollider const * _c2)
+int checkIfCollide(RectCollider const* _c1, RectCollider const* _c2)
 {
     // Tmp data
     const float demiWidthCollider1 = _c1->width / 2.0f;
@@ -23,13 +22,19 @@ int checkIfCollide(RectCollider const * _c1, RectCollider const * _c2)
     const float yBottomCollider2 = _c2->center.y - demiHeightCollider2;
 
     // Collision (we check if they don't collide)
-    if(xRightCollider1 < xLeftCollider2) { return -1; }
-    if(xLeftCollider1 > xRightCollider2) { return -1; }
-    if(yTopCollider1 < yBottomCollider2) { return -1; }
-    if(yBottomCollider1 > yTopCollider2) { return -1; }
+    if (xRightCollider1 < xLeftCollider2) {
+        return -1;
+    }
+    if (xLeftCollider1 > xRightCollider2) {
+        return -1;
+    }
+    if (yTopCollider1 < yBottomCollider2) {
+        return -1;
+    }
+    if (yBottomCollider1 > yTopCollider2) {
+        return -1;
+    }
 
     // At this point, we collide my friend!
     return 1;
 }
-
-

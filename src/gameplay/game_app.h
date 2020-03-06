@@ -15,22 +15,19 @@ typedef enum
 
 typedef struct
 {
-    Engine * engine;
+    Engine* engine;
     GameScreen currentScreen;
     GameResources resources;
 } GameApp;
 
+int gameInit(void* _gamePtr);
+int gameDestroy(void* _gamePtr);
+void gameUpdate(void* _gamePtr, float _dt);
+void gameFixedUpdate(void* _gamePtr, float _dt);
+void gameRender(void* _gamePtr);
 
-// -----------------------------------------------------------------------------
-
-int gameInit(void * _gamePtr);
-int gameDestroy(void * _gamePtr);
-void gameUpdate(void * _gamePtr, float _dt);
-void gameFixedUpdate(void * _gamePtr, float _dt);
-void gameRender(void * _gamePtr);
-
-void leaveApp(GameApp * _gameApp);
-void enterFishingScreen(GameApp * _gameApp);
-void enterWelcomeScreen(GameApp * _gameApp);
-void enterCreditScreen(GameApp * _gameApp);
-void enterGameoverScreen(GameApp * _gameApp);
+void leaveApp(GameApp* _gameApp);
+void enterFishingScreen(GameApp* _gameApp);
+void enterWelcomeScreen(GameApp* _gameApp);
+void enterCreditScreen(GameApp* _gameApp);
+void enterGameoverScreen(GameApp* _gameApp);

@@ -2,6 +2,4 @@
 
 #include "engine/types.h"
 
-
-uint8 * readFileBuffer(const char * _path);
-
+uint8* readFileBuffer(const char* _path);

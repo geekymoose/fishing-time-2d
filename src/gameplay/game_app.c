@@ -1,41 +1,34 @@
 #include <stdlib.h>
 
 #include "build_config.h"
-
-#include "engine/log.h"
 #include "engine/assertions.h"
-#include "engine/types.h"
-#include "engine/shader.h"
 #include "engine/inputs.h"
-
+#include "engine/log.h"
+#include "engine/shader.h"
+#include "engine/types.h"
 #include "gameplay/fishing.h"
 #include "gameplay/game_app.h"
 #include "gameplay/game_menus.h"
 
+static FishingTime* s_fishingTime = NULL;
 
-static FishingTime * s_fishingTime = NULL;
-
-
-int gameInit(void * _gamePtr)
+int gameInit(void* _gamePtr)
 {
-    GameApp * game = (GameApp *)_gamePtr;
+    GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    game->engine->shaderID = createShaderProgramFromFile(
-            GAME_SHADERS_DIR "/vertex_shader.glsl",
-            GAME_SHADERS_DIR "/fragment_shader.glsl");
+    game->engine->shaderID =
+      createShaderProgramFromFile(GAME_SHADERS_DIR "/vertex_shader.glsl", GAME_SHADERS_DIR "/fragment_shader.glsl");
 
     s_fishingTime = malloc(sizeof(FishingTime));
-    if(s_fishingTime == NULL)
-    {
+    if (s_fishingTime == NULL) {
         LOG_ERR("[Game] Failed to malloc fishingtime");
         ASSERT_MSG(FALSE, "Failed to malloc fishingtime");
         return 42;
     }
 
     int success = gameResourcesLoadAll(&game->resources, GAME_RESOURCES_DIR);
-    if(success != 0)
-    {
+    if (success != 0) {
         LOG_ERR("[Game] Failed to load all resources");
         ASSERT_MSG(FALSE, "[Game] Failed to load all resources");
         return 42;
@@ -47,9 +40,9 @@ int gameInit(void * _gamePtr)
     return 0;
 }
 
-int gameDestroy(void * _gamePtr)
+int gameDestroy(void* _gamePtr)
 {
-    GameApp * game = (GameApp *)_gamePtr;
+    GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
     fishingTimeDestroy(game->engine, game, s_fishingTime);
@@ -59,13 +52,12 @@ int gameDestroy(void * _gamePtr)
     return 0;
 }
 
-void gameUpdate(void * _gamePtr, float _dt)
+void gameUpdate(void* _gamePtr, float _dt)
 {
-    GameApp * game = (GameApp *)_gamePtr;
+    GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    switch (game->currentScreen)
-    {
+    switch (game->currentScreen) {
         case GAME_SCREEN_FISHING:
             fishingTimeUpdate(game->engine, game, s_fishingTime, _dt);
             break;
@@ -88,13 +80,12 @@ void gameUpdate(void * _gamePtr, float _dt)
     }
 }
 
-void gameFixedUpdate(void * _gamePtr, float _dt)
+void gameFixedUpdate(void* _gamePtr, float _dt)
 {
-    GameApp * game = (GameApp *)_gamePtr;
+    GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    switch (game->currentScreen)
-    {
+    switch (game->currentScreen) {
         case GAME_SCREEN_FISHING:
             fishingTimeFixedUpdate(game->engine, game, s_fishingTime, _dt);
             break;
@@ -110,13 +101,12 @@ void gameFixedUpdate(void * _gamePtr, float _dt)
     }
 }
 
-void gameRender(void * _gamePtr)
+void gameRender(void* _gamePtr)
 {
-    GameApp * game = (GameApp *)_gamePtr;
+    GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    switch (game->currentScreen)
-    {
+    switch (game->currentScreen) {
         case GAME_SCREEN_FISHING:
             fishingTimeRender(game->engine, game, s_fishingTime);
             break;
@@ -139,15 +129,14 @@ void gameRender(void * _gamePtr)
     }
 }
 
-
-void leaveApp(GameApp * _gameApp)
+void leaveApp(GameApp* _gameApp)
 {
     ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
 
     closeWindow(_gameApp->engine->window);
 }
 
-void enterFishingScreen(GameApp * _gameApp)
+void enterFishingScreen(GameApp* _gameApp)
 {
     ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
 
@@ -155,24 +144,23 @@ void enterFishingScreen(GameApp * _gameApp)
     _gameApp->currentScreen = GAME_SCREEN_FISHING;
 }
 
-void enterWelcomeScreen(GameApp * _gameApp)
+void enterWelcomeScreen(GameApp* _gameApp)
 {
     ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
 
     _gameApp->currentScreen = GAME_SCREEN_WELCOME;
 }
 
-void enterCreditScreen(GameApp * _gameApp)
+void enterCreditScreen(GameApp* _gameApp)
 {
     ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
 
     _gameApp->currentScreen = GAME_SCREEN_CREDITS;
 }
 
-void enterGameoverScreen(GameApp * _gameApp)
+void enterGameoverScreen(GameApp* _gameApp)
 {
     ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
 
     _gameApp->currentScreen = GAME_SCREEN_GAMEOVER;
 }
-

@@ -2,7 +2,6 @@
 
 #include "engine/types.h"
 
-
 typedef struct
 {
     int width;
@@ -20,9 +19,8 @@ typedef struct
     int charStart;
     int charEnd;
     unsigned int textureID;
-    FontGlyph * glyphs;
+    FontGlyph* glyphs;
 } Font;
-
 
 /// Load the font library.
 /// @return 0 if success, otherwise, a positive number.
@@ -40,9 +38,8 @@ int destroyFontLibrary();
 /// @param charStart First character to load from ASCII (e.g., 'a')
 /// @param charEnd Last character to load from ASCII (e.g., 'z')
 /// @return The loaded font or NULL if error
-Font * loadFontFromFile(const char * _path, int _fontSizeInPx, int _charStart, int _charEnd);
+Font* loadFontFromFile(const char* _path, int _fontSizeInPx, int _charStart, int _charEnd);
 
 /// Free the font memory.
 /// @param font Pointer to the font to free
-void destroyFont(Font * _font);
-
+void destroyFont(Font* _font);

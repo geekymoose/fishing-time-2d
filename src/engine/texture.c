@@ -1,16 +1,15 @@
 #include "texture.h"
 
+#include "engine/assertions.h"
+#include "engine/log.h"
+#include "engine/types.h"
+
 #include <GL/glew.h>
 
-#include "engine/types.h"
-#include "engine/log.h"
-#include "engine/assertions.h"
-
-Texture makeTexture(const uint8 * _buffer, int _width, int _height, int _channels)
+Texture makeTexture(const uint8* _buffer, int _width, int _height, int _channels)
 {
     uint32 format;
-    switch(_channels)
-    {
+    switch (_channels) {
         case 1:
             format = GL_RED;
             break;
@@ -39,8 +38,7 @@ Texture makeTexture(const uint8 * _buffer, int _width, int _height, int _channel
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0, format, GL_UNSIGNED_BYTE, _buffer);
-    if(glGetError() != GL_NO_ERROR)
-    {
+    if (glGetError() != GL_NO_ERROR) {
         LOG_ERR("[Texture] Method glGetError failed with GLenum = %d", glGetError());
         ASSERT_MSG(FALSE, "[Texture] Method glGetError failed with GLenum = %d", glGetError());
     }
@@ -55,8 +53,7 @@ Texture makeTexture(const uint8 * _buffer, int _width, int _height, int _channel
     return texture;
 }
 
-Texture makeTextureFromImage(const Image * _image)
+Texture makeTextureFromImage(const Image* _image)
 {
     return makeTexture(_image->buffer, _image->width, _image->height, _image->channels);
 }
-

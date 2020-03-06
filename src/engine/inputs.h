@@ -5,7 +5,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-
 typedef enum
 {
     KEY_SPACE,
@@ -79,11 +78,9 @@ typedef enum
     KEYS_COUNT // UpdateMe: Keep it last
 } KEY_KEYBOARD;
 
-
 int isKeyDown(KEY_KEYBOARD _key);
 int isKeyUp(KEY_KEYBOARD _key);
 int isKeyPressed(KEY_KEYBOARD _key);
 
 void updateInputs();
-void handleKeyEvents(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
-
+void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods);

@@ -1,15 +1,14 @@
 #include "gameplay/game_resources.h"
 
-#include <string.h>
-
+#include "engine/assertions.h"
 #include "engine/libmath.h"
 #include "engine/log.h"
-#include "engine/assertions.h"
-#include "engine/types.h"
 #include "engine/resources.h"
+#include "engine/types.h"
 
+#include <string.h>
 
-static int internalLoadTexture(const char * _resourceDirPath, const char * _resourceName)
+static int internalLoadTexture(const char* _resourceDirPath, const char* _resourceName)
 {
     const size_t dirPathSize = strlen(_resourceDirPath);
     const size_t nameSize = strlen(_resourceName);
@@ -23,16 +22,15 @@ static int internalLoadTexture(const char * _resourceDirPath, const char * _reso
     return resourceLoadTexture(fullpath);
 }
 
-int gameResourcesLoadAll(GameResources * _resources, const char * _resourcesDirPath)
+int gameResourcesLoadAll(GameResources* _resources, const char* _resourcesDirPath)
 {
     ASSERT_MSG(_resources != NULL, "Internal error: unexpected NULL parameter");
     ASSERT_MSG(_resourcesDirPath != NULL, "Internal error: unexpected NULL parameter");
 
     LOG_INFO("[GameResources] Loading all the game resources");
 
-
     // TMP variables
-    vecf2 origin = {0.0f, 0.0f};
+    vecf2 origin = { 0.0f, 0.0f };
     unsigned int texID = 0;
     unsigned int spriteID;
 
@@ -50,14 +48,13 @@ int gameResourcesLoadAll(GameResources * _resources, const char * _resourcesDirP
     texID = internalLoadTexture(_resourcesDirPath, "/foreground.png");
     spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 35, origin);
     _resources->foreground = resourceGetSprite(spriteID);
-    ASSERT_MSG(_resources->foreground!= NULL, "Invalid NULL resource");
+    ASSERT_MSG(_resources->foreground != NULL, "Invalid NULL resource");
 
     // Fonts
     origin.x = 0.0f;
     origin.y = 0.0f;
     texID = internalLoadTexture(_resourcesDirPath, "/fonts.png");
-    for(int k = 0; k < 10; ++k)
-    {
+    for (int k = 0; k < 10; ++k) {
         spriteID = resourceLoadSprite(resourceGetTexture(texID), 6, 8, origin);
         _resources->fontsBitmap[k] = resourceGetSprite(spriteID);
         ASSERT_MSG(_resources->fontsBitmap[k] != NULL, "Invalid NULL resource");
@@ -75,8 +72,7 @@ int gameResourcesLoadAll(GameResources * _resources, const char * _resourcesDirP
     // Fish
     origin.x = 0.0f;
     origin.y = 0.0f;
-    for(int k = 0; k < GAME_FISH_ANIM_NB_FRAMES; ++k)
-    {
+    for (int k = 0; k < GAME_FISH_ANIM_NB_FRAMES; ++k) {
         spriteID = resourceLoadSprite(resourceGetTexture(texID), 14, 12, origin);
         _resources->fish[k] = resourceGetSprite(spriteID);
         ASSERT_MSG(_resources->fish[k] != NULL, "Invalid NULL resource");
@@ -86,8 +82,7 @@ int gameResourcesLoadAll(GameResources * _resources, const char * _resourcesDirP
     // Explosion
     origin.x = 43.0f;
     origin.y = 3.0f;
-    for(int k = 0; k < GAME_EXPLOSION_ANIM_NB_FRAMES; ++k)
-    {
+    for (int k = 0; k < GAME_EXPLOSION_ANIM_NB_FRAMES; ++k) {
         spriteID = resourceLoadSprite(resourceGetTexture(texID), 14, 14, origin);
         _resources->explosion[k] = resourceGetSprite(spriteID);
         ASSERT_MSG(_resources->explosion[k] != NULL, "Invalid NULL resource");
@@ -97,8 +92,7 @@ int gameResourcesLoadAll(GameResources * _resources, const char * _resourcesDirP
     // Boat
     origin.x = 0.0f;
     origin.y = 20.0f;
-    for(int k = 0; k < GAME_BOAT_ANIM_NB_FRAMES; ++k)
-    {
+    for (int k = 0; k < GAME_BOAT_ANIM_NB_FRAMES; ++k) {
         origin.x = k * 45.0f;
         spriteID = resourceLoadSprite(resourceGetTexture(texID), 45, 35, origin);
         _resources->boat[k] = resourceGetSprite(spriteID);
@@ -128,7 +122,6 @@ int gameResourcesLoadAll(GameResources * _resources, const char * _resourcesDirP
     spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
     _resources->credits = resourceGetSprite(spriteID);
     ASSERT_MSG(_resources->credits != NULL, "Invalid NULL resource");
-
 
     LOG_INFO("[GameResources] Game resources successfully loaded");
     return 0;

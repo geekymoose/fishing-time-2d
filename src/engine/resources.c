@@ -5,7 +5,6 @@
 #include "engine/assertions.h"
 #include "engine/images.h"
 
-
 // DevNote:
 // This is a terribly simple and naive implementation of a resource registery.
 // All the resources are loaded at start and no 'unload' is implemented.
@@ -14,11 +13,6 @@
 // DevNote2:
 // Since this is a simple game, we know the exact number of needed resources
 // at start, therefore, the array size is hardcoded with a known value.
-
-
-// -----------------------------------------------------------------------------
-// Internal data
-// -----------------------------------------------------------------------------
 
 // Textures
 #define S_ARRAY_TEXTURES_SIZE 7
@@ -30,18 +24,16 @@ static unsigned int s_arrayTexturesHead = 0;
 static Sprite s_arraySprites[S_ARRAY_SPRITES_SIZE];
 static unsigned int s_arraySpritesHead = 0;
 
-
 // -----------------------------------------------------------------------------
 // Texture resources
 // -----------------------------------------------------------------------------
 
-unsigned int resourceLoadTexture(const char * _path)
+unsigned int resourceLoadTexture(const char* _path)
 {
     ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE, "[Resource] Please increase S_ARRAY_TEXTURES_SIZE");
 
-    Image * image = loadImageFromFile(_path);
-    if(image == NULL)
-    {
+    Image* image = loadImageFromFile(_path);
+    if (image == NULL) {
         return 0;
     }
 
@@ -55,7 +47,7 @@ unsigned int resourceLoadTexture(const char * _path)
     return resourceID;
 }
 
-Texture * resourceGetTexture(const unsigned int _resourceID)
+Texture* resourceGetTexture(const unsigned int _resourceID)
 {
     ASSERT_MSG(_resourceID >= 0, "[Resource] Invalid texture ID");
     ASSERT_MSG(_resourceID < S_ARRAY_TEXTURES_SIZE, "[Resource] Invalid texture ID");
@@ -63,12 +55,11 @@ Texture * resourceGetTexture(const unsigned int _resourceID)
     return &s_arrayTextures[_resourceID];
 }
 
-
 // -----------------------------------------------------------------------------
 // Sprite resources
 // -----------------------------------------------------------------------------
 
-unsigned int resourceLoadSprite(Texture * _tex, int _w, int _h, vecf2 _origin)
+unsigned int resourceLoadSprite(Texture* _tex, int _w, int _h, vecf2 _origin)
 {
     ASSERT_MSG(_tex != NULL, "[Resource] Texture param _tex should not be NULL");
     ASSERT_MSG(s_arraySpritesHead < S_ARRAY_SPRITES_SIZE, "[Resource] Please increase S_ARRAY_SPRITES_SIZE");
@@ -81,11 +72,10 @@ unsigned int resourceLoadSprite(Texture * _tex, int _w, int _h, vecf2 _origin)
     return resourceID;
 }
 
-Sprite * resourceGetSprite(unsigned int _resourceID)
+Sprite* resourceGetSprite(unsigned int _resourceID)
 {
     ASSERT_MSG(_resourceID >= 0, "[Resource] Invalid sprite ID");
     ASSERT_MSG(_resourceID < S_ARRAY_SPRITES_SIZE, "[Resource] Invalid sprite ID");
 
     return &s_arraySprites[_resourceID];
 }
-

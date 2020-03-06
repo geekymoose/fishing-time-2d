@@ -1,20 +1,18 @@
 #include "files.h"
 
-#include "engine/log.h"
 #include "engine/assertions.h"
+#include "engine/log.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-
-uint8 * readFileBuffer(const char * _path)
+uint8* readFileBuffer(const char* _path)
 {
     ASSERT_MSG(_path != NULL, "[File] Invalid values: parameter should not be NULL");
 
-    FILE * file;
+    FILE* file;
     file = fopen(_path, "r");
-    if(file == NULL)
-    {
+    if (file == NULL) {
         LOG_ERR("[File] Unable to open the file %s", _path);
         return NULL;
     }
@@ -23,17 +21,15 @@ uint8 * readFileBuffer(const char * _path)
     const long file_size = ftell(file);
     rewind(file);
 
-    char * filebuffer = NULL;
+    char* filebuffer = NULL;
     filebuffer = malloc((file_size + 1) * sizeof(*filebuffer)); // +1 for '\0'
-    if(filebuffer == NULL)
-    {
+    if (filebuffer == NULL) {
         LOG_ERR("[File] Unable to read %s (malloc %d bytes failed)", _path, filebuffer);
         return NULL;
     }
 
     size_t elementsRead = fread(filebuffer, sizeof(char), file_size, file);
-    if(elementsRead != file_size)
-    {
+    if (elementsRead != file_size) {
         LOG_ERR("[File] Unable to read %s", _path);
         free(filebuffer);
         return NULL;
@@ -44,4 +40,3 @@ uint8 * readFileBuffer(const char * _path)
     fclose(file);
     return filebuffer;
 }
-

@@ -5,20 +5,18 @@
 
 enum
 {
-    _XTERM_COLOR_DEFAULT    = 0,
-    _XTERM_COLOR_ORANGE     = 31,
-    _XTERM_COLOR_GREEN      = 32,
-    _XTERM_COLOR_YELLOW     = 33,
-    _XTERM_COLOR_BLUE       = 34,
-    _XTERM_COLOR_RED        = 35,
+    _XTERM_COLOR_DEFAULT = 0,
+    _XTERM_COLOR_ORANGE = 31,
+    _XTERM_COLOR_GREEN = 32,
+    _XTERM_COLOR_YELLOW = 33,
+    _XTERM_COLOR_BLUE = 34,
+    _XTERM_COLOR_RED = 35,
 };
 
-
 // Returns a string representation of a log level
-static inline const char * _logLevelHeader(const int _level)
+static inline const char* _logLevelHeader(const int _level)
 {
-    switch(_level)
-    {
+    switch (_level) {
         case _LOG_LEVEL_DBG:
             return "[DBG]";
         case _LOG_LEVEL_INFO:
@@ -35,8 +33,7 @@ static inline const char * _logLevelHeader(const int _level)
 // Returns the terminal color for this log level
 static inline int _logLevelColor(const int _level)
 {
-    switch(_level)
-    {
+    switch (_level) {
         case _LOG_LEVEL_DBG:
             return _XTERM_COLOR_BLUE;
         case _LOG_LEVEL_INFO:
@@ -50,7 +47,7 @@ static inline int _logLevelColor(const int _level)
     }
 }
 
-void _log(const int _level, const char * _format, ...)
+void _log(const int _level, const char* _format, ...)
 {
     va_list ap;
     va_start(ap, _format);

@@ -1,12 +1,11 @@
 #include "engine/engine.h"
 
-#include "engine/log.h"
 #include "engine/assertions.h"
-#include "engine/inputs.h"
 #include "engine/fonts.h"
+#include "engine/inputs.h"
+#include "engine/log.h"
 
-
-int engineRun(Engine * _engine, void * _game)
+int engineRun(Engine* _engine, void* _game)
 {
     ASSERT_MSG(_engine != NULL, "[Engine] parameter should not be NULL");
     ASSERT_MSG(_game != NULL, "[Engine] parameter should not be NULL");
@@ -16,8 +15,7 @@ int engineRun(Engine * _engine, void * _game)
     _engine->timescale = 1.0f;
 
     _engine->window = createWindow(600, 600, "Shark engine 2D"); // Default init values
-    if(_engine->window == NULL)
-    {
+    if (_engine->window == NULL) {
         LOG_ERR("[Engine] Failed to create the main window");
         ASSERT_MSG(FALSE, "[Engine] Failed to create the main window");
         return 42;
@@ -34,16 +32,14 @@ int engineRun(Engine * _engine, void * _game)
     const float fixedDeltaTime = 1.0f / 45.0f; // Physic capped at 45 fps
 
     int error = initFontLibrary();
-    if(error != 0)
-    {
+    if (error != 0) {
         LOG_ERR("[Engine] The engine failed to init the font system");
         ASSERT_MSG(FALSE, "[Engine] The engine failed to init the font system");
         return error;
     }
 
     error = _engine->gameInit(_game);
-    if(error != 0)
-    {
+    if (error != 0) {
         LOG_ERR("[Engine] The engine failed to init the game");
         ASSERT_MSG(FALSE, "[Engine] The engine failed to init the game");
         return error;
@@ -51,8 +47,7 @@ int engineRun(Engine * _engine, void * _game)
 
     // Main Loop
 
-    while(!isWindowClosed(_engine->window))
-    {
+    while (!isWindowClosed(_engine->window)) {
         // const int fps = (int)(1.0f / dt);
         // LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
 
@@ -61,8 +56,7 @@ int engineRun(Engine * _engine, void * _game)
         dt = dt * _engine->timescale;
 
         elapsedFixedDeltaTime += dt;
-        if(elapsedFixedDeltaTime >= fixedDeltaTime)
-        {
+        if (elapsedFixedDeltaTime >= fixedDeltaTime) {
             // DevNotes: in case of long render loop (high dt), we don't try to
             // recover the elapsed physics steps and only play one step instead.
             elapsedFixedDeltaTime = 0.0f;
@@ -87,8 +81,7 @@ int engineRun(Engine * _engine, void * _game)
     destroyWindow(_engine->window); // First, remove the window to look responsive
 
     error = _engine->gameDestroy(_game);
-    if(error != 0)
-    {
+    if (error != 0) {
         LOG_ERR("[Engine] The engine failed to destroy the game");
         ASSERT_MSG(FALSE, "[Engine] The engine failed to destroy the game");
         return error;

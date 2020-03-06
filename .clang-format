@@ -1,0 +1,7 @@
+---
+Language: Cpp
+BasedOnStyle: Mozilla
+IndentWidth: 4
+ColumnLimit: 120
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None

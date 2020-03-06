@@ -1,29 +1,15 @@
 #include "sprite.h"
 
-#include <stddef.h> // offsetof
-#include <GL/glew.h> // OpenGL lib
-
-#include "engine/log.h"
 #include "engine/assertions.h"
+#include "engine/log.h"
 #include "engine/shader.h"
 
+#include <GL/glew.h> // OpenGL lib
+#include <stddef.h>  // offsetof
 
-// -----------------------------------------------------------------------------
-// Static Data
-// -----------------------------------------------------------------------------
+static unsigned int s_indices[] = { 0, 1, 2, 0, 2, 3 };
 
-static unsigned int s_indices[] =
-{
-    0, 1, 2,
-    0, 2, 3
-};
-
-
-// -----------------------------------------------------------------------------
-// Methods
-// -----------------------------------------------------------------------------
-
-Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin)
+Sprite makeSprite(Texture* _texture, int _width, int _height, vecf2 _origin)
 {
     ASSERT_MSG(_texture != NULL, "[Sprite] No texture provided! What are you doing?");
     ASSERT_MSG(_width >= 0, "[Sprite] Invalid width (width < 0)");
@@ -62,7 +48,6 @@ Sprite makeSprite(Texture * _texture, int _width, int _height, vecf2 _origin)
     sprite.vertices[3].position.y = y_min;
     sprite.vertices[3].uv.x = _origin.x / _texture->width;
     sprite.vertices[3].uv.y = _origin.y / _texture->height;
-
 
     // VAO
     glGenVertexArrays(1, &sprite.vertex_vao);
@@ -112,7 +97,7 @@ void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const GLuint
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void destroySprite(Sprite * _sprite)
+void destroySprite(Sprite* _sprite)
 {
     ASSERT_MSG(_sprite != NULL, "[Sprite] Sprite should not be NULL");
 
@@ -121,5 +106,3 @@ void destroySprite(Sprite * _sprite)
     glDeleteBuffers(1, &_sprite->vertex_ebo);
     glDeleteBuffers(1, &_sprite->vertex_vbo);
 }
-
-
