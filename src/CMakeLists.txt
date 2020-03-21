@@ -13,8 +13,8 @@ configure_file(
 include_directories("${PROJECT_BINARY_DIR}/src") # add this specific header
 
 # Game executable
-include_directories("${PROJECT_SOURCE_DIR}/src")
 file(GLOB_RECURSE src_files *.c)
+include_directories("${PROJECT_SOURCE_DIR}/src")
 add_executable(fishing-time-2d ${src_files})
 add_custom_target(rungame fishing-time-2d)
 
@@ -36,4 +36,8 @@ include_directories("${PROJECT_SOURCE_DIR}/extern/stb/include/")
 # Freetype
 include_directories("${PROJECT_SOURCE_DIR}/extern/freetype/include/")
 target_link_libraries(fishing-time-2d freetype)
+
+# cJSON
+include_directories("${PROJECT_SOURCE_DIR}/extern/cjson/")
+target_link_libraries(fishing-time-2d cjson)
 

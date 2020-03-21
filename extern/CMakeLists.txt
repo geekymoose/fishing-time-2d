@@ -7,8 +7,8 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory("glfw/")
 
 # GLEW
-add_subdirectory("glew/build/cmake/")
 add_definitions(-DGLEW_STATIC)
+add_subdirectory("glew/build/cmake/")
 
 # Freetype
 execute_process(
@@ -18,3 +18,6 @@ execute_process(
 add_library(freetype STATIC IMPORTED)
 set_property(TARGET freetype PROPERTY IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/freetype/libfreetype.a")
 
+# cJSON
+set(ENABLE_CJSON_TEST OFF CACHE BOOL "" FORCE)
+add_subdirectory("cjson/cjson")
