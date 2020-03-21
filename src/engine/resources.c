@@ -1,9 +1,9 @@
 #include "engine/resources.h"
 
-#include <stdlib.h>
-
 #include "engine/assertions.h"
 #include "engine/images.h"
+
+#include <stdlib.h>
 
 // DevNote:
 // This is a terribly simple and naive implementation of a resource registery.
@@ -23,10 +23,6 @@ static unsigned int s_arrayTexturesHead = 0;
 #define S_ARRAY_SPRITES_SIZE 26
 static Sprite s_arraySprites[S_ARRAY_SPRITES_SIZE];
 static unsigned int s_arraySpritesHead = 0;
-
-// -----------------------------------------------------------------------------
-// Texture resources
-// -----------------------------------------------------------------------------
 
 unsigned int resourceLoadTexture(const char* _path)
 {
@@ -54,10 +50,6 @@ Texture* resourceGetTexture(const unsigned int _resourceID)
 
     return &s_arrayTextures[_resourceID];
 }
-
-// -----------------------------------------------------------------------------
-// Sprite resources
-// -----------------------------------------------------------------------------
 
 unsigned int resourceLoadSprite(Texture* _tex, int _w, int _h, vecf2 _origin)
 {

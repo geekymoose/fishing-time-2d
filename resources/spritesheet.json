@@ -1,0 +1,152 @@
+{
+  "sprite-anchor": {
+    "position": {
+      "x": 153,
+      "y": 5
+    },
+    "size": {
+      "w": 10,
+      "h": 11
+    }
+  },
+  "sprite-fish-01": {
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "w": 14,
+      "h": 12
+    }
+  },
+  "sprite-fish-02": {
+    "position": {
+      "x": 14,
+      "y": 0
+    },
+    "size": {
+      "w": 14,
+      "h": 12
+    }
+  },
+  "sprite-fish-03": {
+    "position": {
+      "x": 28,
+      "y": 0
+    },
+    "size": {
+      "w": 14,
+      "h": 12
+    }
+  },
+  "sprite-explosion-01": {
+    "position": {
+      "x": 43,
+      "y": 3
+    },
+    "size": {
+      "w": 14,
+      "h": 14
+    }
+  },
+  "sprite-explosion-02": {
+    "position": {
+      "x": 57,
+      "y": 3
+    },
+    "size": {
+      "w": 14,
+      "h": 14
+    }
+  },
+  "sprite-explosion-03": {
+    "position": {
+      "x": 71,
+      "y": 3
+    },
+    "size": {
+      "w": 14,
+      "h": 14
+    }
+  },
+  "sprite-boat-01": {
+    "position": {
+      "x": 0,
+      "y": 20
+    },
+    "size": {
+      "w": 45,
+      "h": 35
+    }
+  },
+  "sprite-boat-02": {
+    "position": {
+      "x": 45,
+      "y": 20
+    },
+    "size": {
+      "w": 45,
+      "h": 35
+    }
+  },
+  "sprite-boat-03": {
+    "position": {
+      "x": 90,
+      "y": 20
+    },
+    "size": {
+      "w": 45,
+      "h": 35
+    }
+  },
+  "sprite-boat-04": {
+    "position": {
+      "x": 135,
+      "y": 20
+    },
+    "size": {
+      "w": 45,
+      "h": 35
+    }
+  },
+  "sprite-background": {
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "w": 200,
+      "h": 200
+    }
+  },
+  "sprite-foreground": {
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "w": 200,
+      "h": 35
+    }
+  },
+  "sprite-welcome": {
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "w": 200,
+      "h": 200
+    }
+  },
+  "sprite-gameover": {
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "w": 200,
+      "h": 200
+    }
+  }
+}
