@@ -36,7 +36,7 @@ uint32 createShadeFromFile(const char* _path, const int32 _type)
 {
     LOG_INFO("[Shader] Create shader from file %s", _path);
 
-    char* filebuffer = readFileBuffer(_path);
+    char* filebuffer = (char*)readFileBuffer(_path);
     if (filebuffer == NULL) {
         LOG_ERR("[Shader] Unable to create shader from file %s", _path);
         ASSERT_MSG(FALSE, "[Shader] Unable to create shader from file %s", _path);

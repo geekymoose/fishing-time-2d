@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-uint8* readFileBuffer(const char* _path)
+void* readFileBuffer(const char* _path)
 {
     ASSERT_MSG(_path != NULL, "[File] Invalid values: parameter should not be NULL");
 
@@ -18,25 +18,25 @@ uint8* readFileBuffer(const char* _path)
     }
 
     fseek(file, 0, SEEK_END);
-    const long file_size = ftell(file);
+    const size_t file_size = ftell(file);
     rewind(file);
 
     char* filebuffer = NULL;
-    filebuffer = malloc((file_size + 1) * sizeof(*filebuffer)); // +1 for '\0'
+    filebuffer = calloc(file_size + 1, sizeof(*filebuffer)); // +1 for '\0'
     if (filebuffer == NULL) {
         LOG_ERR("[File] Unable to read %s (malloc %d bytes failed)", _path, filebuffer);
         return NULL;
     }
 
-    size_t elementsRead = fread(filebuffer, sizeof(char), file_size, file);
+    size_t elementsRead = fread(filebuffer, sizeof(*filebuffer), file_size, file);
     if (elementsRead != file_size) {
         LOG_ERR("[File] Unable to read %s", _path);
         free(filebuffer);
         return NULL;
     }
 
-    filebuffer[file_size] = '\0';
+    filebuffer[file_size] = '\0'; // In case of (should already be '\0')
 
     fclose(file);
-    return filebuffer;
+    return (void*)filebuffer;
 }
