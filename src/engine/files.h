@@ -1,3 +1,3 @@
 #pragma once
 
-void* readFileBuffer(const char* _path);
+void* readFileContent(const char* _path);
