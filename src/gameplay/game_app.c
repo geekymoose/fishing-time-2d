@@ -66,10 +66,6 @@ void gameUpdate(void* _gamePtr, float _dt)
             welcomeUpdate(game);
             break;
 
-        case GAME_SCREEN_CREDITS:
-            creditsUpdate(game);
-            break;
-
         case GAME_SCREEN_GAMEOVER:
             gameoverUpdate(game);
             break;
@@ -91,7 +87,6 @@ void gameFixedUpdate(void* _gamePtr, float _dt)
             break;
 
         case GAME_SCREEN_WELCOME:
-        case GAME_SCREEN_CREDITS:
         case GAME_SCREEN_GAMEOVER:
             break;
 
@@ -113,10 +108,6 @@ void gameRender(void* _gamePtr)
 
         case GAME_SCREEN_WELCOME:
             welcomeRender(game);
-            break;
-
-        case GAME_SCREEN_CREDITS:
-            creditsRender(game);
             break;
 
         case GAME_SCREEN_GAMEOVER:
@@ -149,13 +140,6 @@ void enterWelcomeScreen(GameApp* _gameApp)
     ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
 
     _gameApp->currentScreen = GAME_SCREEN_WELCOME;
-}
-
-void enterCreditScreen(GameApp* _gameApp)
-{
-    ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
-
-    _gameApp->currentScreen = GAME_SCREEN_CREDITS;
 }
 
 void enterGameoverScreen(GameApp* _gameApp)

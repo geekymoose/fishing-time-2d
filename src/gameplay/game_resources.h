@@ -5,7 +5,7 @@
 #include "gameplay/config.h"
 
 // This game is pretty simple.
-// We can load all the required resources (e.g., Textures, Sprites) at start.
+// We load all the required resources at start (e.g., textures, sprites).
 
 typedef struct
 {
@@ -18,7 +18,6 @@ typedef struct
     Sprite* fontsBitmap[10]; // The font has only 10 hard coded digits
     Sprite* welcome;
     Sprite* gameover;
-    Sprite* credits;
 } GameResources;
 
 int gameResourcesLoadAll(GameResources* _resources, const char* _resourcesDirPath);

@@ -4,23 +4,6 @@
 #include "engine/resources.h"
 #include "engine/sprite.h"
 
-void creditsUpdate(GameApp* _game)
-{
-    if (isKeyDown(KEY_ESCAPE) == TRUE) {
-        enterWelcomeScreen(_game);
-    } else if (isKeyDown(KEY_SPACE) == TRUE) {
-        enterWelcomeScreen(_game);
-    }
-}
-
-void creditsRender(GameApp* _game)
-{
-    // The world center 0:0 is the center of the screen.
-    const vecf2 center = { 0.0f, 0.0f };
-    const vecf2 scale = { 1.0f, 1.0f };
-    drawSprite(_game->resources.credits, center, scale, _game->engine->shaderID);
-}
-
 void gameoverUpdate(GameApp* _game)
 {
     if (isKeyDown(KEY_ESCAPE) == TRUE) {
@@ -44,8 +27,6 @@ void welcomeUpdate(GameApp* _game)
         leaveApp(_game);
     } else if (isKeyDown(KEY_SPACE) == TRUE) {
         enterFishingScreen(_game);
-    } else if (isKeyDown(KEY_ENTER) == TRUE) {
-        enterCreditScreen(_game);
     }
 }
 

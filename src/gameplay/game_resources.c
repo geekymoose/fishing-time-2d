@@ -146,12 +146,6 @@ int gameResourcesLoadAll(GameResources* _resources, const char* _resourcesDirPat
     _resources->gameover = resourceGetSprite(spriteID);
     ASSERT_MSG(_resources->gameover != NULL, "Invalid NULL resource");
 
-    // Credits
-    texID = internalLoadTexture(_resourcesDirPath, "/placeholder.png");
-    spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
-    _resources->credits = resourceGetSprite(spriteID);
-    ASSERT_MSG(_resources->credits != NULL, "Invalid NULL resource");
-
     // Fonts
     texID = internalLoadTexture(_resourcesDirPath, "/fonts.png");
     for (int k = 0; k < 10; ++k) {

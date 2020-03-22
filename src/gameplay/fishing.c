@@ -70,7 +70,7 @@ void fishingTimeUpdate(Engine* _engine, GameApp* _gameapp, FishingTime* _game, f
         enterWelcomeScreen(_gameapp);
         return;
     }
-    if (_game->remainingTime <= 100.0f) {
+    if (_game->remainingTime <= 0.0f) {
         if (isKeyDown(KEY_ENTER) == TRUE) {
             enterGameoverScreen(_gameapp);
             return;

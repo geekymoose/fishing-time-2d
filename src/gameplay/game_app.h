@@ -9,8 +9,7 @@ typedef enum
 {
     GAME_SCREEN_WELCOME,
     GAME_SCREEN_FISHING,
-    GAME_SCREEN_GAMEOVER,
-    GAME_SCREEN_CREDITS
+    GAME_SCREEN_GAMEOVER
 } GameScreen;
 
 typedef struct
@@ -29,5 +28,4 @@ void gameRender(void* _gamePtr);
 void leaveApp(GameApp* _gameApp);
 void enterFishingScreen(GameApp* _gameApp);
 void enterWelcomeScreen(GameApp* _gameApp);
-void enterCreditScreen(GameApp* _gameApp);
 void enterGameoverScreen(GameApp* _gameApp);

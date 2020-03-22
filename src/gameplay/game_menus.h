@@ -2,10 +2,6 @@
 
 #include "gameplay/game_app.h"
 
-// Credits menu screen
-void creditsUpdate(GameApp* _game);
-void creditsRender(GameApp* _game);
-
 // Gameover menu screen
 void gameoverUpdate(GameApp* _game);
 void gameoverRender(GameApp* _game);
