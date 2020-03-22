@@ -1,14 +1,15 @@
-#include <stdlib.h>
+#include "gameplay/game_app.h"
 
-#include "build_config.h"
 #include "engine/assertions.h"
 #include "engine/inputs.h"
 #include "engine/log.h"
 #include "engine/shader.h"
+#include "engine/str.h"
 #include "engine/types.h"
 #include "gameplay/fishing.h"
-#include "gameplay/game_app.h"
 #include "gameplay/game_menus.h"
+
+#include <stdlib.h>
 
 static FishingTime* s_fishingTime = NULL;
 
@@ -17,8 +18,15 @@ int gameInit(void* _gamePtr)
     GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    game->engine->shaderID =
-      createShaderProgramFromFile(GAME_SHADERS_DIR "/vertex_shader.glsl", GAME_SHADERS_DIR "/fragment_shader.glsl");
+    char vertex_path[255];
+    concatStrings(vertex_path, 255, game->shadersPath, "/");
+    concatStrings(vertex_path, 255, vertex_path, "vertex_shader.glsl");
+
+    char fragment_path[255];
+    concatStrings(fragment_path, 255, game->shadersPath, "/");
+    concatStrings(fragment_path, 255, fragment_path, "fragment_shader.glsl");
+
+    game->engine->shaderID = createShaderProgramFromFile(vertex_path, fragment_path);
 
     s_fishingTime = malloc(sizeof(FishingTime));
     if (s_fishingTime == NULL) {
@@ -27,7 +35,7 @@ int gameInit(void* _gamePtr)
         return 42;
     }
 
-    int success = gameResourcesLoadAll(&game->resources, GAME_RESOURCES_DIR);
+    int success = gameResourcesLoadAll(&game->resources, game->resourcesPath);
     if (success != 0) {
         LOG_ERR("[Game] Failed to load all resources");
         ASSERT_MSG(FALSE, "[Game] Failed to load all resources");

@@ -5,7 +5,7 @@
 
 #include <string.h>
 
-void concatStrings(char* _dest, size_t _destBufferSize, const char* _str1, const char* _str2)
+void concatStrings(char* _dest, const size_t _destBufferSize, const char* _str1, const char* _str2)
 {
     ASSERT_MSG(_dest != NULL, "Invalid parameter: destination string should not be null");
     ASSERT_MSG(_str1 != NULL, "Invalid parameter: source string should not be null");
@@ -20,7 +20,6 @@ void concatStrings(char* _dest, size_t _destBufferSize, const char* _str1, const
         return;
     }
 
-    memset(_dest, 0, _destBufferSize);
     strncpy(_dest, _str1, _destBufferSize - 1); // Size includes '\0'
 
     int sizeRemains = _destBufferSize - strlen(_dest) - 1; // -1 to account the '\0'

@@ -1,6 +1,5 @@
 #include "fishing.h"
 
-#include "build_config.h"
 #include "engine/animation.h"
 #include "engine/assertions.h"
 #include "engine/inputs.h"

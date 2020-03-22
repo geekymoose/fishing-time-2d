@@ -17,6 +17,8 @@ typedef struct
     Engine* engine;
     GameScreen currentScreen;
     GameResources resources;
+    char* resourcesPath;
+    char* shadersPath;
 } GameApp;
 
 int gameInit(void* _gamePtr);

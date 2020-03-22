@@ -5,6 +5,7 @@
 #include "engine/libmath.h"
 #include "engine/log.h"
 #include "engine/resources.h"
+#include "engine/str.h"
 #include "engine/types.h"
 
 #include <cjson/cJSON.h>
@@ -14,21 +15,18 @@
 
 static unsigned int internalLoadTexture(const char* _resourceDirPath, const char* _resourceName)
 {
-    const size_t dirPathSize = strlen(_resourceDirPath);
-    const size_t nameSize = strlen(_resourceName);
-
-    const size_t fullPathSize = (dirPathSize + nameSize + 1); // +1 for NUL char
-    char fullpath[fullPathSize];
-    memset(fullpath, 0, fullPathSize);
-    strncat(fullpath, _resourceDirPath, dirPathSize);
-    strncat(fullpath, _resourceName, nameSize);
-    fullpath[fullPathSize - 1] = '\0';
+    const size_t size = strlen(_resourceDirPath) + strlen(_resourceName) + 2; // +2 for the '/' and '\0'
+    char fullpath[size];
+    concatStrings(fullpath, size, _resourceDirPath, "/");
+    concatStrings(fullpath, size, fullpath, _resourceName);
 
     return resourceLoadTexture(fullpath);
 }
 
 static unsigned int internalLoadSpriteFromJSON(const cJSON* _json, const char* _name, unsigned int _texID)
 {
+    // TODO Add validity checks
+
     const cJSON* json_sprite = cJSON_GetObjectItemCaseSensitive(_json, _name);
 
     const cJSON* json_position = cJSON_GetObjectItemCaseSensitive(json_sprite, "position");
@@ -50,15 +48,10 @@ static void internalLoadSpritesheet(GameResources* _resources, const char* _reso
 
     const char* _resourceName = "spritesheet.json";
 
-    const size_t dirPathSize = strlen(_resourcesDirPath);
-    const size_t nameSize = strlen(_resourceName);
-    const size_t fullPathSize = (dirPathSize + nameSize + 1); // +1 for NUL char
-    char fullpath[fullPathSize];
-
-    memset(fullpath, 0, fullPathSize);
-    strncat(fullpath, _resourcesDirPath, dirPathSize);
-    strncat(fullpath, _resourceName, nameSize);
-    fullpath[fullPathSize - 1] = '\0';
+    const size_t size = strlen(_resourcesDirPath) + strlen(_resourceName) + 2; // +2 for the '/' and '\0'
+    char fullpath[size];
+    concatStrings(fullpath, size, _resourcesDirPath, "/");
+    concatStrings(fullpath, size, fullpath, _resourceName);
 
     char* json_buffer = (char*)readFileContent(fullpath);
     cJSON* json = cJSON_Parse(json_buffer);
@@ -72,7 +65,7 @@ static void internalLoadSpritesheet(GameResources* _resources, const char* _reso
         return;
     }
 
-    unsigned int texID = internalLoadTexture(_resourcesDirPath, "/spritesheet.png");
+    unsigned int texID = internalLoadTexture(_resourcesDirPath, "spritesheet.png");
 
     // Anchor
     _resources->anchor = resourceGetSprite(internalLoadSpriteFromJSON(json, "sprite-anchor", texID));
@@ -123,31 +116,31 @@ int gameResourcesLoadAll(GameResources* _resources, const char* _resourcesDirPat
     unsigned int spriteID;
 
     // Background
-    texID = internalLoadTexture(_resourcesDirPath, "/background.png");
+    texID = internalLoadTexture(_resourcesDirPath, "background.png");
     spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
     _resources->background = resourceGetSprite(spriteID);
     ASSERT_MSG(_resources->background != NULL, "Invalid NULL resource");
 
     // Foreground
-    texID = internalLoadTexture(_resourcesDirPath, "/foreground.png");
+    texID = internalLoadTexture(_resourcesDirPath, "foreground.png");
     spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 35, origin);
     _resources->foreground = resourceGetSprite(spriteID);
     ASSERT_MSG(_resources->foreground != NULL, "Invalid NULL resource");
 
     // Welcome
-    texID = internalLoadTexture(_resourcesDirPath, "/welcome.png");
+    texID = internalLoadTexture(_resourcesDirPath, "welcome.png");
     spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
     _resources->welcome = resourceGetSprite(spriteID);
     ASSERT_MSG(_resources->welcome != NULL, "Invalid NULL resource");
 
     // Gameover
-    texID = internalLoadTexture(_resourcesDirPath, "/placeholder.png");
+    texID = internalLoadTexture(_resourcesDirPath, "placeholder.png");
     spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
     _resources->gameover = resourceGetSprite(spriteID);
     ASSERT_MSG(_resources->gameover != NULL, "Invalid NULL resource");
 
     // Fonts
-    texID = internalLoadTexture(_resourcesDirPath, "/fonts.png");
+    texID = internalLoadTexture(_resourcesDirPath, "fonts.png");
     for (int k = 0; k < 10; ++k) {
         spriteID = resourceLoadSprite(resourceGetTexture(texID), 6, 8, origin);
         _resources->fontsBitmap[k] = resourceGetSprite(spriteID);

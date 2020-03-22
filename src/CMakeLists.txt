@@ -1,22 +1,13 @@
 message(STATUS "Building the sources")
 
-# Build config
-set(GAME_VERSION_MAJOR 0)
-set(GAME_VERSION_MINOR 1)
-set(GAME_RESOURCES_DIR "${PROJECT_SOURCE_DIR}/resources/")
-set(GAME_SHADERS_DIR "${PROJECT_SOURCE_DIR}/shaders/")
-
-configure_file(
-    "build_config.h.in"
-    "build_config.h"
-    )
-include_directories("${PROJECT_BINARY_DIR}/src") # add this specific header
-
 # Game executable
 file(GLOB_RECURSE src_files *.c)
 include_directories("${PROJECT_SOURCE_DIR}/src")
 add_executable(fishing-time-2d ${src_files})
-add_custom_target(rungame fishing-time-2d)
+
+set(GAME_RESOURCES_DIR "${PROJECT_SOURCE_DIR}/resources")
+set(GAME_SHADERS_DIR "${PROJECT_SOURCE_DIR}/shaders")
+add_custom_target(rungame fishing-time-2d ${GAME_RESOURCES_DIR} ${GAME_SHADERS_DIR})
 
 # OpenGL
 find_package(OpenGL REQUIRED)
