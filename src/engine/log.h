@@ -1,7 +1,5 @@
 #pragma once
 
-#if defined(ENGINE_ENABLE_LOG)
-
 enum
 {
     _LOG_LEVEL_DBG,
@@ -10,6 +8,8 @@ enum
     _LOG_LEVEL_ERR,
     _LOG_LEVEL_OMG,
 };
+
+#if defined(ENGINE_ENABLE_LOG)
 
 void _log(const int _level, const char* _format, ...);
 

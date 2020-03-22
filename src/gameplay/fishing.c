@@ -1,4 +1,4 @@
-#include "fishing.h"
+#include "gameplay/fishing.h"
 
 #include "engine/animation.h"
 #include "engine/assertions.h"

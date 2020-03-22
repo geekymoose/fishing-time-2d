@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "engine/shader.h"
 
 #include "engine/assertions.h"
 #include "engine/files.h"

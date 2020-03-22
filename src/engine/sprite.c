@@ -1,4 +1,4 @@
-#include "sprite.h"
+#include "engine/sprite.h"
 
 #include "engine/assertions.h"
 #include "engine/log.h"
