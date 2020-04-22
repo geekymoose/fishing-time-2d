@@ -8,8 +8,8 @@ void gameoverUpdate(GameApp* _game)
 {
     if (isKeyDown(KEY_ESCAPE) == TRUE) {
         enterWelcomeScreen(_game);
-    } else if (isKeyDown(KEY_SPACE) == TRUE) {
-        enterWelcomeScreen(_game);
+    } else if (isKeyDown(KEY_R) == TRUE) {
+        enterFishingScreen(_game);
     }
 }
 
@@ -25,7 +25,7 @@ void welcomeUpdate(GameApp* _game)
 {
     if (isKeyDown(KEY_ESCAPE) == TRUE) {
         leaveApp(_game);
-    } else if (isKeyDown(KEY_SPACE) == TRUE) {
+    } else if (isKeyDown(KEY_ENTER) == TRUE) {
         enterFishingScreen(_game);
     }
 }

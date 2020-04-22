@@ -70,10 +70,8 @@ void fishingTimeUpdate(Engine* _engine, GameApp* _gameapp, FishingTime* _game, f
         return;
     }
     if (_game->remainingTime <= 0.0f) {
-        if (isKeyDown(KEY_ENTER) == TRUE) {
-            enterGameoverScreen(_gameapp);
-            return;
-        }
+        enterGameoverScreen(_gameapp);
+        return;
     }
 
     // Restart game
@@ -271,7 +269,6 @@ void fishingTimeRestart(FishingTime* _game)
     LOG_INFO("[Game] Reseting the game data");
 
     _game->score = 0;
-    _game->timeAtStartInSec = GAME_TIME_AT_START_IN_SEC;
     _game->remainingTime = GAME_TIME_AT_START_IN_SEC;
     _game->isPaused = FALSE;
 

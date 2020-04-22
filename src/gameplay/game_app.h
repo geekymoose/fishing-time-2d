@@ -19,6 +19,8 @@ typedef struct
     GameResources resources;
     char* resourcesPath;
     char* shadersPath;
+    int bestScore;
+    int lastScore;
 } GameApp;
 
 int gameInit(void* _gamePtr);

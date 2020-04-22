@@ -47,7 +47,6 @@ typedef struct
     int isPaused;
     int score;
     float remainingTime;
-    float timeAtStartInSec; // Available amount of time at beginning
 } FishingTime;
 
 void fishingTimeInit(Engine* _engine, GameApp* _gameapp, FishingTime* _game);
