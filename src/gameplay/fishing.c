@@ -27,23 +27,26 @@ static void drawGameUI(GameApp* _gameapp, FishingTime const* _game, const uint32
     vecf2 scale = { 1.0f, 1.0f };
 
     const int score = _game->score;
-    int digit_1 = (score / 10) % 10; // 92 -> gives 9
-    int digit_2 = score % 10;        // 92 -> gives 2
+    int digit_hundred = (score / 100) % 10; // 100 -> gives 1
+    int digit_ten = (score / 10) % 10;      // 92 -> gives 9
+    int digit_unit = score % 10;            // 92 -> gives 2
 
-    drawSprite(_gameapp->resources.fontsBitmap[digit_1], score_position, scale, _shaderID);
-    score_position.x += _gameapp->resources.fontsBitmap[digit_1]->size.x;
-    drawSprite(_gameapp->resources.fontsBitmap[digit_2], score_position, scale, _shaderID);
+    drawSprite(_gameapp->resources.fontsBitmap[digit_hundred], score_position, scale, _shaderID);
+    score_position.x += _gameapp->resources.fontsBitmap[digit_hundred]->size.x;
+    drawSprite(_gameapp->resources.fontsBitmap[digit_ten], score_position, scale, _shaderID);
+    score_position.x += _gameapp->resources.fontsBitmap[digit_ten]->size.x;
+    drawSprite(_gameapp->resources.fontsBitmap[digit_unit], score_position, scale, _shaderID);
 
     // Remaining time (max supported 99 secs)
-    vecf2 time_position = { 7.0f, GAME_CAMERA_RECT_HEIGHT / 2.1f };
+    vecf2 time_position = { 10.0f, GAME_CAMERA_RECT_HEIGHT / 2.1f };
 
     const int time = _game->remainingTime;
-    digit_1 = (time / 10) % 10; // 92 -> gives 9
-    digit_2 = time % 10;        // 92 -> gives 2
+    digit_ten = (time / 10) % 10; // 92 -> gives 9
+    digit_unit = time % 10;       // 92 -> gives 2
 
-    drawSprite(_gameapp->resources.fontsBitmap[digit_1], time_position, scale, _shaderID);
-    time_position.x += _gameapp->resources.fontsBitmap[digit_1]->size.x;
-    drawSprite(_gameapp->resources.fontsBitmap[digit_2], time_position, scale, _shaderID);
+    drawSprite(_gameapp->resources.fontsBitmap[digit_ten], time_position, scale, _shaderID);
+    time_position.x += _gameapp->resources.fontsBitmap[digit_ten]->size.x;
+    drawSprite(_gameapp->resources.fontsBitmap[digit_unit], time_position, scale, _shaderID);
 }
 
 // Spawn a fish on game. The given index is the fish position in the array.
