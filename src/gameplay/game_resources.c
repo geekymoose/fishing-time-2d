@@ -134,7 +134,7 @@ int gameResourcesLoadAll(GameResources* _resources, const char* _resourcesDirPat
     ASSERT_MSG(_resources->welcome != NULL, "Invalid NULL resource");
 
     // Gameover
-    texID = internalLoadTexture(_resourcesDirPath, "placeholder.png");
+    texID = internalLoadTexture(_resourcesDirPath, "gameover.png");
     spriteID = resourceLoadSprite(resourceGetTexture(texID), 200, 200, origin);
     _resources->gameover = resourceGetSprite(spriteID);
     ASSERT_MSG(_resources->gameover != NULL, "Invalid NULL resource");

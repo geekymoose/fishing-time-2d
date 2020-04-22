@@ -20,7 +20,7 @@ typedef struct
     char* resourcesPath;
     char* shadersPath;
     int bestScore;
-    int lastScore;
+    int currentScore;
 } GameApp;
 
 int gameInit(void* _gamePtr);

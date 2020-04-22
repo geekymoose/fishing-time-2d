@@ -45,7 +45,7 @@ int gameInit(void* _gamePtr)
     fishingTimeInit(game->engine, game, s_fishingTime);
     game->currentScreen = GAME_SCREEN_WELCOME;
     game->bestScore = 0;
-    game->lastScore = 0;
+    game->currentScore = 0;
 
     return 0;
 }

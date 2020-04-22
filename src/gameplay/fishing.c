@@ -74,6 +74,10 @@ void fishingTimeUpdate(Engine* _engine, GameApp* _gameapp, FishingTime* _game, f
     }
     if (_game->remainingTime <= 0.0f) {
         enterGameoverScreen(_gameapp);
+        _gameapp->currentScore = _game->score;
+        if (_gameapp->bestScore < _game->score) {
+            _gameapp->bestScore = _game->score;
+        }
         return;
     }
 
@@ -252,7 +256,7 @@ void fishingTimeRender(Engine* _engine, GameApp* _gameapp, FishingTime* _game)
         }
     }
 
-    // Foreground
+    // Foreground UI
     // Hardcoded position but basically it is (backgroundSize - 35) / 2
     // See the background sprite size
     center.x = 0.0f;
