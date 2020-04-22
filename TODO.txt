@@ -1,0 +1,2 @@
+- Make port for Windows
+- Integrate the fonts system in the gameplay (now, it uses the hardcoded fonts from a png)

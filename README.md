@@ -1,13 +1,18 @@
 # Fishing time 2D
 
-> The game is work in progress.
+![screenshot](screenshots/Screenshot_2020-04-23_00-27-55.png)
+
+> Catch as much fishes as you can!
 
 ## Description
 
-This is a little game in C for the learning purpose (made with OpenGL and GLFW).
+This is a little 2D game in C made for the learning purpose (OpenGL rendering).
+My goal was to make a game in C, the old school way, with as few libs as possible.
 It focuses on the engine side.
 
 ## Build and run with CMake (Linux only)
+
+> Only Linux is supported (I didn't test on Windows)
 
 - Requires C++11.
 - Requires `pragma once` support.
@@ -26,3 +31,18 @@ make rungame
 # Or use the build script
 ./build.sh
 ```
+
+## Controls
+
+- `Enter` to start
+- `Esc` to leave
+- `R` to restart
+- `P` to pause
+- `Space` to shoot
+- `Arrows` to move
+
+## Screenshots
+
+![screenshot](screenshots/Screenshot_2020-04-23_00-23-00.png)
+![screenshot](screenshots/Screenshot_2020-04-23_00-25-11.png)
+![screenshot](screenshots/Screenshot_2020-04-23_00-27-55.png)
