@@ -13,7 +13,7 @@ typedef void (*gameRenderFct)(void* _game);
 
 typedef struct
 {
-    GLFWwindow* window;
+    Window window;
 
     gameInitFct gameInit;
     gameTerminateFct gameTerminate;

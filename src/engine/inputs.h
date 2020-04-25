@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-
 typedef enum
 {
     KEY_SPACE,
@@ -80,4 +78,4 @@ int isKeyUp(KEY_KEYBOARD _key);
 int isKeyPressed(KEY_KEYBOARD _key);
 
 void updateInputs();
-void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods);
+void handleKeyEvents(int _key, int _action);

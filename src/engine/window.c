@@ -4,6 +4,9 @@
 #include "engine/inputs.h"
 #include "engine/log.h"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 static void glfwWindowSizeCallback(GLFWwindow* _window, int _width, int _height)
 {
     glViewport(0, 0, _width, _height);
@@ -14,12 +17,18 @@ static void glfwErrorCallback(int _error, const char* _description)
     LOG_ERR("[Window] GLFW error %d: %s", _error, _description);
 }
 
-GLFWwindow* createWindow(const int width, const int height, const char* title)
+static void glfwHandleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
+{
+    handleKeyEvents(_key, _action);
+}
+
+Window createWindow(const int width, const int height, const char* title)
 {
     // Init GLFW
     if (!glfwInit()) {
         LOG_ERR("[Window] Unable to initialize glfw. Ahah you suck!");
-        return NULL;
+        Window w = { NULL };
+        return w;
     }
     LOG_INFO("[Window] GLFW successfully initialized. Not that bad!");
     LOG_INFO("[Window] GLFW info: %s", glfwGetVersionString());
@@ -28,26 +37,28 @@ GLFWwindow* createWindow(const int width, const int height, const char* title)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
     // Create GLFW window
-    GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (window == NULL) {
+    GLFWwindow* glfw_window = glfwCreateWindow(width, height, title, NULL, NULL);
+    if (glfw_window == NULL) {
         LOG_ERR("[Window] Unable to create GLFW window. How are you gonna play now?");
         glfwTerminate();
-        return NULL;
+        Window w = { NULL };
+        return w;
     }
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(glfw_window);
 
     // Callbacks
-    glfwSetFramebufferSizeCallback(window, glfwWindowSizeCallback);
+    glfwSetFramebufferSizeCallback(glfw_window, glfwWindowSizeCallback);
     glfwSetErrorCallback(glfwErrorCallback);
-    glfwSetKeyCallback(window, handleKeyEvents);
+    glfwSetKeyCallback(glfw_window, glfwHandleKeyEvents);
 
     // Init GLEW
     GLenum glewinit = glewInit();
     if (glewinit != GLEW_OK) {
         LOG_ERR("[Window] Unable to init GLEW. He was not in the mood");
-        glfwDestroyWindow(window);
+        glfwDestroyWindow(glfw_window);
         glfwTerminate();
-        return NULL;
+        Window w = { NULL };
+        return w;
     }
     LOG_INFO("[Window] GLEW successfully initialize! GG!");
 
@@ -55,40 +66,42 @@ GLFWwindow* createWindow(const int width, const int height, const char* title)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    return window;
+    Window w;
+    w.context = (void*)glfw_window;
+    return w;
 }
 
-void destroyWindow(GLFWwindow* _window)
+void destroyWindow(Window* _window)
 {
     LOG_INFO("[Window] Destroy GLFW window and terminate GLFW");
     ASSERT_MSG(_window != NULL, "[Window] Cannot destroy NULL window");
 
-    glfwDestroyWindow(_window);
+    glfwDestroyWindow((GLFWwindow*)_window->context);
     glfwTerminate();
 }
 
-void clearWindow(GLFWwindow* _window)
+void clearWindow(Window* _window)
 {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void swapWindow(GLFWwindow* _window)
+void swapWindow(Window* _window)
 {
-    glfwSwapBuffers(_window);
+    glfwSwapBuffers((GLFWwindow*)_window->context);
 }
 
-void closeWindow(GLFWwindow* _window)
+void closeWindow(Window* _window)
 {
-    glfwSetWindowShouldClose(_window, 1);
+    glfwSetWindowShouldClose((GLFWwindow*)_window->context, 1);
 }
 
-int isWindowClosed(GLFWwindow* _window)
+int isWindowClosed(Window* _window)
 {
-    return glfwWindowShouldClose(_window);
+    return glfwWindowShouldClose((GLFWwindow*)_window->context);
 }
 
-void resizeWindow(GLFWwindow* _window, int _width, int _height)
+void resizeWindow(Window* _window, int _width, int _height)
 {
-    glfwSetWindowSize(_window, _width, _height);
+    glfwSetWindowSize((GLFWwindow*)_window->context, _width, _height);
 }

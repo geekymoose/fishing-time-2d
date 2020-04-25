@@ -5,6 +5,8 @@
 #include "engine/inputs.h"
 #include "engine/log.h"
 
+#include <GLFW/glfw3.h> // For times methods
+
 int engineRun(Engine* _engine, void* _game)
 {
     ASSERT_MSG(_engine != NULL, "[Engine] parameter should not be NULL");
@@ -14,8 +16,8 @@ int engineRun(Engine* _engine, void* _game)
 
     _engine->timescale = 1.0f;
 
-    _engine->window = createWindow(600, 600, "Shark engine 2D"); // Default init values
-    if (_engine->window == NULL) {
+    _engine->window = createWindow(600, 600, "Fishing time 2D"); // Default init values
+    if (_engine->window.context == NULL) {
         LOG_ERR("[Engine] Failed to create the main window");
         ASSERT_MSG(FALSE, "[Engine] Failed to create the main window");
         return 42;
@@ -47,11 +49,11 @@ int engineRun(Engine* _engine, void* _game)
 
     // Main Loop
 
-    while (!isWindowClosed(_engine->window)) {
+    while (!isWindowClosed(&_engine->window)) {
         // const int fps = (int)(1.0f / dt);
         // LOG_DBG("dt = %f, fps = %d (fixed dt = %f)", dt, fps, fixedDeltaTime);
 
-        clearWindow(_engine->window);
+        clearWindow(&_engine->window);
 
         dt = dt * _engine->timescale;
 
@@ -66,7 +68,7 @@ int engineRun(Engine* _engine, void* _game)
         _engine->gameUpdate(_game, dt);
         _engine->gameRender(_game);
 
-        swapWindow(_engine->window);
+        swapWindow(&_engine->window);
 
         updateInputs();
 
@@ -77,7 +79,7 @@ int engineRun(Engine* _engine, void* _game)
 
     // Shutdown
 
-    destroyWindow(_engine->window); // First, remove the window to look responsive
+    destroyWindow(&_engine->window); // First, remove the window to look responsive
 
     terminateFontLibrary();
 

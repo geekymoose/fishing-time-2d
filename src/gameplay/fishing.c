@@ -9,6 +9,7 @@
 #include "engine/types.h"
 #include "engine/window.h"
 
+#include <GLFW/glfw3.h> // HACK see where a glfw is used here (remove if not used anymore)
 #include <stdlib.h>
 
 // Statics vars
@@ -111,12 +112,24 @@ void fishingTimeUpdate(Engine* _engine, GameApp* _gameapp, FishingTime* _game, f
     }
 
     // Boat movement
+    /*
+    // TODO this should be the righ code to place
     _game->boat.velocity = 0.0f;
-    // TODO: Update with new input system (not working yet)
-    if (glfwGetKey(_engine->window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+    if (isKeyPressed(KEY_LEFT)) {
         _game->boat.direction = -1;
         _game->boat.velocity = -GAME_BOAT_SPEED;
-    } else if (glfwGetKey(_engine->window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+    } else if (isKeyPressed(KEY_RIGHT)) {
+        _game->boat.direction = 1;
+        _game->boat.velocity = GAME_BOAT_SPEED;
+    }
+    */
+    // TODO: Update with new input system (not working yet)
+    // HACK
+    _game->boat.velocity = 0.0f;
+    if (glfwGetKey((GLFWwindow*)_engine->window.context, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        _game->boat.direction = -1;
+        _game->boat.velocity = -GAME_BOAT_SPEED;
+    } else if (glfwGetKey((GLFWwindow*)_engine->window.context, GLFW_KEY_RIGHT) == GLFW_PRESS) {
         _game->boat.direction = 1;
         _game->boat.velocity = GAME_BOAT_SPEED;
     }
@@ -321,7 +334,7 @@ void fishingTimeInit(Engine* _engine, GameApp* _gameapp, FishingTime* _game)
 
     _game->cameraRect.x = GAME_CAMERA_RECT_WIDTH;
     _game->cameraRect.y = GAME_CAMERA_RECT_HEIGHT;
-    resizeWindow(_engine->window, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
+    resizeWindow(&_engine->window, GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT);
 
     // Camera is hardcoded with a default rect of vision
     setShaderProgramUniform(_engine->shaderID, "cameraRect", _game->cameraRect.x, _game->cameraRect.y);

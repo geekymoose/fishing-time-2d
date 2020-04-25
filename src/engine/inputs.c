@@ -1,7 +1,9 @@
 #include "engine/inputs.h"
 
+#include "engine/assertions.h"
 #include "engine/types.h"
 
+#include <GLFW/glfw3.h>
 #include <string.h> // memset
 
 // "state[KEY] & 0x4" == 1 if down during this frame
@@ -22,13 +24,12 @@ void updateInputs()
     glfwPollEvents();
 }
 
-void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods)
+void handleKeyEvents(int _key, int _action)
 {
     int keymap = 0;
+
     switch (_key) {
-        case GLFW_KEY_SPACE:
-            keymap = KEY_SPACE;
-            break;
+        // Digits
         case GLFW_KEY_0:
             keymap = KEY_0;
             break;
@@ -60,6 +61,7 @@ void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, 
             keymap = KEY_9;
             break;
 
+        // Alpha
         case GLFW_KEY_A:
             keymap = KEY_A;
             break;
@@ -139,6 +141,7 @@ void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, 
             keymap = KEY_Z;
             break;
 
+        // F1 - F12
         case GLFW_KEY_F1:
             keymap = KEY_F1;
             break;
@@ -176,6 +179,7 @@ void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, 
             keymap = KEY_F12;
             break;
 
+        // Arrow
         case GLFW_KEY_RIGHT:
             keymap = KEY_RIGHT;
             break;
@@ -189,6 +193,10 @@ void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, 
             keymap = KEY_UP;
             break;
 
+        // Special
+        case GLFW_KEY_SPACE:
+            keymap = KEY_SPACE;
+            break;
         case GLFW_KEY_ESCAPE:
             keymap = KEY_ESCAPE;
             break;
@@ -208,6 +216,7 @@ void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, 
             keymap = KEY_DELETE;
             break;
 
+        // Miscs
         case GLFW_KEY_HOME:
             keymap = KEY_HOME;
             break;
@@ -217,6 +226,7 @@ void handleKeyEvents(GLFWwindow* _window, int _key, int _scancode, int _action, 
 
         default:
             // Means the GLFW key has no support in this engine
+            ASSERT_MSG(FALSE, "Unknown input KEY");
             break;
     }
 

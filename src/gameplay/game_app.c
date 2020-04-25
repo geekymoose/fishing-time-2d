@@ -137,7 +137,7 @@ void leaveApp(GameApp* _gameApp)
 {
     ASSERT_MSG(_gameApp != NULL, "Invalid parameter");
 
-    closeWindow(_gameApp->engine->window);
+    closeWindow(&_gameApp->engine->window);
 }
 
 void enterFishingScreen(GameApp* _gameApp)
