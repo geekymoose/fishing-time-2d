@@ -151,3 +151,11 @@ int gameResourcesLoadAll(GameResources* _resources, const char* _resourcesDirPat
     LOG_INFO("[GameResources] Game resources successfully loaded");
     return 0;
 }
+
+void gameResourceUnloadAll(GameResources* _resources)
+{
+    ASSERT_MSG(_resources != NULL, "Invalid NULL resources");
+
+    resourceUnloadAllSprites();
+    resourceUnloadAllTextures();
+}

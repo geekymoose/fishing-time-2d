@@ -60,6 +60,8 @@ int gameTerminate(void* _gamePtr)
     fishingTimeTerminate(game->engine, game, s_fishingTime);
     free(s_fishingTime);
 
+    gameResourceUnloadAll(&game->resources);
+
     return 0;
 }
 

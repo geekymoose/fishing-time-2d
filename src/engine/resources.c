@@ -43,6 +43,13 @@ unsigned int resourceLoadTexture(const char* _path)
     return resourceID;
 }
 
+void resourceUnloadAllTextures()
+{
+    for (int k = 0; k < S_ARRAY_TEXTURES_SIZE; ++k) {
+        destroyTexture(&s_arrayTextures[k]);
+    }
+}
+
 Texture* resourceGetTexture(const unsigned int _resourceID)
 {
     ASSERT_MSG(_resourceID >= 0, "[Resource] Invalid texture ID");
@@ -70,4 +77,11 @@ Sprite* resourceGetSprite(unsigned int _resourceID)
     ASSERT_MSG(_resourceID < S_ARRAY_SPRITES_SIZE, "[Resource] Invalid sprite ID");
 
     return &s_arraySprites[_resourceID];
+}
+
+void resourceUnloadAllSprites()
+{
+    for (int k = 0; k < S_ARRAY_SPRITES_SIZE; ++k) {
+        destroySprite(&s_arraySprites[k]);
+    }
 }

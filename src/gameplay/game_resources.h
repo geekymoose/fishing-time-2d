@@ -21,3 +21,4 @@ typedef struct
 } GameResources;
 
 int gameResourcesLoadAll(GameResources* _resources, const char* _resourcesDirPath);
+void gameResourceUnloadAll(GameResources* _resources);
