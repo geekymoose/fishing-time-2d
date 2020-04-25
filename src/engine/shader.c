@@ -32,11 +32,11 @@ uint32 createShaderFromSource(const char* _sources, const int32 _type)
     return id;
 }
 
-uint32 createShadeFromFile(const char* _path, const int32 _type)
+uint32 createShaderFromFile(const char* _path, const int32 _type)
 {
     LOG_INFO("[Shader] Create shader from file %s", _path);
 
-    char* filebuffer = (char*)readFileContent(_path);
+    char* filebuffer = (char*)newReadFileContent(_path);
     if (filebuffer == NULL) {
         LOG_ERR("[Shader] Unable to create shader from file %s", _path);
         ASSERT_MSG(FALSE, "[Shader] Unable to create shader from file %s", _path);
@@ -47,6 +47,11 @@ uint32 createShadeFromFile(const char* _path, const int32 _type)
     free(filebuffer);
 
     return id;
+}
+
+void destroyShader(const uint32 _id)
+{
+    glDeleteShader(_id);
 }
 
 uint32 createShaderProgram(const uint32 _idVertexShader, const uint32 _idFragShader)
@@ -74,9 +79,14 @@ uint32 createShaderProgram(const uint32 _idVertexShader, const uint32 _idFragSha
 
 uint32 createShaderProgramFromFile(const char* _vertexPath, const char* _fragPath)
 {
-    uint32 idVertex = createShadeFromFile(_vertexPath, GL_VERTEX_SHADER);
-    uint32 idFrag = createShadeFromFile(_fragPath, GL_FRAGMENT_SHADER);
+    uint32 idVertex = createShaderFromFile(_vertexPath, GL_VERTEX_SHADER);
+    uint32 idFrag = createShaderFromFile(_fragPath, GL_FRAGMENT_SHADER);
     return createShaderProgram(idVertex, idFrag);
+}
+
+void destroyShaderProgram(const uint32 _id)
+{
+    glDeleteShader(_id); // This also deletes attached shaders
 }
 
 void setShaderProgramUniform(uint32 _shaderID, const char* _name, float _x, float _y)

@@ -8,7 +8,7 @@ typedef struct
     float currentFrameDurationInSec; // Duration of the current frame
 } Animation;
 
-/// Update the given animation according to the elapsed time.
+/// Updates the given animation according to the elapsed time.
 /// @param _anim The animation to update.
 /// @param _dt Elapsed time since the last animation update (in sec)
 void updateAnimation(Animation* _anim, float _dt);

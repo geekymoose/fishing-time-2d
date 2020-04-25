@@ -77,10 +77,11 @@ int engineRun(Engine* _engine, void* _game)
 
     // Shutdown
 
-    destroyFontLibrary();
     destroyWindow(_engine->window); // First, remove the window to look responsive
 
-    error = _engine->gameDestroy(_game);
+    terminateFontLibrary();
+
+    error = _engine->gameTerminate(_game);
     if (error != 0) {
         LOG_ERR("[Engine] The engine failed to destroy the game");
         ASSERT_MSG(FALSE, "[Engine] The engine failed to destroy the game");

@@ -12,7 +12,7 @@ int main(int argc, char** argv)
     Engine engine = { 0 };
 
     engine.gameInit = gameInit;
-    engine.gameDestroy = gameDestroy;
+    engine.gameTerminate = gameTerminate;
     engine.gameUpdate = gameUpdate;
     engine.gameFixedUpdate = gameFixedUpdate;
     engine.gameRender = gameRender;

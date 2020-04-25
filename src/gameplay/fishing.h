@@ -50,7 +50,7 @@ typedef struct
 } FishingTime;
 
 void fishingTimeInit(Engine* _engine, GameApp* _gameapp, FishingTime* _game);
-void fishingTimeDestroy(Engine* _engine, GameApp* _gameapp, FishingTime* _game);
+void fishingTimeTerminate(Engine* _engine, GameApp* _gameapp, FishingTime* _game);
 
 void fishingTimeRestart(FishingTime* _game);
 

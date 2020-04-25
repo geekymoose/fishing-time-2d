@@ -28,14 +28,14 @@ unsigned int resourceLoadTexture(const char* _path)
 {
     ASSERT_MSG(s_arrayTexturesHead < S_ARRAY_TEXTURES_SIZE, "[Resource] Please increase S_ARRAY_TEXTURES_SIZE");
 
-    Image* image = loadImageFromFile(_path);
+    Image* image = createImageFromFile(_path);
     if (image == NULL) {
         return 0;
     }
 
     const int resourceID = s_arrayTexturesHead;
 
-    s_arrayTextures[resourceID] = makeTextureFromImage(image);
+    s_arrayTextures[resourceID] = createTextureFromImage(image);
     s_arrayTexturesHead++;
 
     destroyImage(image);
@@ -58,7 +58,7 @@ unsigned int resourceLoadSprite(Texture* _tex, int _w, int _h, vecf2 _origin)
 
     const int resourceID = s_arraySpritesHead;
 
-    s_arraySprites[resourceID] = makeSprite(_tex, _w, _h, _origin);
+    s_arraySprites[resourceID] = createSprite(_tex, _w, _h, _origin);
     s_arraySpritesHead++;
 
     return resourceID;

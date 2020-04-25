@@ -27,7 +27,7 @@ typedef struct
 /// @param _width The sprite's width in the original texture.
 /// @param _height The sprite's height in the original texture.
 /// @param _origin Location of the sprite in the original texture.
-Sprite makeSprite(Texture* _texture, int _width, int _height, vecf2 _origin);
+Sprite createSprite(Texture* _texture, int _width, int _height, vecf2 _origin);
 
 /// Frees all resources used by a sprite.
 /// The sprite is no longer usable.
@@ -39,4 +39,4 @@ void destroySprite(Sprite* _sprite);
 /// @param _center Position of the sprite's center in world coordinates.
 /// @param _scale Sprite scaling.
 /// @param _shaderID ID of the OpenGL shader to use.
-void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const uint32 _shaderID);
+void drawSprite(const Sprite* _sprite, vecf2 _center, vecf2 _scale, const uint32 _shaderID);

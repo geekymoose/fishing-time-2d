@@ -17,7 +17,7 @@
 static Anchor s_anchor;
 static Explosion s_explosionsPool[GAME_FISH_COUNT]; // Static pool of explosions
 
-static void drawGameUI(GameApp* _gameapp, FishingTime const* _game, const uint32 _shaderID)
+static void drawGameUI(GameApp* _gameapp, const FishingTime* _game, const uint32 _shaderID)
 {
     // UI position is in World units (as beeing seen by camera).
     // Positions are hard coded (simply based on the visual results on screen)
@@ -350,7 +350,7 @@ void fishingTimeInit(Engine* _engine, GameApp* _gameapp, FishingTime* _game)
     LOG_INFO("[Game] Game successfully initialized");
 }
 
-void fishingTimeDestroy(Engine* _engine, GameApp* _gameapp, FishingTime* _game)
+void fishingTimeTerminate(Engine* _engine, GameApp* _gameapp, FishingTime* _game)
 {
     ASSERT_MSG(_engine != NULL, "Invalid parameter (should not be NULL");
     ASSERT_MSG(_game != NULL, "Invalid parameter (should not be NULL");

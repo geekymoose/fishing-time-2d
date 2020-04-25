@@ -1,5 +1,7 @@
 #include "engine/inputs.h"
 
+#include "engine/types.h"
+
 #include <string.h> // memset
 
 // "state[KEY] & 0x4" == 1 if down during this frame

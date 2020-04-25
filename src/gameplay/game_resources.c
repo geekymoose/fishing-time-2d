@@ -53,7 +53,7 @@ static void internalLoadSpritesheet(GameResources* _resources, const char* _reso
     concatStrings(fullpath, size, _resourcesDirPath, "/");
     concatStrings(fullpath, size, fullpath, _resourceName);
 
-    char* json_buffer = (char*)readFileContent(fullpath);
+    char* json_buffer = (char*)newReadFileContent(fullpath);
     cJSON* json = cJSON_Parse(json_buffer);
 
     if (json == NULL) {

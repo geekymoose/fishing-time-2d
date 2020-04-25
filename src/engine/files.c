@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void* readFileContent(const char* _path)
+void* newReadFileContent(const char* _path)
 {
     ASSERT_MSG(_path != NULL, "[File] Invalid values: parameter should not be NULL");
 

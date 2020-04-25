@@ -50,13 +50,14 @@ int gameInit(void* _gamePtr)
     return 0;
 }
 
-int gameDestroy(void* _gamePtr)
+int gameTerminate(void* _gamePtr)
 {
     GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    fishingTimeDestroy(game->engine, game, s_fishingTime);
+    destroyShader(game->engine->shaderID);
 
+    fishingTimeTerminate(game->engine, game, s_fishingTime);
     free(s_fishingTime);
 
     return 0;

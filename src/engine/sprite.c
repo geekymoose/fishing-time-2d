@@ -9,7 +9,7 @@
 
 static unsigned int s_indices[] = { 0, 1, 2, 0, 2, 3 };
 
-Sprite makeSprite(Texture* _texture, int _width, int _height, vecf2 _origin)
+Sprite createSprite(Texture* _texture, int _width, int _height, vecf2 _origin)
 {
     ASSERT_MSG(_texture != NULL, "[Sprite] No texture provided! What are you doing?");
     ASSERT_MSG(_width >= 0, "[Sprite] Invalid width (width < 0)");
@@ -80,7 +80,19 @@ Sprite makeSprite(Texture* _texture, int _width, int _height, vecf2 _origin)
     return sprite;
 }
 
-void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const GLuint _shaderID)
+void destroySprite(Sprite* _sprite)
+{
+    ASSERT_MSG(_sprite != NULL, "[Sprite] Sprite should not be NULL");
+
+    if (_sprite != NULL) {
+        glDeleteVertexArrays(1, &_sprite->vertex_vao);
+
+        glDeleteBuffers(1, &_sprite->vertex_ebo);
+        glDeleteBuffers(1, &_sprite->vertex_vbo);
+    }
+}
+
+void drawSprite(const Sprite* _sprite, vecf2 _center, vecf2 _scale, const GLuint _shaderID)
 {
     setShaderProgramUniform(_shaderID, "position", _center.x, _center.y);
     setShaderProgramUniform(_shaderID, "scale", _scale.x, _scale.y);
@@ -95,14 +107,4 @@ void drawSprite(Sprite const* _sprite, vecf2 _center, vecf2 _scale, const GLuint
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void destroySprite(Sprite* _sprite)
-{
-    ASSERT_MSG(_sprite != NULL, "[Sprite] Sprite should not be NULL");
-
-    glDeleteVertexArrays(1, &_sprite->vertex_vao);
-
-    glDeleteBuffers(1, &_sprite->vertex_ebo);
-    glDeleteBuffers(1, &_sprite->vertex_vbo);
 }

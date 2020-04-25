@@ -28,7 +28,7 @@ int initFontLibrary()
     return error;
 }
 
-int destroyFontLibrary()
+int terminateFontLibrary()
 {
     FT_Error error = FT_Done_FreeType(s_ftLibrary);
     if (error) {
@@ -37,12 +37,11 @@ int destroyFontLibrary()
     }
 
     LOG_INFO("[Font] Font library successfully destroyed");
-
     return error;
 }
 
 // Assumes 1 Pixel == 1 Byte
-Font* loadFontFromFile(const char* _path, int _fontSizeInPx, int _charStart, int _charEnd)
+Font* createFontFromFile(const char* _path, int _fontSizeInPx, int _charStart, int _charEnd)
 {
     FT_Face face;
     FT_Error error;
@@ -152,12 +151,12 @@ Font* loadFontFromFile(const char* _path, int _fontSizeInPx, int _charStart, int
     // DEBUG: uncomment to create a debug png with the generated glyphs bitmap
     // stbi_write_png("font_generated_bitmap.png", bufferWidth, bufferHeight, 1, bitmapBuffer, 0);
 
-    Texture texture = makeTexture(bitmapBuffer, bufferWidth, bufferHeight, 1);
+    Texture texture = createTexture(bitmapBuffer, bufferWidth, bufferHeight, 1);
 
     font->sizeInPx = _fontSizeInPx;
     font->charStart = _charStart;
     font->charEnd = _charEnd;
-    font->textureID = texture.id;
+    font->texture = texture;
 
     free(bitmapBuffer);
     FT_Done_Face(face);

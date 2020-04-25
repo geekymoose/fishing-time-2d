@@ -10,5 +10,5 @@ typedef struct
     int channels;
 } Image;
 
-Image* loadImageFromFile(const char* _path);
+Image* createImageFromFile(const char* _path);
 void destroyImage(Image* image);

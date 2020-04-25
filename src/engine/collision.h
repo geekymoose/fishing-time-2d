@@ -14,4 +14,4 @@ typedef struct
 /// @param _c1 Collider one.
 /// @param _c2 Collider two.
 /// @return Returns 1 if collide, otherwise, return -1.
-int checkIfCollide(RectCollider const* _c1, RectCollider const* _c2);
+int checkIfCollide(const RectCollider* _c1, const RectCollider* _c2);

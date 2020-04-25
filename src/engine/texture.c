@@ -6,7 +6,7 @@
 
 #include <GL/glew.h>
 
-Texture makeTexture(const uint8* _buffer, int _width, int _height, int _channels)
+Texture createTexture(const uint8* _buffer, int _width, int _height, int _channels)
 {
     uint32 format;
     switch (_channels) {
@@ -53,7 +53,16 @@ Texture makeTexture(const uint8* _buffer, int _width, int _height, int _channels
     return texture;
 }
 
-Texture makeTextureFromImage(const Image* _image)
+Texture createTextureFromImage(const Image* _image)
 {
-    return makeTexture(_image->buffer, _image->width, _image->height, _image->channels);
+    return createTexture(_image->buffer, _image->width, _image->height, _image->channels);
+}
+
+void destroyTexture(Texture* _texture)
+{
+    ASSERT_MSG(_texture != NULL, "[Texture] Texture should not be NULL");
+
+    if (_texture != NULL) {
+        glDeleteTextures(1, &_texture->id);
+    }
 }

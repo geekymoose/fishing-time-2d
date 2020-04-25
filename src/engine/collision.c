@@ -1,6 +1,6 @@
 #include "engine/collision.h"
 
-int checkIfCollide(RectCollider const* _c1, RectCollider const* _c2)
+int checkIfCollide(const RectCollider* _c1, const RectCollider* _c2)
 {
     // Tmp data
     const float demiWidthCollider1 = _c1->width / 2.0f;

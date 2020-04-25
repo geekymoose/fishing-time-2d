@@ -9,7 +9,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-Image* loadImageFromFile(const char* _path)
+Image* createImageFromFile(const char* _path)
 {
     LOG_INFO("[Image] Loading image %s", _path);
     ASSERT_MSG(_path != NULL, "[Image] Internal error: parameter cannot be NULL");
@@ -36,6 +36,7 @@ Image* loadImageFromFile(const char* _path)
 void destroyImage(Image* _image)
 {
     ASSERT_MSG(_image != NULL, "[Image] Internal error: parameter cannot be NULL");
+
     if (_image != NULL) {
         stbi_image_free(_image->buffer);
         free(_image);

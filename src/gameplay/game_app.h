@@ -24,7 +24,7 @@ typedef struct
 } GameApp;
 
 int gameInit(void* _gamePtr);
-int gameDestroy(void* _gamePtr);
+int gameTerminate(void* _gamePtr);
 void gameUpdate(void* _gamePtr, float _dt);
 void gameFixedUpdate(void* _gamePtr, float _dt);
 void gameRender(void* _gamePtr);
