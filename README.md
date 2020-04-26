@@ -6,9 +6,8 @@
 
 ## Description
 
-This is a little 2D game in C made for the learning purpose (OpenGL rendering).
-My goal was to make a game in C, the old school way, with as few libs as possible.
-It focuses on the engine side.
+This is a little 2D game in C made for the learning purpose (OpenGL rendering), with as few libs as possible.
+It focuses on the engine side (which is designed to be reusable in external projects).
 
 ## Build and run with CMake (Linux only)
 
@@ -41,7 +40,7 @@ make rungame
 - `Space` to shoot
 - `Arrows` to move
 
-## Technical notes
+## Technical note about method names
 
 Since C has a manual memory management (no Garbage Collector), the engine methods follow a naming convention to ensure consistency.
 Any methods that allocates memory has its 'free' antonym.
@@ -51,6 +50,25 @@ Any methods that allocates memory has its 'free' antonym.
 - `load` -> `unload` (e.g., `loadResourceB`, `unloadResourceB`)
 - `start` -> `stop` (e.g., `startRendering`, `stopRendering`)
 - `new` -> `free` (e.g., `newFileContent`, `freeFileContent` or `free(content)`)
+
+## Engine features
+
+The engine is designed to be reusable in external projects.
+These are the current features.
+
+- Animation (2D)
+- Assertion
+- Collision (2D)
+- File system
+- Font system
+- Image
+- Input system
+- Logs
+- Shader
+- Sprite
+- Str
+- Texture
+- Window
 
 ## Screenshots
 
