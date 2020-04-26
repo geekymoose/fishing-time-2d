@@ -7,18 +7,18 @@ typedef struct
     void* context;
 } Window;
 
-/// Creates a GLFW window and GL context.
-/// This method also init GLFW and GLEW and must be called once at start.
+/// Creates a main window.
+/// This method also inits the required window systems and must be called once at start.
 /// @param _width Width of the window.
 /// @param _height Heigh of the window.
 /// @param _title Title of the window.
 /// @return Returns the created window.
-Window createWindow(const int _width, const int _height, const char* _title);
+Window createMainWindow(const int _width, const int _height, const char* _title);
 
-/// Destroys a GLFW window, the GLcontext and terminates GLFW.
-/// This is the last method to call.
-/// @param _window The GLFW window to destroy.
-void destroyWindow(Window* _window);
+/// Destroys the main window.
+/// This also terminate the required window system.
+/// @param _window The window to destroy.
+void destroyMainWindow(Window* _window);
 
 /// Clears the whole window content.
 /// @param _window the window to clear.

@@ -22,7 +22,7 @@ static void glfwHandleKeyEvents(GLFWwindow* _window, int _key, int _scancode, in
     handleKeyEvents(_key, _action);
 }
 
-Window createWindow(const int width, const int height, const char* title)
+Window createMainWindow(const int width, const int height, const char* title)
 {
     // Init GLFW
     if (!glfwInit()) {
@@ -51,6 +51,8 @@ Window createWindow(const int width, const int height, const char* title)
     glfwSetErrorCallback(glfwErrorCallback);
     glfwSetKeyCallback(glfw_window, glfwHandleKeyEvents);
 
+    glfwSetInputMode(glfw_window, GLFW_STICKY_KEYS, GLFW_FALSE);
+
     // Init GLEW
     GLenum glewinit = glewInit();
     if (glewinit != GLEW_OK) {
@@ -71,7 +73,7 @@ Window createWindow(const int width, const int height, const char* title)
     return w;
 }
 
-void destroyWindow(Window* _window)
+void destroyMainWindow(Window* _window)
 {
     LOG_INFO("[Window] Destroy GLFW window and terminate GLFW");
     ASSERT_MSG(_window != NULL, "[Window] Cannot destroy NULL window");

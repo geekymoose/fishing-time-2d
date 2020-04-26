@@ -16,7 +16,7 @@ int engineRun(Engine* _engine, void* _game)
 
     _engine->timescale = 1.0f;
 
-    _engine->window = createWindow(600, 600, "Fishing time 2D"); // Default init values
+    _engine->window = createMainWindow(600, 600, "Fishing time 2D"); // Default init values
     if (_engine->window.context == NULL) {
         LOG_ERR("[Engine] Failed to create the main window");
         ASSERT_MSG(FALSE, "[Engine] Failed to create the main window");
@@ -79,7 +79,7 @@ int engineRun(Engine* _engine, void* _game)
 
     // Shutdown
 
-    destroyWindow(&_engine->window); // First, remove the window to look responsive
+    destroyMainWindow(&_engine->window); // First, remove the window to look responsive
 
     terminateFontLibrary();
 
