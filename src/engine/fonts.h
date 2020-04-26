@@ -2,8 +2,6 @@
 
 #include "engine/texture.h"
 
-// TODO Note: finally not used in fishing-time-2d
-
 typedef struct
 {
     int width;

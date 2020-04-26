@@ -64,6 +64,7 @@ These are the current features.
 - Image
 - Input system
 - Logs
+- Path
 - Shader
 - Sprite
 - Str

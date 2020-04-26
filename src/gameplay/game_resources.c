@@ -4,8 +4,8 @@
 #include "engine/files.h"
 #include "engine/libmath.h"
 #include "engine/log.h"
+#include "engine/path.h"
 #include "engine/resources.h"
-#include "engine/str.h"
 #include "engine/types.h"
 
 #include <cjson/cJSON.h>
@@ -15,12 +15,8 @@
 
 static unsigned int internalLoadTexture(const char* _resourceDirPath, const char* _resourceName)
 {
-    const size_t size = strlen(_resourceDirPath) + strlen(_resourceName) + 2; // +2 for the '/' and '\0'
-    char fullpath[size];
-    concatStrings(fullpath, size, _resourceDirPath, "/");
-    concatStrings(fullpath, size, fullpath, _resourceName);
-
-    return resourceLoadTexture(fullpath);
+    Path fullpath = makePath(2, _resourceDirPath, _resourceName);
+    return resourceLoadTexture(fullpath.str);
 }
 
 static unsigned int internalLoadSpriteFromJSON(const cJSON* _json, const char* _name, unsigned int _texID)
@@ -46,14 +42,9 @@ static void internalLoadSpritesheet(GameResources* _resources, const char* _reso
 {
     LOG_INFO("[GameResources] Loading spritesheet resource");
 
-    const char* _resourceName = "spritesheet.json";
+    Path fullpath = makePath(2, _resourcesDirPath, "spritesheet.json");
 
-    const size_t size = strlen(_resourcesDirPath) + strlen(_resourceName) + 2; // +2 for the '/' and '\0'
-    char fullpath[size];
-    concatStrings(fullpath, size, _resourcesDirPath, "/");
-    concatStrings(fullpath, size, fullpath, _resourceName);
-
-    char* json_buffer = (char*)newReadFileContent(fullpath);
+    char* json_buffer = (char*)newReadFileContent(fullpath.str);
     cJSON* json = cJSON_Parse(json_buffer);
 
     if (json == NULL) {

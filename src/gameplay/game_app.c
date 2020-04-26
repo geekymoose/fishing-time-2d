@@ -3,8 +3,8 @@
 #include "engine/assertions.h"
 #include "engine/inputs.h"
 #include "engine/log.h"
+#include "engine/path.h"
 #include "engine/shader.h"
-#include "engine/str.h"
 #include "engine/types.h"
 #include "gameplay/fishing.h"
 #include "gameplay/game_menus.h"
@@ -18,15 +18,9 @@ int gameInit(void* _gamePtr)
     GameApp* game = (GameApp*)_gamePtr;
     ASSERT_MSG(game != NULL, "Internal critical error: NULL parameter from the engine");
 
-    char vertex_path[255];
-    concatStrings(vertex_path, 255, game->shadersPath, "/");
-    concatStrings(vertex_path, 255, vertex_path, "vertex_shader.glsl");
-
-    char fragment_path[255];
-    concatStrings(fragment_path, 255, game->shadersPath, "/");
-    concatStrings(fragment_path, 255, fragment_path, "fragment_shader.glsl");
-
-    game->engine->shaderID = createShaderProgramFromFile(vertex_path, fragment_path);
+    Path vertex_path = makePath(2, game->shadersPath, "vertex_shader.glsl");
+    Path fragment_path = makePath(2, game->shadersPath, "fragment_shader.glsl");
+    game->engine->shaderID = createShaderProgramFromFile(vertex_path.str, fragment_path.str);
 
     s_fishingTime = malloc(sizeof(FishingTime));
     if (s_fishingTime == NULL) {
