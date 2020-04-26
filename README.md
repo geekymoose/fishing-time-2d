@@ -41,6 +41,17 @@ make rungame
 - `Space` to shoot
 - `Arrows` to move
 
+## Technical notes
+
+Since C has a manual memory management (no Garbage Collector), the engine methods follow a naming convention to ensure consistency.
+Any methods that allocates memory has its 'free' antonym.
+
+- `create` -> `destroy` (e.g., `createTexture`, `destroyTexture`)
+- `init` -> `terminate` (e.g., `initLibA`, `terminateLibA`)
+- `load` -> `unload` (e.g., `loadResourceB`, `unloadResourceB`)
+- `start` -> `stop` (e.g., `startRendering`, `stopRendering`)
+- `new` -> `free` (e.g., `newFileContent`, `freeFileContent` or `free(content)`)
+
 ## Screenshots
 
 ![screenshot](screenshots/Screenshot_2020-04-23_00-23-00.png)
