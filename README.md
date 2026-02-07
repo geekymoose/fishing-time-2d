@@ -1,6 +1,6 @@
 # Fishing time 2D
 
-![screenshot](screenshots/Screenshot_2020-04-23_00-27-55.png)
+![screenshot](screenshots/2020-04-23_002755_screenshot.png)
 
 > Catch as much fishes as you can!
 
@@ -73,6 +73,6 @@ These are the current features.
 
 ## Screenshots
 
-![screenshot](screenshots/Screenshot_2020-04-23_00-23-00.png)
-![screenshot](screenshots/Screenshot_2020-04-23_00-25-11.png)
-![screenshot](screenshots/Screenshot_2020-04-23_00-27-55.png)
+![screenshot](screenshots/2020-04-23_002300_screenshot.png)
+![screenshot](screenshots/2020-04-23_002511_screenshot.png)
+![screenshot](screenshots/2020-04-23_002755_screenshot.png)
